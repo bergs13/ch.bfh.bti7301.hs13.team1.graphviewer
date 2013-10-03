@@ -1,5 +1,16 @@
+import java.awt.Color;
+import java.awt.FlowLayout;
+import java.awt.GridBagLayout;
+import java.awt.GridLayout;
+
+import javax.swing.BorderFactory;
 import javax.swing.JFrame;
-import ui.SampleComponent;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+import javax.swing.border.Border;
+import javax.swing.border.LineBorder;
+
+import demo.SampleCirclePanel;
 
 public class Program {
 
@@ -11,8 +22,12 @@ public class Program {
 		frame.setSize(500, 500);
 		frame.setTitle("A Sample Component");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		SampleComponent component = new SampleComponent();
-		frame.add(component);
+		frame.setLayout(new GridLayout(1,1));
+		
+		JPanel sampleCirclePanel = new SampleCirclePanel();
+		sampleCirclePanel.setBorder(new LineBorder(Color.red));
+		
+		frame.add(sampleCirclePanel);
 		frame.setVisible(true);
 	}
 }

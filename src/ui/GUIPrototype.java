@@ -28,7 +28,7 @@ public class GUIPrototype extends javax.swing.JFrame {
 
         jScrollPane1 = new javax.swing.JScrollPane();
         jScrollPane2 = new javax.swing.JScrollPane();
-        informationPanel1 = new ui.InformationPanel();
+        informationPanel2 = new ui.InformationPanel();
         jPanel1 = new javax.swing.JPanel();
         jButton3 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
@@ -43,18 +43,7 @@ public class GUIPrototype extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        javax.swing.GroupLayout informationPanel1Layout = new javax.swing.GroupLayout(informationPanel1);
-        informationPanel1.setLayout(informationPanel1Layout);
-        informationPanel1Layout.setHorizontalGroup(
-            informationPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 127, Short.MAX_VALUE)
-        );
-        informationPanel1Layout.setVerticalGroup(
-            informationPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 317, Short.MAX_VALUE)
-        );
-
-        jScrollPane2.setViewportView(informationPanel1);
+        jScrollPane2.setViewportView(informationPanel2);
 
         jButton3.setText("Run");
         jButton3.addActionListener(new java.awt.event.ActionListener() {
@@ -142,7 +131,7 @@ public class GUIPrototype extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 319, Short.MAX_VALUE)
-                    .addComponent(jScrollPane2)))
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)))
         );
 
         pack();
@@ -196,7 +185,7 @@ public class GUIPrototype extends javax.swing.JFrame {
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton forwardButton;
-    private ui.InformationPanel informationPanel1;
+    private ui.InformationPanel informationPanel2;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JMenu jMenu1;

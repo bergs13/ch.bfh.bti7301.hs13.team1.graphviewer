@@ -28,11 +28,11 @@ public class GUIPrototype extends javax.swing.JFrame {
 
         jScrollPane1 = new javax.swing.JScrollPane();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jPanel2 = new javax.swing.JPanel();
+        informationPanel1 = new ui.InformationPanel();
         jPanel1 = new javax.swing.JPanel();
         jButton3 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
-        jButton1 = new javax.swing.JButton();
+        forwardButton = new javax.swing.JButton();
         jRadioButton2 = new javax.swing.JRadioButton();
         jRadioButton1 = new javax.swing.JRadioButton();
         jMenuBar1 = new javax.swing.JMenuBar();
@@ -43,18 +43,18 @@ public class GUIPrototype extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        javax.swing.GroupLayout informationPanel1Layout = new javax.swing.GroupLayout(informationPanel1);
+        informationPanel1.setLayout(informationPanel1Layout);
+        informationPanel1Layout.setHorizontalGroup(
+            informationPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 127, Short.MAX_VALUE)
         );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        informationPanel1Layout.setVerticalGroup(
+            informationPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 317, Short.MAX_VALUE)
         );
 
-        jScrollPane2.setViewportView(jPanel2);
+        jScrollPane2.setViewportView(informationPanel1);
 
         jButton3.setText("Run");
         jButton3.addActionListener(new java.awt.event.ActionListener() {
@@ -70,7 +70,7 @@ public class GUIPrototype extends javax.swing.JFrame {
             }
         });
 
-        jButton1.setText("Forward");
+        forwardButton.setText("Forward");
 
         jRadioButton2.setText("directed");
 
@@ -86,7 +86,7 @@ public class GUIPrototype extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jRadioButton2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 403, Short.MAX_VALUE)
-                .addComponent(jButton1)
+                .addComponent(forwardButton)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jButton2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -99,7 +99,7 @@ public class GUIPrototype extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton3)
                     .addComponent(jButton2)
-                    .addComponent(jButton1)
+                    .addComponent(forwardButton)
                     .addComponent(jRadioButton2)
                     .addComponent(jRadioButton1))
                 .addGap(0, 16, Short.MAX_VALUE))
@@ -141,7 +141,7 @@ public class GUIPrototype extends javax.swing.JFrame {
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 319, Short.MAX_VALUE)
                     .addComponent(jScrollPane2)))
         );
 
@@ -195,7 +195,8 @@ public class GUIPrototype extends javax.swing.JFrame {
         });
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
+    private javax.swing.JButton forwardButton;
+    private ui.InformationPanel informationPanel1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JMenu jMenu1;
@@ -204,7 +205,6 @@ public class GUIPrototype extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
     private javax.swing.JRadioButton jRadioButton1;
     private javax.swing.JRadioButton jRadioButton2;
     private javax.swing.JScrollPane jScrollPane1;

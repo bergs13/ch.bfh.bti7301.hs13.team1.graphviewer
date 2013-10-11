@@ -1,4 +1,4 @@
-package demo;
+package ui;
 
 import java.awt.Cursor;
 import java.awt.Dimension;
@@ -14,8 +14,11 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JPanel;
 
+import logic.DragAndDropTransferHandler;
+
+
 @SuppressWarnings("serial")
-public class SampleCirclePanel extends JPanel {
+public class GraphPanel extends JPanel {
 	// Members
 	/**
 	 * <p>
@@ -23,35 +26,35 @@ public class SampleCirclePanel extends JPanel {
 	 * </p>
 	 * <p>
 	 * In our limited case with only 1 type of dropped item, it will be a
-	 * SampleCircleComponent object!
+	 * VertexComponent object!
 	 * </p>
 	 * <p>
 	 * Note DataFlavor can represent more than classes -- easily text, images,
 	 * etc.
 	 * </p>
 	 */
-	private static DataFlavor sampleCircleComponentDataFlavor = null;
+	private static DataFlavor vertexComponentDataFlavor = null;
 	/**
 	 * Keep a list of the user-added panels so can re-add
 	 */
-	private final List<SampleCircleComponent> circles = new ArrayList<SampleCircleComponent>();
+	private final List<VertexComponent> circles = new ArrayList<VertexComponent>();
 
 	// End of Members
 	// Constructors
-	public SampleCirclePanel() {
+	public GraphPanel() {
 		// Add circles with a center for start
 		for (int i = 1; i < 3; i++) {
-			SampleCircleComponent comp = new SampleCircleComponent();
+			VertexComponent comp = new VertexComponent();
 			comp.setCircleCenterLocation(new Point(i * 100, i * 100));
 			this.circles.add(comp);
 		}
 
 		// Again, needs to negotiate with the draggable object
-		this.setTransferHandler(new SampleDragAndDropTransferHandler());
+		this.setTransferHandler(new DragAndDropTransferHandler());
 
 		// Create the listener to do the work when dropping on this object!
 		this.setDropTarget(new DropTarget(this,
-				new SampleCirclePanelDropTargetListener(this)));
+				new GraphPanelDropTargetListener(this)));
 
 		this.setLayout(null);
 
@@ -74,7 +77,7 @@ public class SampleCirclePanel extends JPanel {
 		this.removeAll();
 
 		// Add the panels, if any
-		for (SampleCircleComponent c : this.circles) {
+		for (VertexComponent c : this.circles) {
 			Dimension size = c.getPreferredSize();
 			Point p = c.getLocation();
 			c.setBounds(p.x, p.y, size.width, size.height);
@@ -94,15 +97,15 @@ public class SampleCirclePanel extends JPanel {
 	 * 
 	 * @return
 	 */
-	public static DataFlavor getSampleCircleComponentDataFlavor()
+	public static DataFlavor getVertexComponentDataFlavor()
 			throws Exception {
 		// Lazy load/create the flavor
-		if (sampleCircleComponentDataFlavor == null) {
-			sampleCircleComponentDataFlavor = new DataFlavor(
+		if (vertexComponentDataFlavor == null) {
+			vertexComponentDataFlavor = new DataFlavor(
 					DataFlavor.javaJVMLocalObjectMimeType + ";class=\""
-							+ SampleCircleComponent.class.getName() + "\"");
+							+ VertexComponent.class.getName() + "\"");
 		}
-		return sampleCircleComponentDataFlavor;
+		return vertexComponentDataFlavor;
 	}
 
 	// Listeners
@@ -114,9 +117,9 @@ public class SampleCirclePanel extends JPanel {
 	 * The real magic behind the drop!
 	 * </p>
 	 */
-	static class SampleCirclePanelDropTargetListener implements
+	static class GraphPanelDropTargetListener implements
 			DropTargetListener {
-		private final SampleCirclePanel sampleCirclePanel;
+		private final GraphPanel graphPanel;
 		/**
 		 * <p>
 		 * Two cursors with which we are primarily interested while dragging:
@@ -135,9 +138,9 @@ public class SampleCirclePanel extends JPanel {
 				notDroppableCursor = Cursor
 						.getPredefinedCursor(Cursor.CROSSHAIR_CURSOR);
 
-		public SampleCirclePanelDropTargetListener(
-				SampleCirclePanel sampleCirclePanel) {
-			this.sampleCirclePanel = sampleCirclePanel;
+		public GraphPanelDropTargetListener(
+				GraphPanel graphPanel) {
+			this.graphPanel = graphPanel;
 		}
 
 		// Could easily find uses for these, like cursor changes, etc.
@@ -145,8 +148,8 @@ public class SampleCirclePanel extends JPanel {
 		}
 
 		public void dragOver(DropTargetDragEvent dtde) {
-			if (!this.sampleCirclePanel.getCursor().equals(droppableCursor)) {
-				this.sampleCirclePanel.setCursor(droppableCursor);
+			if (!this.graphPanel.getCursor().equals(droppableCursor)) {
+				this.graphPanel.setCursor(droppableCursor);
 			}
 		}
 
@@ -154,7 +157,7 @@ public class SampleCirclePanel extends JPanel {
 		}
 
 		public void dragExit(DropTargetEvent dte) {
-			this.sampleCirclePanel.setCursor(notDroppableCursor);
+			this.graphPanel.setCursor(notDroppableCursor);
 		}
 
 		/**
@@ -167,27 +170,27 @@ public class SampleCirclePanel extends JPanel {
 		 */
 		public void drop(DropTargetDropEvent dtde) {
 			// Done with cursors, dropping
-			this.sampleCirclePanel.setCursor(Cursor.getDefaultCursor());
+			this.graphPanel.setCursor(Cursor.getDefaultCursor());
 
 			// Just going to grab the expected DataFlavor to make sure
 			// we know what is being dropped
-			DataFlavor sampleCircleComponentDataFlavor = null;
+			DataFlavor vertexComponentDataFlavor = null;
 
 			Object transferableObj = null;
 			Transferable transferable = null;
 
 			try {
 				// Grab expected flavor
-				sampleCircleComponentDataFlavor = SampleCirclePanel
-						.getSampleCircleComponentDataFlavor();
+				vertexComponentDataFlavor = GraphPanel
+						.getVertexComponentDataFlavor();
 
 				transferable = dtde.getTransferable();
 
 				// What does the Transferable support
 				if (transferable
-						.isDataFlavorSupported(sampleCircleComponentDataFlavor)) {
+						.isDataFlavorSupported(vertexComponentDataFlavor)) {
 					transferableObj = dtde.getTransferable().getTransferData(
-							sampleCircleComponentDataFlavor);
+							vertexComponentDataFlavor);
 				}
 
 			} catch (Exception ex) { /* nope, not the place */
@@ -198,20 +201,20 @@ public class SampleCirclePanel extends JPanel {
 				return;
 			}
 
-			// Cast it to the SampleCircleComponent. By this point, we have
+			// Cast it to the VertexComponent. By this point, we have
 			// verified it is
-			// a SampleCircleComponent.
-			SampleCircleComponent droppedSampleCircleComponent = (SampleCircleComponent) transferableObj;
+			// a VertexComponent.
+			VertexComponent droppedVertexComponent = (VertexComponent) transferableObj;
 
-			// Get the the point of the SampleCircleComponent
+			// Get the the point of the VertexComponent
 			// for the drop option (the cursor on the drop)
-			droppedSampleCircleComponent.setCircleCenterLocation(dtde
+			droppedVertexComponent.setCircleCenterLocation(dtde
 					.getLocation());
 
 			// Request repaint of contents, or else won't update GUI following
 			// drop.
 			// Will add back in the order to which we just sorted
-			this.sampleCirclePanel.repaintContent();
+			this.graphPanel.repaintContent();
 		}
 	}
 	// End of Listeners

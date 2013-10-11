@@ -1,4 +1,4 @@
-package demo;
+package ui;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -13,8 +13,11 @@ import java.awt.geom.Ellipse2D;
 import javax.swing.JComponent;
 import javax.swing.TransferHandler;
 
+import logic.DragAndDropTransferHandler;
+
+
 @SuppressWarnings("serial")
-public class SampleCircleComponent extends JComponent implements Transferable {
+public class VertexComponent extends JComponent implements Transferable {
 	// Constant values
 	private static final int LOCATIONCENTERMODIFIER = 30;
 	private static final int INNERCIRCLEDIAMETER = 50;
@@ -23,7 +26,7 @@ public class SampleCircleComponent extends JComponent implements Transferable {
 	// End of constant values
 
 	// Constructors
-	public SampleCircleComponent() {
+	public VertexComponent() {
 		// Grösse Rechteck (Component)
 		this.setPreferredSize(new Dimension(OUTERCIRCLEDIAMETER,
 				OUTERCIRCLEDIAMETER));
@@ -38,7 +41,7 @@ public class SampleCircleComponent extends JComponent implements Transferable {
 		// Definierbare Sachen aus Vertex-Logik (Überschreiben wenn Vertex-Logik
 		// implementiert)
 		Color inactiveColor = new Color(0, 0, 255);
-		Color activeColor = new Color(255, 0, 255);
+		Color activeColor = new Color(255, 0, 0);
 		boolean active = true;
 
 		// Vertex mit innerem und äusserem Kreis
@@ -54,12 +57,12 @@ public class SampleCircleComponent extends JComponent implements Transferable {
 		g2.fill(inner);
 
 		// Drag & Drop
-		// Add the listener which will export this SampleCircleComponent for
+		// Add the listener which will export this VertexComponent for
 		// dragging
 		this.addMouseListener(new DraggableMouseListener());
 		// Add the handler, which negotiates between drop target and this
-		// draggable SampleCircleComponent
-		this.setTransferHandler(new SampleDragAndDropTransferHandler());
+		// draggable VertexComponent
+		this.setTransferHandler(new DragAndDropTransferHandler());
 		// End of Drag & Drop
 	}
 
@@ -75,7 +78,7 @@ public class SampleCircleComponent extends JComponent implements Transferable {
 	 * If multiple DataFlavor's are supported, can choose what Object to return.
 	 * </p>
 	 * <p>
-	 * In this case, we only support one: the actual SampleCircleComponent.
+	 * In this case, we only support one: the actual VertexComponent.
 	 * </p>
 	 * <p>
 	 * Note we could easily support more than one. For example, if supports text
@@ -90,7 +93,7 @@ public class SampleCircleComponent extends JComponent implements Transferable {
 		DataFlavor thisFlavor = this.getTransferDataFlavors()[0];
 		// For now, assume wants this class... see loadDnD
 		if (thisFlavor != null && flavor.equals(thisFlavor)) {
-			return SampleCircleComponent.this;
+			return VertexComponent.this;
 		}
 		return null;
 	}
@@ -112,8 +115,8 @@ public class SampleCircleComponent extends JComponent implements Transferable {
 	public DataFlavor[] getTransferDataFlavors() {
 		DataFlavor[] flavors = { null };
 		try {
-			flavors[0] = SampleCircleComponent
-					.getDragAndDropSampleCircleComponentDataFlavor();
+			flavors[0] = VertexComponent
+					.getDragAndDropVertexComponentDataFlavor();
 		} catch (Exception ex) {
 			System.err.println("Problem lazy loading: " + ex.getMessage());
 			ex.printStackTrace(System.err);
@@ -153,14 +156,14 @@ public class SampleCircleComponent extends JComponent implements Transferable {
 	 * </p>
 	 * <p>
 	 * In our limited case with only 1 type of dropped item, it will be a
-	 * SampleCircleComponent object!
+	 * VertexComponent object!
 	 * </p>
 	 * <p>
 	 * Note DataFlavor can represent more than classes -- easily text, images,
 	 * etc.
 	 * </p>
 	 */
-	private static DataFlavor dragAndDropSampleCircleComponentDataFlavor = null;
+	private static DataFlavor dragAndDropVertexComponentDataFlavor = null;
 
 	// End of Members
 	// Listeners
@@ -184,20 +187,20 @@ public class SampleCircleComponent extends JComponent implements Transferable {
 	// Methods
 	/**
 	 * <p>
-	 * Returns (creating, if necessary) the DataFlavor representing SampleCircle
+	 * Returns (creating, if necessary) the DataFlavor representing Vertex
 	 * </p>
 	 * 
 	 * @return
 	 */
-	public static DataFlavor getDragAndDropSampleCircleComponentDataFlavor()
+	public static DataFlavor getDragAndDropVertexComponentDataFlavor()
 			throws Exception {
 		// Lazy load/create the flavor
-		if (dragAndDropSampleCircleComponentDataFlavor == null) {
-			dragAndDropSampleCircleComponentDataFlavor = new DataFlavor(
+		if (dragAndDropVertexComponentDataFlavor == null) {
+			dragAndDropVertexComponentDataFlavor = new DataFlavor(
 					DataFlavor.javaJVMLocalObjectMimeType + ";class=\""
-							+ SampleCircleComponent.class.getName() + "\"");
+							+ VertexComponent.class.getName() + "\"");
 		}
-		return dragAndDropSampleCircleComponentDataFlavor;
+		return dragAndDropVertexComponentDataFlavor;
 	}
 
 	public void setCircleCenterLocation(Point p) {

@@ -1,8 +1,6 @@
-import java.awt.Color;
 import java.awt.GridLayout;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import javax.swing.border.LineBorder;
 import demo.SampleCirclePanel;
 
 public class Program {
@@ -15,9 +13,8 @@ public class Program {
 		frame.setSize(500, 500);
 		frame.setTitle("A Sample Component");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setLayout(new GridLayout(1,1));
+		frame.setLayout(new GridLayout(1, 1));
 		JPanel sampleCirclePanel = new SampleCirclePanel();
-		sampleCirclePanel.setBorder(new LineBorder(Color.red));
 		frame.add(sampleCirclePanel);
 		frame.setVisible(true);
 	}

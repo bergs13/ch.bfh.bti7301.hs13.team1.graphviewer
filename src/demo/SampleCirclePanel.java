@@ -2,7 +2,6 @@ package demo;
 
 import java.awt.Cursor;
 import java.awt.Dimension;
-import java.awt.Insets;
 import java.awt.Point;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
@@ -76,11 +75,10 @@ public class SampleCirclePanel extends JPanel {
 
 		// Add the panels, if any
 		for (SampleCircleComponent c : this.circles) {
-			this.add(c);
 			Dimension size = c.getPreferredSize();
 			Point p = c.getLocation();
-			c.setBounds(p.x, p.y, size.width,
-					size.height);
+			c.setBounds(p.x, p.y, size.width, size.height);
+			this.add(c);
 			c.validate();
 			c.repaint();
 		}
@@ -100,8 +98,9 @@ public class SampleCirclePanel extends JPanel {
 			throws Exception {
 		// Lazy load/create the flavor
 		if (sampleCircleComponentDataFlavor == null) {
-			sampleCircleComponentDataFlavor = new DataFlavor(DataFlavor.javaJVMLocalObjectMimeType +
-					";class=\"" + SampleCircleComponent.class.getName() + "\"");
+			sampleCircleComponentDataFlavor = new DataFlavor(
+					DataFlavor.javaJVMLocalObjectMimeType + ";class=\""
+							+ SampleCircleComponent.class.getName() + "\"");
 		}
 		return sampleCircleComponentDataFlavor;
 	}
@@ -198,12 +197,12 @@ public class SampleCirclePanel extends JPanel {
 			if (transferableObj == null) {
 				return;
 			}
-			
+
 			// Cast it to the SampleCircleComponent. By this point, we have
 			// verified it is
 			// a SampleCircleComponent.
 			SampleCircleComponent droppedSampleCircleComponent = (SampleCircleComponent) transferableObj;
-	
+
 			// Get the the point of the SampleCircleComponent
 			// for the drop option (the cursor on the drop)
 			droppedSampleCircleComponent.setCircleCenterLocation(dtde

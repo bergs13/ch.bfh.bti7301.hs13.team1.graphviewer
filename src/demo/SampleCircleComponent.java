@@ -10,7 +10,6 @@ import java.awt.datatransfer.Transferable;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Ellipse2D;
-import javax.swing.BorderFactory;
 import javax.swing.JComponent;
 import javax.swing.TransferHandler;
 
@@ -22,6 +21,7 @@ public class SampleCircleComponent extends JComponent implements Transferable {
 	private static final int OUTERCIRCLEDIAMETER = 60;
 
 	// End of constant values
+
 	// Constructors
 	public SampleCircleComponent() {
 		// Grösse Rechteck (Component)
@@ -30,6 +30,7 @@ public class SampleCircleComponent extends JComponent implements Transferable {
 	}
 
 	// End of constructors
+
 	// PaintComponent method
 	public void paintComponent(Graphics g) {
 		Graphics2D g2 = (Graphics2D) g; // Cast g to Graphics2D
@@ -39,21 +40,19 @@ public class SampleCircleComponent extends JComponent implements Transferable {
 		Color inactiveColor = new Color(0, 0, 255);
 		Color activeColor = new Color(255, 0, 255);
 		boolean active = true;
-		
+
 		// Vertex mit innerem und äusserem Kreis
-		Point location = this.getLocation();
-		Ellipse2D inner = new Ellipse2D.Double(location.x, location.y,
-				INNERCIRCLEDIAMETER, INNERCIRCLEDIAMETER);
-		Ellipse2D outer = new Ellipse2D.Double(inner.getCenterX() - OUTERCIRCLEDIAMETER/2,
-				inner.getCenterY() - OUTERCIRCLEDIAMETER/2, OUTERCIRCLEDIAMETER,
-				OUTERCIRCLEDIAMETER);
+		Ellipse2D outer = new Ellipse2D.Double(0, 0,
+				OUTERCIRCLEDIAMETER, OUTERCIRCLEDIAMETER);
 		g2.setColor(active ? activeColor : inactiveColor);
 		g2.fill(outer);
+		Ellipse2D inner = new Ellipse2D.Double(outer.getCenterX()
+				- INNERCIRCLEDIAMETER / 2, outer.getCenterY()
+				- INNERCIRCLEDIAMETER / 2, INNERCIRCLEDIAMETER,
+				INNERCIRCLEDIAMETER);
 		g2.setColor(inactiveColor);
 		g2.fill(inner);
 
-		this.setBorder(BorderFactory.createLineBorder(Color.red));
-		
 		// Drag & Drop
 		// Add the listener which will export this SampleCircleComponent for
 		// dragging
@@ -65,6 +64,7 @@ public class SampleCircleComponent extends JComponent implements Transferable {
 	}
 
 	// End of paintComponent method
+
 	// Drag & Drop
 	// Transferable
 	/**
@@ -163,6 +163,24 @@ public class SampleCircleComponent extends JComponent implements Transferable {
 	private static DataFlavor dragAndDropSampleCircleComponentDataFlavor = null;
 
 	// End of Members
+	// Listeners
+	/**
+	 * <p>
+	 * Listener that make source draggable.
+	 * </p>
+	 */
+	class DraggableMouseListener extends MouseAdapter {
+		@Override()
+		public void mousePressed(MouseEvent e) {
+			JComponent c = (JComponent) e.getSource();
+			TransferHandler handler = c.getTransferHandler();
+			handler.exportAsDrag(c, e, TransferHandler.COPY);
+		}
+	}
+
+	// End of Listeners
+	// End of Drag & Drop
+
 	// Methods
 	/**
 	 * <p>
@@ -175,8 +193,9 @@ public class SampleCircleComponent extends JComponent implements Transferable {
 			throws Exception {
 		// Lazy load/create the flavor
 		if (dragAndDropSampleCircleComponentDataFlavor == null) {
-			dragAndDropSampleCircleComponentDataFlavor = new DataFlavor(DataFlavor.javaJVMLocalObjectMimeType +
-					";class=\"" + SampleCircleComponent.class.getName() + "\"");
+			dragAndDropSampleCircleComponentDataFlavor = new DataFlavor(
+					DataFlavor.javaJVMLocalObjectMimeType + ";class=\""
+							+ SampleCircleComponent.class.getName() + "\"");
 		}
 		return dragAndDropSampleCircleComponentDataFlavor;
 	}
@@ -193,22 +212,5 @@ public class SampleCircleComponent extends JComponent implements Transferable {
 		return new Point(p.x + LOCATIONCENTERMODIFIER, p.y
 				+ LOCATIONCENTERMODIFIER);
 	}
-
 	// End of Methods
-	// Listeners
-	/**
-	 * <p>
-	 * Listener that make source draggable.
-	 * </p>
-	 */
-	class DraggableMouseListener extends MouseAdapter {
-		@Override()
-		public void mousePressed(MouseEvent e) {
-			JComponent c = (JComponent) e.getSource();
-			TransferHandler handler = c.getTransferHandler();
-			handler.exportAsDrag(c, e, TransferHandler.COPY);
-		}
-	}
-	// End of Listeners
-	// End of Drag & Drop
 }

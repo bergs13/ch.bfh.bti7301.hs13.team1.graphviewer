@@ -24,10 +24,30 @@
             </MenuItem>
           </SubComponents>
         </Menu>
+        <Menu class="javax.swing.JMenu" name="jMenu3">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Graph"/>
+          </Properties>
+        </Menu>
         <Menu class="javax.swing.JMenu" name="jMenu2">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Edit"/>
+            <Property name="text" type="java.lang.String" value="Algorithm"/>
           </Properties>
+          <SubComponents>
+            <MenuItem class="javax.swing.JMenuItem" name="jMenuItem3">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Dijkstra"/>
+              </Properties>
+            </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="jMenuItem4">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Kruskal"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItem4ActionPerformed"/>
+              </Events>
+            </MenuItem>
+          </SubComponents>
         </Menu>
       </SubComponents>
     </Menu>
@@ -69,7 +89,7 @@
               <Component id="jPanel1" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="jScrollPane1" pref="319" max="32767" attributes="0"/>
+                  <Component id="jScrollPane1" pref="359" max="32767" attributes="0"/>
                   <Component id="jScrollPane2" pref="0" max="32767" attributes="0"/>
               </Group>
           </Group>
@@ -94,12 +114,13 @@
       <Layout>
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
-              <Group type="102" alignment="1" attributes="0">
+              <Group type="102" attributes="0">
+                  <Component id="editCheckBox" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Component id="directedRadioButton" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="jRadioButton1" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace max="-2" attributes="0"/>
-                  <Component id="jRadioButton2" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace pref="403" max="32767" attributes="0"/>
+                  <EmptySpace pref="366" max="32767" attributes="0"/>
                   <Component id="forwardButton" min="-2" max="-2" attributes="0"/>
                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
                   <Component id="jButton2" min="-2" max="-2" attributes="0"/>
@@ -116,10 +137,11 @@
                       <Component id="jButton3" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="jButton2" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="forwardButton" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="jRadioButton2" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="jRadioButton1" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="directedRadioButton" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="editCheckBox" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace min="0" pref="16" max="32767" attributes="0"/>
+                  <EmptySpace pref="25" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -146,7 +168,7 @@
             <Property name="text" type="java.lang.String" value="Forward"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JRadioButton" name="jRadioButton2">
+        <Component class="javax.swing.JRadioButton" name="directedRadioButton">
           <Properties>
             <Property name="text" type="java.lang.String" value="directed"/>
           </Properties>
@@ -154,6 +176,11 @@
         <Component class="javax.swing.JRadioButton" name="jRadioButton1">
           <Properties>
             <Property name="text" type="java.lang.String" value="weighted"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JCheckBox" name="editCheckBox">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Edit"/>
           </Properties>
         </Component>
       </SubComponents>

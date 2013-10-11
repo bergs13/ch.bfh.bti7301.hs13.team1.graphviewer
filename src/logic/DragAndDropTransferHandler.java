@@ -1,10 +1,12 @@
-package demo;
+package logic;
 
 import java.awt.datatransfer.Transferable;
 import java.awt.dnd.DragSourceDragEvent;
 import java.awt.dnd.DragSourceMotionListener;
 import javax.swing.JComponent;
 import javax.swing.TransferHandler;
+
+import ui.VertexComponent;
 
 /**
  * <p>
@@ -18,16 +20,16 @@ import javax.swing.TransferHandler;
  * @author bergs13
  */
 @SuppressWarnings("serial")
-public class SampleDragAndDropTransferHandler extends TransferHandler implements
+public class DragAndDropTransferHandler extends TransferHandler implements
 		DragSourceMotionListener {
-	public SampleDragAndDropTransferHandler() {
+	public DragAndDropTransferHandler() {
 		super();
 	}
 
 	/**
 	 * <p>
-	 * This creates the Transferable object. In our case, SampleCircleComponent
-	 * implements Transferable, so this requires only a type cast.
+	 * This creates the Transferable object if it the JComponent implements
+	 * Transferable
 	 * </p>
 	 * 
 	 * @param c
@@ -35,9 +37,9 @@ public class SampleDragAndDropTransferHandler extends TransferHandler implements
 	 */
 	@Override()
 	public Transferable createTransferable(JComponent c) {
-		// SampleCircleComponent implements Transferable
-		if (c instanceof SampleCircleComponent) {
-			Transferable tip = (SampleCircleComponent) c;
+		// Only components who implement Transferable
+		if (c instanceof Transferable) {
+			Transferable tip = (Transferable) c;
 			return tip;
 		}
 		// Not found
@@ -58,7 +60,7 @@ public class SampleDragAndDropTransferHandler extends TransferHandler implements
 	 */
 	@Override()
 	public int getSourceActions(JComponent c) {
-		if (c instanceof SampleCircleComponent) {
+		if (c instanceof VertexComponent) {
 			return TransferHandler.COPY;
 		}
 		return TransferHandler.NONE;

@@ -1,7 +1,8 @@
 import java.awt.GridLayout;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import demo.SampleCirclePanel;
+
+import ui.GraphPanel;
 
 public class Program {
 
@@ -14,8 +15,8 @@ public class Program {
 		frame.setTitle("A Sample Component");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setLayout(new GridLayout(1, 1));
-		JPanel sampleCirclePanel = new SampleCirclePanel();
-		frame.add(sampleCirclePanel);
+		JPanel graphPanel = new GraphPanel();
+		frame.add(graphPanel);
 		frame.setVisible(true);
 	}
 }

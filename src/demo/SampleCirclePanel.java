@@ -1,7 +1,8 @@
 package demo;
 
 import java.awt.Cursor;
-import java.awt.GridLayout;
+import java.awt.Dimension;
+import java.awt.Insets;
 import java.awt.Point;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
@@ -12,7 +13,6 @@ import java.awt.dnd.DropTargetEvent;
 import java.awt.dnd.DropTargetListener;
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.swing.JPanel;
 
 @SuppressWarnings("serial")
@@ -43,7 +43,7 @@ public class SampleCirclePanel extends JPanel {
 		// Add circles with a center for start
 		for (int i = 1; i < 3; i++) {
 			SampleCircleComponent comp = new SampleCircleComponent();
-			comp.setCircleCenter(new Point(i * 100, i * 100));
+			comp.setCircleCenterLocation(new Point(i * 100, i * 100));
 			this.circles.add(comp);
 		}
 
@@ -54,8 +54,8 @@ public class SampleCirclePanel extends JPanel {
 		this.setDropTarget(new DropTarget(this,
 				new SampleCirclePanelDropTargetListener(this)));
 
-		this.setLayout(new GridLayout(1,1));
-		
+		this.setLayout(null);
+
 		// Paint the circles
 		repaintContent();
 	}
@@ -77,8 +77,13 @@ public class SampleCirclePanel extends JPanel {
 		// Add the panels, if any
 		for (SampleCircleComponent c : this.circles) {
 			this.add(c);
+			Dimension size = c.getPreferredSize();
+			Point p = c.getLocation();
+			c.setBounds(p.x, p.y, size.width,
+					size.height);
+			c.validate();
+			c.repaint();
 		}
-
 		this.validate();
 		this.repaint();
 	}
@@ -95,9 +100,8 @@ public class SampleCirclePanel extends JPanel {
 			throws Exception {
 		// Lazy load/create the flavor
 		if (sampleCircleComponentDataFlavor == null) {
-			sampleCircleComponentDataFlavor = new DataFlavor(
-					DataFlavor.javaJVMLocalObjectMimeType
-							+ ";class=SampleCircleComponent");
+			sampleCircleComponentDataFlavor = new DataFlavor(DataFlavor.javaJVMLocalObjectMimeType +
+					";class=\"" + SampleCircleComponent.class.getName() + "\"");
 		}
 		return sampleCircleComponentDataFlavor;
 	}
@@ -111,7 +115,8 @@ public class SampleCirclePanel extends JPanel {
 	 * The real magic behind the drop!
 	 * </p>
 	 */
-	static class SampleCirclePanelDropTargetListener implements DropTargetListener {
+	static class SampleCirclePanelDropTargetListener implements
+			DropTargetListener {
 		private final SampleCirclePanel sampleCirclePanel;
 		/**
 		 * <p>
@@ -193,15 +198,16 @@ public class SampleCirclePanel extends JPanel {
 			if (transferableObj == null) {
 				return;
 			}
-
+			
 			// Cast it to the SampleCircleComponent. By this point, we have
 			// verified it is
 			// a SampleCircleComponent.
 			SampleCircleComponent droppedSampleCircleComponent = (SampleCircleComponent) transferableObj;
-
+	
 			// Get the the point of the SampleCircleComponent
 			// for the drop option (the cursor on the drop)
-			droppedSampleCircleComponent.setCircleCenter(dtde.getLocation());
+			droppedSampleCircleComponent.setCircleCenterLocation(dtde
+					.getLocation());
 
 			// Request repaint of contents, or else won't update GUI following
 			// drop.

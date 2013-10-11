@@ -16,10 +16,8 @@ public class Program {
 		frame.setTitle("A Sample Component");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setLayout(new GridLayout(1,1));
-		
 		JPanel sampleCirclePanel = new SampleCirclePanel();
 		sampleCirclePanel.setBorder(new LineBorder(Color.red));
-		
 		frame.add(sampleCirclePanel);
 		frame.setVisible(true);
 	}

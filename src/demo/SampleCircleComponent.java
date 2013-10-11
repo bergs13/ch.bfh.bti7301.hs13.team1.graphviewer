@@ -1,6 +1,7 @@
 package demo;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
@@ -9,38 +10,61 @@ import java.awt.datatransfer.Transferable;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Ellipse2D;
+import javax.swing.BorderFactory;
 import javax.swing.JComponent;
 import javax.swing.TransferHandler;
 
 @SuppressWarnings("serial")
 public class SampleCircleComponent extends JComponent implements Transferable {
-	private Point circleCenter = null;
-	public void paintComponent(Graphics g) {
-		Graphics2D g2 = (Graphics2D) g; // Cast g to Graphics2D
-		if (null != circleCenter) {
-			// Sample-Vertex mit innerem und äusserem Kreis
-			Ellipse2D inner = new Ellipse2D.Double(circleCenter.x - 25, circleCenter.y - 25, 50, 50);
-			boolean active = true;
-			if (active) {
-				Ellipse2D outer = new Ellipse2D.Double(inner.getCenterX() - 30,
-						inner.getCenterX() - 30, 60, 60);
-				g2.setColor(new Color(0, 0, 255));
-				g2.fill(outer);
-			}
-			g2.setColor(new Color(255, 0,0));
-			g2.fill(inner);
+	// Constant values
+	private static final int LOCATIONCENTERMODIFIER = 30;
+	private static final int INNERCIRCLEDIAMETER = 50;
+	private static final int OUTERCIRCLEDIAMETER = 60;
 
-			// Drag & Drop
-			// Add the listener which will export this SampleCircleComponent for
-			// dragging
-			this.addMouseListener(new DraggableMouseListener());
-			// Add the handler, which negotiates between drop target and this
-			// draggable SampleCircleComponent
-			this.setTransferHandler(new SampleDragAndDropTransferHandler());
-			// End of Drag & Drop
-		}
+	// End of constant values
+	// Constructors
+	public SampleCircleComponent() {
+		// Grösse Rechteck (Component)
+		this.setPreferredSize(new Dimension(OUTERCIRCLEDIAMETER,
+				OUTERCIRCLEDIAMETER));
 	}
 
+	// End of constructors
+	// PaintComponent method
+	public void paintComponent(Graphics g) {
+		Graphics2D g2 = (Graphics2D) g; // Cast g to Graphics2D
+
+		// Definierbare Sachen aus Vertex-Logik (Überschreiben wenn Vertex-Logik
+		// implementiert)
+		Color inactiveColor = new Color(0, 0, 255);
+		Color activeColor = new Color(255, 0, 255);
+		boolean active = true;
+		
+		// Vertex mit innerem und äusserem Kreis
+		Point location = this.getLocation();
+		Ellipse2D inner = new Ellipse2D.Double(location.x, location.y,
+				INNERCIRCLEDIAMETER, INNERCIRCLEDIAMETER);
+		Ellipse2D outer = new Ellipse2D.Double(inner.getCenterX() - OUTERCIRCLEDIAMETER/2,
+				inner.getCenterY() - OUTERCIRCLEDIAMETER/2, OUTERCIRCLEDIAMETER,
+				OUTERCIRCLEDIAMETER);
+		g2.setColor(active ? activeColor : inactiveColor);
+		g2.fill(outer);
+		g2.setColor(inactiveColor);
+		g2.fill(inner);
+
+		this.setBorder(BorderFactory.createLineBorder(Color.red));
+		
+		// Drag & Drop
+		// Add the listener which will export this SampleCircleComponent for
+		// dragging
+		this.addMouseListener(new DraggableMouseListener());
+		// Add the handler, which negotiates between drop target and this
+		// draggable SampleCircleComponent
+		this.setTransferHandler(new SampleDragAndDropTransferHandler());
+		// End of Drag & Drop
+	}
+
+	// End of paintComponent method
 	// Drag & Drop
 	// Transferable
 	/**
@@ -151,15 +175,23 @@ public class SampleCircleComponent extends JComponent implements Transferable {
 			throws Exception {
 		// Lazy load/create the flavor
 		if (dragAndDropSampleCircleComponentDataFlavor == null) {
-			dragAndDropSampleCircleComponentDataFlavor = new DataFlavor(
-					DataFlavor.javaJVMLocalObjectMimeType
-							+ ";class=SampleCircleComponent");
+			dragAndDropSampleCircleComponentDataFlavor = new DataFlavor(DataFlavor.javaJVMLocalObjectMimeType +
+					";class=\"" + SampleCircleComponent.class.getName() + "\"");
 		}
 		return dragAndDropSampleCircleComponentDataFlavor;
 	}
 
-	public void setCircleCenter(Point circleCenter) {
-		this.circleCenter = circleCenter;
+	public void setCircleCenterLocation(Point p) {
+		// Standard setLocation - Constant value for the circleCenter
+		this.setLocation(new Point(p.x - LOCATIONCENTERMODIFIER, p.y
+				- LOCATIONCENTERMODIFIER));
+	}
+
+	public Point getCircleCenterLocation() {
+		// Standard getLocation + Constant value for the circleCenter
+		Point p = this.getLocation();
+		return new Point(p.x + LOCATIONCENTERMODIFIER, p.y
+				+ LOCATIONCENTERMODIFIER);
 	}
 
 	// End of Methods

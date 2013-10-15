@@ -11,14 +11,15 @@ import java.awt.dnd.DropTargetDropEvent;
 import java.awt.dnd.DropTargetEvent;
 import java.awt.dnd.DropTargetListener;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import javax.swing.JPanel;
-
+import extlib.Graph;
+import extlib.Vertex;
 import logic.DragAndDropTransferHandler;
 
-
 @SuppressWarnings("serial")
-public class GraphPanel extends JPanel {
+public class GraphPanel<V, E> extends JPanel {
 	// Members
 	/**
 	 * <p>
@@ -37,16 +38,27 @@ public class GraphPanel extends JPanel {
 	/**
 	 * Keep a list of the user-added panels so can re-add
 	 */
-	private final List<VertexComponent> circles = new ArrayList<VertexComponent>();
+	private final List<VertexComponent<V>> vertexComponents = new ArrayList<VertexComponent<V>>();
 
 	// End of Members
 	// Constructors
-	public GraphPanel() {
-		// Add circles with a center for start
-		for (int i = 1; i < 3; i++) {
-			VertexComponent comp = new VertexComponent();
-			comp.setCircleCenterLocation(new Point(i * 100, i * 100));
-			this.circles.add(comp);
+	public GraphPanel(Graph<V, E> g) {
+		if (null == g) {
+			// Add circles with a center for start
+			for (int i = 1; i < 3; i++) {
+				VertexComponent<V> comp = new VertexComponent<V>(null);
+				comp.setCircleCenterLocation(new Point(i * 100, i * 100));
+				this.vertexComponents.add(comp);
+			}
+		} else {
+			Iterator<Vertex<V>> it = g.vertices();
+			int i = 1;
+			while (it.hasNext()) {
+				VertexComponent<V> comp = new VertexComponent<V>(it.next());
+				comp.setCircleCenterLocation(new Point(i * 100, i * 100));
+				this.vertexComponents.add(comp);
+				i++;
+			}
 		}
 
 		// Again, needs to negotiate with the draggable object
@@ -54,7 +66,7 @@ public class GraphPanel extends JPanel {
 
 		// Create the listener to do the work when dropping on this object!
 		this.setDropTarget(new DropTarget(this,
-				new GraphPanelDropTargetListener(this)));
+				new GraphPanelDropTargetListener<V, E>(this)));
 
 		this.setLayout(null);
 
@@ -77,13 +89,13 @@ public class GraphPanel extends JPanel {
 		this.removeAll();
 
 		// Add the panels, if any
-		for (VertexComponent c : this.circles) {
-			Dimension size = c.getPreferredSize();
-			Point p = c.getLocation();
-			c.setBounds(p.x, p.y, size.width, size.height);
-			this.add(c);
-			c.validate();
-			c.repaint();
+		for (VertexComponent<V> vComp : this.vertexComponents) {
+			Dimension size = vComp.getPreferredSize();
+			Point p = vComp.getLocation();
+			vComp.setBounds(p.x, p.y, size.width, size.height);
+			this.add(vComp);
+			vComp.validate();
+			vComp.repaint();
 		}
 		this.validate();
 		this.repaint();
@@ -97,8 +109,7 @@ public class GraphPanel extends JPanel {
 	 * 
 	 * @return
 	 */
-	public static DataFlavor getVertexComponentDataFlavor()
-			throws Exception {
+	public static DataFlavor getVertexComponentDataFlavor() throws Exception {
 		// Lazy load/create the flavor
 		if (vertexComponentDataFlavor == null) {
 			vertexComponentDataFlavor = new DataFlavor(
@@ -117,29 +128,22 @@ public class GraphPanel extends JPanel {
 	 * The real magic behind the drop!
 	 * </p>
 	 */
-	static class GraphPanelDropTargetListener implements
+	static class GraphPanelDropTargetListener<V, E> implements
 			DropTargetListener {
-		private final GraphPanel graphPanel;
-		/**
-		 * <p>
-		 * Two cursors with which we are primarily interested while dragging:
-		 * </p>
-		 * <ul>
-		 * <li>Cursor for droppable condition</li>
-		 * <li>Cursor for non-droppable consition</li>
-		 * </ul>
-		 * <p>
-		 * After drop, we manually change the cursor back to default, though
-		 * does this anyhow -- just to be complete.
-		 * </p>
+		private final GraphPanel<V, E> graphPanel;
+		/*
+		 * ,* <p> Two cursors with which we are primarily interested while
+		 * dragging: </p> <ul> <li>Cursor for droppable condition</li>
+		 * <li>Cursor for non-droppable consition</li> </ul> <p> After drop, we
+		 * manually change the cursor back to default, though does this anyhow
+		 * -- just to be complete. </p>
 		 */
 		private static final Cursor droppableCursor = Cursor
 				.getPredefinedCursor(Cursor.HAND_CURSOR),
 				notDroppableCursor = Cursor
 						.getPredefinedCursor(Cursor.CROSSHAIR_CURSOR);
 
-		public GraphPanelDropTargetListener(
-				GraphPanel graphPanel) {
+		public GraphPanelDropTargetListener(GraphPanel<V, E> graphPanel) {
 			this.graphPanel = graphPanel;
 		}
 
@@ -204,12 +208,11 @@ public class GraphPanel extends JPanel {
 			// Cast it to the VertexComponent. By this point, we have
 			// verified it is
 			// a VertexComponent.
-			VertexComponent droppedVertexComponent = (VertexComponent) transferableObj;
+			VertexComponent<V> droppedVertexComponent = (VertexComponent<V>) transferableObj;
 
 			// Get the the point of the VertexComponent
 			// for the drop option (the cursor on the drop)
-			droppedVertexComponent.setCircleCenterLocation(dtde
-					.getLocation());
+			droppedVertexComponent.setCircleCenterLocation(dtde.getLocation());
 
 			// Request repaint of contents, or else won't update GUI following
 			// drop.

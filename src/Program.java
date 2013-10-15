@@ -15,7 +15,7 @@ public class Program {
 		frame.setTitle("A Sample Component");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setLayout(new GridLayout(1, 1));
-		JPanel graphPanel = new GraphPanel();
+		JPanel graphPanel = new GraphPanel<String, String>(null);
 		frame.add(graphPanel);
 		frame.setVisible(true);
 	}

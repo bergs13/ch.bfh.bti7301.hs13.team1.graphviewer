@@ -280,6 +280,7 @@ private GraphPanel<V,E> graphPanel;
 		Vertex<String> vA = gr.insertVertex("A");
 		Vertex<String> vB = gr.insertVertex("B");
 		Vertex<String> vC = gr.insertVertex("C");
+                Vertex<String> vD = gr.insertVertex("D");
 		// Edges
 		gr.insertEdge(vA, vB, "AB");
 		gr.insertEdge(vB, vC, "BC");

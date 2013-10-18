@@ -1,4 +1,5 @@
 import extlib.IncidenceListGraph;
+import extlib.Vertex;
 import java.awt.GridLayout;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -34,12 +35,19 @@ public class Program {
             java.util.logging.Logger.getLogger(MainGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
-
+           final IncidenceListGraph<String, String> gr = new IncidenceListGraph<>(true);
+        // Vertices
+		Vertex<String> vA = gr.insertVertex("A");
+		Vertex<String> vB = gr.insertVertex("B");
+		Vertex<String> vC = gr.insertVertex("C");
+		// Edges
+		gr.insertEdge(vA, vB, "AB");
+		gr.insertEdge(vB, vC, "BC");
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                IncidenceListGraph<String, String> g = new IncidenceListGraph<>(true);
-                new MainGUI<String, String>(g).setVisible(true);
+                
+                new MainGUI<String, String>(gr).setVisible(true);
             }
         });
 	}

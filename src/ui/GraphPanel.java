@@ -13,7 +13,9 @@ import java.awt.dnd.DropTargetListener;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import javax.swing.JComponent;
 import javax.swing.JPanel;
+import extlib.Edge;
 import extlib.Graph;
 import extlib.Vertex;
 import logic.DragAndDropTransferHandler;
@@ -38,25 +40,26 @@ public class GraphPanel<V, E> extends JPanel {
 	/**
 	 * Keep a list of the user-added panels so can re-add
 	 */
-	private final List<VertexComponent<V>> vertexComponents = new ArrayList<VertexComponent<V>>();
+	private final List<JComponent> components = new ArrayList<JComponent>();
 
 	// End of Members
 	// Constructors
 	public GraphPanel(Graph<V, E> g) {
-		if (null == g) {
-			// Add circles with a center for start
-			for (int i = 1; i < 3; i++) {
-				VertexComponent<V> comp = new VertexComponent<V>(null);
-				comp.setCircleCenterLocation(new Point(i * 100, i * 100));
-				this.vertexComponents.add(comp);
-			}
-		} else {
-			Iterator<Vertex<V>> it = g.vertices();
+		if (null != g) {
+			Iterator<Vertex<V>> itV = g.vertices();
 			int i = 1;
-			while (it.hasNext()) {
-				VertexComponent<V> comp = new VertexComponent<V>(it.next());
+			while (itV.hasNext()) {
+				VertexComponent<V> comp = new VertexComponent<V>(itV.next());
 				comp.setCircleCenterLocation(new Point(i * 100, i * 100));
-				this.vertexComponents.add(comp);
+				this.components.add(comp);
+				i++;
+			}
+			int j = 1;
+			Iterator<Edge<E>> itE = g.edges();
+			while (itE.hasNext()) {
+				EdgeComponent<E> comp = new EdgeComponent<E>(itE.next());
+				comp.setLocation(new Point(j * 20, j * 20));
+				this.components.add(comp);
 				i++;
 			}
 		}
@@ -70,17 +73,17 @@ public class GraphPanel<V, E> extends JPanel {
 
 		this.setLayout(null);
 
-		// Paint the circles
+		// Paint the components
 		repaintContent();
 	}
 
 	// End of Constructors
 	/**
 	 * <p>
-	 * Removes all circles from the panel and re-adds them.
+	 * Removes all components from the panel and re-adds them.
 	 * </p>
 	 * <p>
-	 * This is important for reordering circles (user drags and drops a panel to
+	 * This is important for reordering components (user drags and drops a vertex to
 	 * acceptable drop target region)
 	 * </p>
 	 */
@@ -89,13 +92,13 @@ public class GraphPanel<V, E> extends JPanel {
 		this.removeAll();
 
 		// Add the panels, if any
-		for (VertexComponent<V> vComp : this.vertexComponents) {
-			Dimension size = vComp.getPreferredSize();
-			Point p = vComp.getLocation();
-			vComp.setBounds(p.x, p.y, size.width, size.height);
-			this.add(vComp);
-			vComp.validate();
-			vComp.repaint();
+		for (JComponent comp : this.components) {
+			Dimension size = comp.getPreferredSize();
+			Point p = comp.getLocation();
+			comp.setBounds(p.x, p.y, size.width, size.height);
+			this.add(comp);
+			comp.validate();
+			comp.repaint();
 		}
 		this.validate();
 		this.repaint();

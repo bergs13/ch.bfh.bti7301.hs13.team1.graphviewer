@@ -366,7 +366,7 @@ public class IncidenceListGraph<V,E> implements Graph<V, E> {
 		private Object thisGraph = IncidenceListGraph.this;
 		private ILGVertex from;
 		private ILGVertex to;
-	
+			
 		ILGEdge(E e, ILGVertex from, ILGVertex to){
 			element=e;
 			this.from = from;

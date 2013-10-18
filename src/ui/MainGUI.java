@@ -19,8 +19,10 @@ private GraphPanel<V,E> graphPanel;
      */
     public MainGUI(IncidenceListGraph<V,E> g) {
         initComponents();
-        graphPanel = new GraphPanel<V,E>(g);
         
+       
+       
+       //.addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
     }
 
     /**

@@ -1,3 +1,4 @@
+import extlib.IncidenceListGraph;
 import java.awt.GridLayout;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -37,7 +38,8 @@ public class Program {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new MainGUI().setVisible(true);
+                IncidenceListGraph<String, String> g = new IncidenceListGraph<>(true);
+                new MainGUI<String, String>(g).setVisible(true);
             }
         });
 	}

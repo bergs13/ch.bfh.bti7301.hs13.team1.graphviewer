@@ -18,8 +18,9 @@ import logic.DragAndDropTransferHandler;
 @SuppressWarnings("serial")
 public class VertexComponent<V> extends JComponent implements Transferable {
 	// Members
-	Vertex<V> vertex = null;
+	private Vertex<V> vertex = null;
 	// End of members
+
 	// Constant values
 	private static final int LOCATIONCENTERMODIFIER = 30;
 	private static final int INNERCIRCLEDIAMETER = 50;
@@ -41,11 +42,13 @@ public class VertexComponent<V> extends JComponent implements Transferable {
 	public void paintComponent(Graphics g) {
 		Graphics2D g2 = (Graphics2D) g; // Cast g to Graphics2D
 
-		// Definierbare Sachen aus Vertex-Logik (Überschreiben wenn Vertex-Logik
-		// implementiert)
+		// Definierbare Sachen aus Vertex-Format (Überschreiben wenn
+		// Vertex-Format implementiert)
 		Color inactiveColor = new Color(0, 0, 255);
 		Color activeColor = new Color(255, 0, 0);
 		boolean active = true;
+		boolean textVisible = true;
+		String displayText = "V";
 
 		// Vertex mit innerem und äusserem Kreis
 		Ellipse2D outer = new Ellipse2D.Double(0, 0, OUTERCIRCLEDIAMETER,

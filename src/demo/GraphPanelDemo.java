@@ -30,7 +30,7 @@ public class GraphPanelDemo extends GraphExamples<String, String> {
 		// GUI aus Graph
 		JFrame frame = new JFrame();
 		frame.setSize(500, 500);
-		frame.setTitle("A Sample Component");
+		frame.setTitle("A Graph Component Demo");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setLayout(new GridLayout(1, 1));
 		JPanel graphPanel = new GraphPanel<String, String>(g);

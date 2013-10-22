@@ -19,24 +19,32 @@ public class VertexFormat {
     private Color unvisitedColor;
     private Point centerPoint = new Point(100, 100);
     private String label;
+    private boolean textVisible;
     private boolean active = false;
     private boolean visited = false;
+    private VertexLayout layout;
     
-    //default values
-    private static final Color DEFAULT_ACTIVE_COLOR = new Color(255, 0 ,0);
-    private static final String DEFAULT_LABEL = "DV";
     
-    public VertexFormat() {
-        this.setDefault();
+    
+    public VertexFormat(VertexLayout newlayout) {
+        setLayout(newlayout);
     }
-
+    //delayed until StandartLayout has been defined
+    //public VertexFormat(){
+    //this(StandarLayout);
+    //}
     
-    
-    public void setDefault(){
-        label= DEFAULT_LABEL;
-        active = false;
-        activeColor = DEFAULT_ACTIVE_COLOR;
-        
+    /**
+     * 
+     * @param newLayout 
+     */
+    public void setLayout(VertexLayout newLayout){
+        layout = newLayout;
+        activeColor = layout.getActiveColor();
+        visitedColor = layout.getVisitedColor();
+        unvisitedColor = layout.getUnvisitedColor();
+        textVisible= layout.getTextVisible();
+        label = layout.getDefaultText();
         
     }
 }

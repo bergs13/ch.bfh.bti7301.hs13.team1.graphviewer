@@ -30,7 +30,7 @@ public class VertexComponent<V> extends JComponent implements Transferable {
 
 	// Constructors
 	public VertexComponent(Vertex<V> vertex) {
-		// Grösse Rechteck (Component)
+		// Grï¿½sse Rechteck (Component)
 		this.setPreferredSize(new Dimension(OUTERCIRCLEDIAMETER,
 				OUTERCIRCLEDIAMETER));
 		this.vertex = vertex;
@@ -42,7 +42,7 @@ public class VertexComponent<V> extends JComponent implements Transferable {
 	public void paintComponent(Graphics g) {
 		Graphics2D g2 = (Graphics2D) g; // Cast g to Graphics2D
 
-		// Definierbare Sachen aus Vertex-Format (Überschreiben wenn
+		// Definierbare Sachen aus Vertex-Format (ï¿½berschreiben wenn
 		// Vertex-Format implementiert)
 		Color inactiveColor = new Color(0, 0, 255);
 		Color activeColor = new Color(255, 0, 0);
@@ -50,7 +50,7 @@ public class VertexComponent<V> extends JComponent implements Transferable {
 		boolean textVisible = true;
 		String displayText = "V";
 
-		// Vertex mit innerem und äusserem Kreis
+		// Vertex mit innerem und ï¿½usserem Kreis
 		Ellipse2D outer = new Ellipse2D.Double(0, 0, OUTERCIRCLEDIAMETER,
 				OUTERCIRCLEDIAMETER);
 		g2.setColor(active ? activeColor : inactiveColor);

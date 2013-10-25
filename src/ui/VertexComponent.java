@@ -22,9 +22,9 @@ public class VertexComponent<V> extends JComponent implements Transferable {
 	// End of members
 
 	// Constant values
-	private static final int LOCATIONCENTERMODIFIER = 30;
-	private static final int INNERCIRCLEDIAMETER = 50;
-	private static final int OUTERCIRCLEDIAMETER = 60;
+	private static final int LOCATIONCENTERMODIFIER = 50;
+	private static final int INNERCIRCLEDIAMETER = 80;
+	private static final int OUTERCIRCLEDIAMETER = 100;
 
 	// End of constant values
 

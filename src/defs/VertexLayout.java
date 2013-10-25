@@ -16,5 +16,6 @@ public interface VertexLayout {
     Color getUnvisitedColor();
     boolean getTextVisible();
     String getDefaultText();
+    int getSize();
     
 }

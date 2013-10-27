@@ -10,12 +10,13 @@ import java.awt.Color;
  *
  * @author Stephan_2
  */
-public interface VertexLayout {
+public interface GraphLayout {
     Color getActiveColor();
     Color getVisitedColor();
     Color getUnvisitedColor();
     boolean getTextVisible();
     String getDefaultText();
-    int getSize();
+    int getVertexSize();
+    float getEdgeWidth();
     
 }

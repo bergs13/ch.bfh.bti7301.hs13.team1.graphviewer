@@ -23,7 +23,7 @@ public class VertexFormat {
     private boolean textVisible;
     private boolean active;
     private boolean visited;
-    private VertexLayout layout;
+    private GraphLayout layout;
     private int size;
     private final int DEFAULT_SIZE = 40;
     private final int MAX_SIZE = 80;
@@ -33,7 +33,7 @@ public class VertexFormat {
      *
      * @param newlayout
      */
-    public VertexFormat(VertexLayout newlayout) {
+    public VertexFormat(GraphLayout newlayout) {
         setLayout(newlayout);
     }
 
@@ -45,14 +45,14 @@ public class VertexFormat {
      *
      * @param newLayout
      */
-    public final void setLayout(VertexLayout newLayout) {
+    public final void setLayout(GraphLayout newLayout) {
         layout = newLayout;
         activeColor = layout.getActiveColor();
         visitedColor = layout.getVisitedColor();
         unvisitedColor = layout.getUnvisitedColor();
         textVisible = layout.getTextVisible();
         label = layout.getDefaultText();
-        this.setSize(layout.getSize());
+        this.setSize(layout.getVertexSize());
         this.reset();
 
     }
@@ -153,42 +153,5 @@ public class VertexFormat {
         visited = false;
     }
 
-    private class StandardLayout implements VertexLayout {
-
-        private final Color ACTIVECOLOR = new Color(255, 0, 0);
-        private final Color VISITEDCOLOR = new Color(0, 0, 255);
-        private final Color UNVISITEDCOLOR = new Color(0, 0, 0);
-        private final int SIZE = 50;
-
-        @Override
-        public Color getActiveColor() {
-            return ACTIVECOLOR;
-        }
-
-        @Override
-        public Color getVisitedColor() {
-            return VISITEDCOLOR;
-        }
-
-        @Override
-        public Color getUnvisitedColor() {
-            return UNVISITEDCOLOR;
-        }
-
-        @Override
-        public boolean getTextVisible() {
-            return true;
-        }
-
-        @Override
-        public String getDefaultText() {
-            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-        }
-
-        @Override
-        public int getSize() {
-            return size;
-        }
-
-    }
+    
 }

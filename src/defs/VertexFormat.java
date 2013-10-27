@@ -11,6 +11,7 @@ import java.awt.Color;
  *
  * @author Stephan_2
  */
+@SuppressWarnings("serial")
 public class VertexFormat {
 
     //variabels
@@ -20,12 +21,12 @@ public class VertexFormat {
     private Point centerPoint;
     private String label;
     private boolean textVisible;
-    private boolean active = false;
-    private boolean visited = false;
+    private boolean active;
+    private boolean visited;
     private VertexLayout layout;
     private int size;
     private final int DEFAULT_SIZE = 40;
-    private final int MAX_SIZE = 100;
+    private final int MAX_SIZE = 80;
     private final int MIN_SIZE = 10;
 
     /**
@@ -44,7 +45,7 @@ public class VertexFormat {
      *
      * @param newLayout
      */
-    public void setLayout(VertexLayout newLayout) {
+    public final void setLayout(VertexLayout newLayout) {
         layout = newLayout;
         activeColor = layout.getActiveColor();
         visitedColor = layout.getVisitedColor();
@@ -52,6 +53,7 @@ public class VertexFormat {
         textVisible = layout.getTextVisible();
         label = layout.getDefaultText();
         this.setSize(layout.getSize());
+        this.reset();
 
     }
 
@@ -135,7 +137,7 @@ public class VertexFormat {
             aSize--;
         }
         if (aSize < MIN_SIZE || aSize > MAX_SIZE) {
-            aSize = DEFAULT_SIZE;
+            this.size = DEFAULT_SIZE;
         }
         this.size = aSize;
 
@@ -155,7 +157,7 @@ public class VertexFormat {
 
         private final Color ACTIVECOLOR = new Color(255, 0, 0);
         private final Color VISITEDCOLOR = new Color(0, 0, 255);
-        private final Color UNVISITEDCOLOR = new Color(0,0,0);
+        private final Color UNVISITEDCOLOR = new Color(0, 0, 0);
         private final int SIZE = 50;
 
         @Override

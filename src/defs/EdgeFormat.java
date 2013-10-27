@@ -14,4 +14,5 @@ public class EdgeFormat {
     private boolean active;
     private boolean included;
     private String label;
+    
 }

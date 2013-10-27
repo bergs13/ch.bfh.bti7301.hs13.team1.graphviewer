@@ -64,6 +64,7 @@ public class TestVertexComponent<V> extends JComponent implements Transferable {
 				INNERCIRCLEDIAMETER);
 		g2.setColor(inactiveColor);
 		g2.fill(inner);
+                
 		// Drag & Drop
 		// Add the listener which will export this VertexComponent for
 		// dragging

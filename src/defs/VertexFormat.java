@@ -25,6 +25,7 @@ public class VertexFormat {
     private boolean visited;
     private GraphLayout layout;
     private int size;
+    private int borderWidth;
     private final int DEFAULT_SIZE = 40;
     private final int MAX_SIZE = 80;
     private final int MIN_SIZE = 20;
@@ -53,6 +54,7 @@ public class VertexFormat {
         textVisible = layout.getTextVisible();
         label = layout.getDefaultText();
         this.setSize();
+        borderWidth = (int) size / 10;
         this.setUnvisited();
 
     }
@@ -144,16 +146,23 @@ public class VertexFormat {
         if (size % 2 == 1) {
             size++;
         }
-        
+
         if (size < MIN_SIZE || size > MAX_SIZE) {
             this.size = DEFAULT_SIZE;
         }
-        
 
     }
 
     public int getSize() {
         return size;
+    }
+
+    public int getBorderWidth() {
+        return borderWidth;
+    }
+
+    public void setBorderWidth(int borderWidth) {
+        this.borderWidth = borderWidth;
     }
 
     //End of getters and setters

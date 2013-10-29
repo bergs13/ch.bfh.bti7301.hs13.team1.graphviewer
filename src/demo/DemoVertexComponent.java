@@ -26,7 +26,7 @@ public class DemoVertexComponent<V> extends JComponent implements Transferable {
 
 	// Constant values
 	private final int LOCATIONCENTERMODIFIER = format.getSize()/2;
-	private final int INNERCIRCLEDIAMETER = format.getSize()- 10;
+	private final int INNERCIRCLEDIAMETER = format.getSize()- format.getBorderWidth();
 	private final int OUTERCIRCLEDIAMETER = format.getSize();
 
 	// End of constant values
@@ -50,7 +50,7 @@ public class DemoVertexComponent<V> extends JComponent implements Transferable {
 		Color inactiveColor = format.getUnvisitedColor();
 		Color activeColor = format.getActiveColor();
 		String displayText = "V";
-                format.setActive();
+                format.setVisited();
 
 		// Vertex mit innerem und �usserem Kreis
 		Ellipse2D outer = new Ellipse2D.Double(0, 0, OUTERCIRCLEDIAMETER,

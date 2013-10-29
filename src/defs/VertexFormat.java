@@ -27,7 +27,7 @@ public class VertexFormat {
     private int size;
     private final int DEFAULT_SIZE = 40;
     private final int MAX_SIZE = 80;
-    private final int MIN_SIZE = 10;
+    private final int MIN_SIZE = 20;
 
     /**
      *
@@ -52,8 +52,8 @@ public class VertexFormat {
         unvisitedColor = layout.getUnvisitedColor();
         textVisible = layout.getTextVisible();
         label = layout.getDefaultText();
-        this.setSize(layout.getVertexSize());
-        this.reset();
+        this.setSize();
+        this.setUnvisited();
 
     }
 
@@ -106,20 +106,27 @@ public class VertexFormat {
         this.textVisible = textVisible;
     }
 
+    public void setUnvisited() {
+        active = false;
+        visited = false;
+    }
+
     public boolean isActive() {
         return active;
     }
 
-    public void setActive(boolean active) {
-        this.active = active;
+    public void setActive() {
+        this.active = true;
+        this.visited = false;
     }
 
     public boolean isVisited() {
         return visited;
     }
 
-    public void setVisited(boolean visited) {
-        this.visited = visited;
+    public void setVisited() {
+        this.visited = true;
+        this.active = false;
     }
 
     public Color getColor() {
@@ -132,14 +139,16 @@ public class VertexFormat {
         }
     }
 
-    public void setSize(int aSize) {
-        if (aSize % 2 == 1) {
-            aSize--;
+    public void setSize() {
+        this.size = this.layout.getVertexSize();
+        if (size % 2 == 1) {
+            size++;
         }
-        if (aSize < MIN_SIZE || aSize > MAX_SIZE) {
+        
+        if (size < MIN_SIZE || size > MAX_SIZE) {
             this.size = DEFAULT_SIZE;
         }
-        this.size = aSize;
+        
 
     }
 
@@ -148,10 +157,4 @@ public class VertexFormat {
     }
 
     //End of getters and setters
-    public void reset() {
-        active = false;
-        visited = false;
-    }
-
-    
 }

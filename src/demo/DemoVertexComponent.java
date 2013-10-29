@@ -18,7 +18,7 @@ import extlib.Vertex;
 import logic.DragAndDropTransferHandler;
 
 @SuppressWarnings("serial")
-public class TestVertexComponent<V> extends JComponent implements Transferable {
+public class DemoVertexComponent<V> extends JComponent implements Transferable {
 	// Members
 	private Vertex<V> vertex = null;
         private VertexFormat format = new VertexFormat();
@@ -32,7 +32,7 @@ public class TestVertexComponent<V> extends JComponent implements Transferable {
 	// End of constant values
 
 	// Constructors
-	public TestVertexComponent(Vertex<V> vertex) {
+	public DemoVertexComponent(Vertex<V> vertex) {
 		// Gr�sse Rechteck (Component)
 		this.setPreferredSize(new Dimension(OUTERCIRCLEDIAMETER,
 				OUTERCIRCLEDIAMETER));
@@ -47,16 +47,15 @@ public class TestVertexComponent<V> extends JComponent implements Transferable {
                 
 		// Definierbare Sachen aus Vertex-Format (�berschreiben wenn
 		// Vertex-Format implementiert)
-		Color inactiveColor = new Color(0, 0, 255);
-		Color activeColor = new Color(255, 0, 0);
-		boolean active = true;
-		boolean textVisible = true;
+		Color inactiveColor = format.getUnvisitedColor();
+		Color activeColor = format.getActiveColor();
 		String displayText = "V";
+                format.setActive();
 
 		// Vertex mit innerem und �usserem Kreis
 		Ellipse2D outer = new Ellipse2D.Double(0, 0, OUTERCIRCLEDIAMETER,
 				OUTERCIRCLEDIAMETER);
-		g2.setColor(format.isActive() ? format.getActiveColor() : (format.isVisited() ? format.getVisitedColor() : format.getUnvisitedColor()));
+		g2.setColor(format.getColor());
 		g2.fill(outer);
 		Ellipse2D inner = new Ellipse2D.Double(outer.getCenterX()
 				- INNERCIRCLEDIAMETER / 2, outer.getCenterY()
@@ -102,7 +101,7 @@ public class TestVertexComponent<V> extends JComponent implements Transferable {
 		DataFlavor thisFlavor = this.getTransferDataFlavors()[0];
 		// For now, assume wants this class... see loadDnD
 		if (thisFlavor != null && flavor.equals(thisFlavor)) {
-			return TestVertexComponent.this;
+			return DemoVertexComponent.this;
 		}
 		return null;
 	}

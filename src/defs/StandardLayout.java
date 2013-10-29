@@ -16,7 +16,7 @@ public class StandardLayout implements GraphLayout {
     private final Color ACTIVECOLOR = new Color(255, 0, 0);
     private final Color VISITEDCOLOR = new Color(0, 0, 255);
     private final Color UNVISITEDCOLOR = new Color(0, 0, 0);
-    private final int VERTEX_SIZE = 50;
+    private final int VERTEX_SIZE = 20;
     private final float EDGE_WIDTH = 2f;
 
     public StandardLayout() {
@@ -45,7 +45,7 @@ public class StandardLayout implements GraphLayout {
 
     @Override
     public String getDefaultText() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+       return "default";
     }
 
     @Override

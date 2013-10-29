@@ -17,6 +17,8 @@ public class EdgeFormat {
     private boolean isDirected;
     private boolean active;
     private boolean included;
+    private boolean textVisible;
+    
     private String label;
     private Point fromPoint;
     private Point toPoint;
@@ -24,9 +26,11 @@ public class EdgeFormat {
     private BasicStroke edgeStyle;
     private Color activeColor;
     private Color includedColor;
-    private Color unvisitedColor;
-    private boolean textVisible;
-    private final int MAX_WIDTH = 20;
+    private Color unincludedColor;
+
+    private final float MAX_WIDTH = 20F;
+    private final float MIN_WIDTH = 2F;
+    private final float DEFAULT_WIDTH = 4F;
 
     public EdgeFormat(GraphLayout newLayout) {
         setLayout(newLayout);
@@ -39,7 +43,26 @@ public class EdgeFormat {
         setLayout(new StandardLayout());
     }
 
-    //Start Getters and Setters
+    public final void setLayout(GraphLayout newLayout) {
+        layout = newLayout;
+        activeColor = layout.getActiveColor();
+        includedColor = layout.getVisitedColor();
+        unincludedColor = layout.getUnvisitedColor();
+        textVisible = layout.getTextVisible();
+        //label = layout.getDefaultText();
+        edgeStyle = new BasicStroke(this.setWidth(layout.getEdgeWidth()));
+        this.reset();
+    }
+   /**
+    * reset this edget to Start State
+    */
+    private void reset() {
+        active = false;
+        included = false;
+
+    }
+//Start Getters and Setters
+
     public boolean isIsDirected() {
         return isDirected;
     }
@@ -112,12 +135,12 @@ public class EdgeFormat {
         this.includedColor = includedColor;
     }
 
-    public Color getUnvisitedColor() {
-        return unvisitedColor;
+    public Color getUnincludedColor() {
+        return unincludedColor;
     }
 
-    public void setUnvisitedColor(Color unvisitedColor) {
-        this.unvisitedColor = unvisitedColor;
+    public void setUnincludedColor(Color unincludedColor) {
+        this.unincludedColor = unincludedColor;
     }
 
     public boolean isTextVisible() {
@@ -127,23 +150,13 @@ public class EdgeFormat {
     public void setTextVisible(boolean textVisible) {
         this.textVisible = textVisible;
     }
+
+    private float setWidth(float width) {
+        if (width < MIN_WIDTH || width > MAX_WIDTH) {
+            return DEFAULT_WIDTH;
+        }
+        return width;
+    }
+
     //End Getters and Setters
-
-    public final void setLayout(GraphLayout newLayout) {
-        layout = newLayout;
-        activeColor = layout.getActiveColor();
-        includedColor = layout.getVisitedColor();
-        unvisitedColor = layout.getUnvisitedColor();
-        textVisible = layout.getTextVisible();
-        label = layout.getDefaultText();
-        edgeStyle = new BasicStroke(layout.getEdgeWidth());
-        this.reset();
-    }
-
-    private void reset() {
-        active = false;
-        included = false;
-
-    }
-
 }

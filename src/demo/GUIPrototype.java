@@ -17,14 +17,14 @@ import ui.GraphPanel;
  */
 @SuppressWarnings("serial")
 public class GUIPrototype<V,E> extends javax.swing.JFrame {
-private GraphPanel<V,E> graphPanel;
+private DemoGraphPanel<V,E> graphPanel;
 
     /**
      * Creates new form GUIPrototype
      */
     public GUIPrototype(IncidenceListGraph<V,E> g) {
         initComponents();
-        graphPanel = new GraphPanel<>(g);
+        graphPanel = new DemoGraphPanel<>(g);
         graphPanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         javax.swing.GroupLayout graphPanelLayout = new javax.swing.GroupLayout(graphPanel);
         graphPanel.setLayout(graphPanelLayout);

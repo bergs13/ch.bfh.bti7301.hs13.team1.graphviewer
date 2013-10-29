@@ -119,9 +119,9 @@ public class EdgeComponent<E> extends JComponent {
 				}
 				// Allgemeiner Fall
 				else {
+					
 					Point p = PointCalculator.getPointOnStraightLine(toPoint,
 							fromPoint, ARROWTRIANGLEHEIGHT);
-
 				}
 
 				// Daten für Pfeil bekannt, Pfeil zeichnen

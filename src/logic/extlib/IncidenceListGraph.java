@@ -1,4 +1,4 @@
-package extlib;
+package logic.extlib;
 
 import java.util.HashMap;
 import java.util.HashSet;

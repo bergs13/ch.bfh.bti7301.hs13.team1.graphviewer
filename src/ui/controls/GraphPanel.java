@@ -1,4 +1,4 @@
-package ui;
+package ui.controls;
 
 import java.awt.Cursor;
 import java.awt.Dimension;
@@ -15,9 +15,11 @@ import java.util.Iterator;
 import java.util.List;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
-import extlib.Edge;
-import extlib.Graph;
-import extlib.Vertex;
+import ui.components.EdgeComponent;
+import ui.components.VertexComponent;
+import logic.extlib.Edge;
+import logic.extlib.Graph;
+import logic.extlib.Vertex;
 import logic.DragAndDropTransferHandler;
 
 @SuppressWarnings("serial")

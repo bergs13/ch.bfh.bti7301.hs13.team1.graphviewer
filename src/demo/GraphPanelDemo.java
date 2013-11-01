@@ -1,14 +1,12 @@
 package demo;
 
 import java.awt.GridLayout;
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-
-import ui.GraphPanel;
-import extlib.GraphExamples;
-import extlib.IncidenceListGraph;
-import extlib.Vertex;
+import ui.controls.GraphPanel;
+import logic.extlib.GraphExamples;
+import logic.extlib.IncidenceListGraph;
+import logic.extlib.Vertex;
 
 public class GraphPanelDemo extends GraphExamples<String, String> {
 
@@ -23,9 +21,9 @@ public class GraphPanelDemo extends GraphExamples<String, String> {
 		Vertex<String> vA = g.insertVertex("A");
 		Vertex<String> vB = g.insertVertex("B");
 		Vertex<String> vC = g.insertVertex("C");
-//		// Edges
-//		g.insertEdge(vA, vB, "AB");
-//		g.insertEdge(vB, vC, "BC");
+		// // Edges
+		// g.insertEdge(vA, vB, "AB");
+		// g.insertEdge(vB, vC, "BC");
 
 		// GUI aus Graph
 		JFrame frame = new JFrame();

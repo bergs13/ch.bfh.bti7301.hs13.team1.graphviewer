@@ -1,7 +1,6 @@
 package logic;
 
 import java.awt.Point;
-import defs.VectorR2;
 
 public class PointCalculator {
 	public PointCalculator() {

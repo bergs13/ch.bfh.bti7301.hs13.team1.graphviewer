@@ -1,7 +1,7 @@
 /**
  * 
  */
-package extlib;
+package logic.extlib;
 
 /**
  * Locator allow to store (key,Object) pairs, where the keys have 

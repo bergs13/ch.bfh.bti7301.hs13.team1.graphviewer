@@ -1,7 +1,7 @@
 package demo;
 
 import defs.VertexFormat;
-import ui.*;
+import ui.components.VertexComponent;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -14,19 +14,20 @@ import java.awt.event.MouseEvent;
 import java.awt.geom.Ellipse2D;
 import javax.swing.JComponent;
 import javax.swing.TransferHandler;
-import extlib.Vertex;
+import logic.extlib.Vertex;
 import logic.DragAndDropTransferHandler;
 
 @SuppressWarnings("serial")
 public class DemoVertexComponent<V> extends JComponent implements Transferable {
 	// Members
 	private Vertex<V> vertex = null;
-        private VertexFormat format = new VertexFormat();
-       	// End of members
+	private VertexFormat format = new VertexFormat();
+	// End of members
 
 	// Constant values
-	private final int LOCATIONCENTERMODIFIER = format.getSize()/2;
-	private final int INNERCIRCLEDIAMETER = format.getSize()- format.getBorderWidth();
+	private final int LOCATIONCENTERMODIFIER = format.getSize() / 2;
+	private final int INNERCIRCLEDIAMETER = format.getSize()
+			- format.getBorderWidth();
 	private final int OUTERCIRCLEDIAMETER = format.getSize();
 
 	// End of constant values
@@ -44,13 +45,13 @@ public class DemoVertexComponent<V> extends JComponent implements Transferable {
 	// PaintComponent method
 	public void paintComponent(Graphics g) {
 		Graphics2D g2 = (Graphics2D) g; // Cast g to Graphics2D
-                
+
 		// Definierbare Sachen aus Vertex-Format (�berschreiben wenn
 		// Vertex-Format implementiert)
 		Color inactiveColor = format.getUnvisitedColor();
 		Color activeColor = format.getActiveColor();
 		String displayText = "V";
-                format.setVisited();
+		format.setVisited();
 
 		// Vertex mit innerem und �usserem Kreis
 		Ellipse2D outer = new Ellipse2D.Double(0, 0, OUTERCIRCLEDIAMETER,
@@ -63,7 +64,7 @@ public class DemoVertexComponent<V> extends JComponent implements Transferable {
 				INNERCIRCLEDIAMETER);
 		g2.setColor(inactiveColor);
 		g2.fill(inner);
-                
+
 		// Drag & Drop
 		// Add the listener which will export this VertexComponent for
 		// dragging

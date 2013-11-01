@@ -1,7 +1,7 @@
 /**
  * 
  */
-package extlib;
+package logic.extlib;
 
 import java.lang.management.ManagementFactory;
 import java.lang.management.ThreadMXBean;

@@ -1,4 +1,4 @@
-package ui;
+package ui.components;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -12,7 +12,7 @@ import java.awt.event.MouseEvent;
 import java.awt.geom.Ellipse2D;
 import javax.swing.JComponent;
 import javax.swing.TransferHandler;
-import extlib.Vertex;
+import logic.extlib.Vertex;
 import logic.DragAndDropTransferHandler;
 
 @SuppressWarnings("serial")

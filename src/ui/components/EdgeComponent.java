@@ -1,4 +1,4 @@
-package ui;
+package ui.components;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -10,12 +10,9 @@ import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.Shape;
 import java.awt.geom.Line2D;
-import java.awt.geom.Rectangle2D;
-
 import javax.swing.JComponent;
-
 import logic.PointCalculator;
-import extlib.Edge;
+import logic.extlib.Edge;
 
 @SuppressWarnings("serial")
 public class EdgeComponent<E> extends JComponent {

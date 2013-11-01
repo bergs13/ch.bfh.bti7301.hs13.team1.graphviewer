@@ -1,4 +1,4 @@
-package extlib;
+package logic.extlib;
 /**
  * Edges of a graph. The edge object can be retrieved with 
  * the element() method. 

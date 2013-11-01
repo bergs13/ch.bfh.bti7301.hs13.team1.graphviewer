@@ -1,4 +1,4 @@
-package extlib;
+package logic.extlib;
 /**
  * @author ps
  *

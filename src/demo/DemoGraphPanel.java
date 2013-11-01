@@ -1,6 +1,7 @@
 package demo;
 
-import ui.*;
+import ui.components.VertexComponent;
+import ui.controls.GraphPanel;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Point;
@@ -16,9 +17,8 @@ import java.util.Iterator;
 import java.util.List;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
-import extlib.Edge;
-import extlib.Graph;
-import extlib.Vertex;
+import logic.extlib.Graph;
+import logic.extlib.Vertex;
 import logic.DragAndDropTransferHandler;
 
 @SuppressWarnings("serial")
@@ -50,19 +50,20 @@ public class DemoGraphPanel<V, E> extends JPanel {
 			Iterator<Vertex<V>> itV = g.vertices();
 			int i = 1;
 			while (itV.hasNext()) {
-				DemoVertexComponent<V> comp = new DemoVertexComponent<V>(itV.next());
+				DemoVertexComponent<V> comp = new DemoVertexComponent<V>(
+						itV.next());
 				comp.setCircleCenterLocation(new Point(i * 100, i * 100));
 				this.components.add(comp);
 				i++;
 			}
-//			int j = 1;
-//			Iterator<Edge<E>> itE = g.edges();
-//			while (itE.hasNext()) {
-//				EdgeComponent<E> comp = new EdgeComponent<E>(itE.next());
-//				comp.setLocation(new Point(j * 20, j * 20));
-//				this.components.add(comp);
-//				i++;
-//			}
+			// int j = 1;
+			// Iterator<Edge<E>> itE = g.edges();
+			// while (itE.hasNext()) {
+			// EdgeComponent<E> comp = new EdgeComponent<E>(itE.next());
+			// comp.setLocation(new Point(j * 20, j * 20));
+			// this.components.add(comp);
+			// i++;
+			// }
 		}
 
 		// Again, needs to negotiate with the draggable object
@@ -84,8 +85,8 @@ public class DemoGraphPanel<V, E> extends JPanel {
 	 * Removes all components from the panel and re-adds them.
 	 * </p>
 	 * <p>
-	 * This is important for reordering components (user drags and drops a vertex to
-	 * acceptable drop target region)
+	 * This is important for reordering components (user drags and drops a
+	 * vertex to acceptable drop target region)
 	 * </p>
 	 */
 	public void repaintContent() {
@@ -112,7 +113,7 @@ public class DemoGraphPanel<V, E> extends JPanel {
 	 * </p>
 	 * 
 	 * @return
-     * @throws java.lang.Exception
+	 * @throws java.lang.Exception
 	 */
 	public static DataFlavor getVertexComponentDataFlavor() throws Exception {
 		// Lazy load/create the flavor

@@ -1,4 +1,4 @@
-package defs;
+package logic;
 
 import java.awt.Point;
 
@@ -33,9 +33,8 @@ public class VectorR2 {
 				- otherVector.getY());
 	}
 
-	public VectorR2 multiplyVector(VectorR2 otherVector) {
-		return new VectorR2(this.x *= otherVector.getX(),
-				this.y *= otherVector.getY());
+	public double scalarProduct(VectorR2 otherVector) {
+		return this.x* otherVector.getX() + this.y * otherVector.getY();
 	}
 
 	public VectorR2 multiplyConstantValue(double constantValue) {

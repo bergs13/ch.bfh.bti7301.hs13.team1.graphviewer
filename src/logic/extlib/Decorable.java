@@ -1,4 +1,4 @@
-package extlib;
+package logic.extlib;
 
 /**
  * Classes implementing the decorable interface allow to attach 

@@ -1,4 +1,4 @@
-package extlib;
+package logic.extlib;
 /**
  * Vertices of a graph. The vertex object can be retrieved with 
  * the element() method. 

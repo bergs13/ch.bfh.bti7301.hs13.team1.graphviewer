@@ -1,11 +1,6 @@
 import extlib.IncidenceListGraph;
 import extlib.Vertex;
-import java.awt.GridLayout;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
 import ui.MainGUI;
-
-import ui.GraphPanel;
 
 public class Program {
 

@@ -3,9 +3,11 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/Stephan_2/Documents/NetBeansProjects/Graphviewer/src/extlib/GraphExamples.java</file>
-            <file>file:/C:/Users/Stephan_2/Documents/NetBeansProjects/Graphviewer/src/extlib/HeapPriorityQueue.java</file>
-            <file>file:/C:/Users/Stephan_2/Documents/NetBeansProjects/Graphviewer/src/extlib/IncidenceListGraph.java</file>
+            <file>file:/C:/Users/Stephan_2/Documents/NetBeansProjects/Graphviewer/src/demo/DemoVertexComponent.java</file>
+            <file>file:/C:/Users/Stephan_2/Documents/NetBeansProjects/Graphviewer/src/defs/VertexFormat.java</file>
+            <file>file:/C:/Users/Stephan_2/Documents/NetBeansProjects/Graphviewer/src/ui/components/EdgeComponent.java</file>
+            <file>file:/C:/Users/Stephan_2/Documents/NetBeansProjects/Graphviewer/src/logic/extlib/IncidenceListGraph.java</file>
+            <file>file:/C:/Users/Stephan_2/Documents/NetBeansProjects/Graphviewer/src/ui/components/VertexComponent.java</file>
         </group>
     </open-files>
 </project-private>

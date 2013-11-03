@@ -21,7 +21,7 @@ import logic.DragAndDropTransferHandler;
 public class DemoVertexComponent<V> extends JComponent implements Transferable {
 	// Members
 	private Vertex<V> vertex = null;
-	private VertexFormat format = new VertexFormat();
+	private VertexFormat format = null;
 	// End of members
 
 	// Constant values
@@ -38,6 +38,7 @@ public class DemoVertexComponent<V> extends JComponent implements Transferable {
 		this.setPreferredSize(new Dimension(OUTERCIRCLEDIAMETER,
 				OUTERCIRCLEDIAMETER));
 		this.vertex = vertex;
+                this.format = new VertexFormat(vertex);
 	}
 
 	// End of constructors

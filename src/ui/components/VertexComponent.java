@@ -14,17 +14,18 @@ import javax.swing.JComponent;
 import javax.swing.TransferHandler;
 import logic.extlib.Vertex;
 import logic.DragAndDropTransferHandler;
-
+import defs.VertexFormat;
 @SuppressWarnings("serial")
 public class VertexComponent<V> extends JComponent implements Transferable {
 	// Members
 	private Vertex<V> vertex = null;
+        private static VertexFormat format= null;
 	// End of members
 
 	// Constant values
-	private static final int LOCATIONCENTERMODIFIER = 50;
-	private static final int INNERCIRCLEDIAMETER = 80;
-	private static final int OUTERCIRCLEDIAMETER = 100;
+	private static final int LOCATIONCENTERMODIFIER = format.getSize()/2;
+	private static final int INNERCIRCLEDIAMETER = format.getSize()-format.getBorderWidth();
+	private static final int OUTERCIRCLEDIAMETER = format.getSize();
 
 	// End of constant values
 
@@ -33,7 +34,9 @@ public class VertexComponent<V> extends JComponent implements Transferable {
 		// Gr�sse Rechteck (Component)
 		this.setPreferredSize(new Dimension(OUTERCIRCLEDIAMETER,
 				OUTERCIRCLEDIAMETER));
-		this.vertex = vertex;
+		this.format = new VertexFormat(this.vertex);
+                this.vertex = vertex;
+                this.vertex.set(format, null);
 	}
 
 	// End of constructors
@@ -53,7 +56,7 @@ public class VertexComponent<V> extends JComponent implements Transferable {
 		// Vertex mit innerem und �usserem Kreis
 		Ellipse2D outer = new Ellipse2D.Double(0, 0, OUTERCIRCLEDIAMETER,
 				OUTERCIRCLEDIAMETER);
-		g2.setColor(active ? activeColor : inactiveColor);
+		g2.setColor(format.getColor());
 		g2.fill(outer);
 		Ellipse2D inner = new Ellipse2D.Double(outer.getCenterX()
 				- INNERCIRCLEDIAMETER / 2, outer.getCenterY()
@@ -61,6 +64,7 @@ public class VertexComponent<V> extends JComponent implements Transferable {
 				INNERCIRCLEDIAMETER);
 		g2.setColor(inactiveColor);
 		g2.fill(inner);
+                
 		// Drag & Drop
 		// Add the listener which will export this VertexComponent for
 		// dragging

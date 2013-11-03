@@ -18,6 +18,7 @@ public class StandardLayout implements GraphLayout {
     private final Color UNVISITEDCOLOR = new Color(0, 0, 0);
     private final int VERTEX_SIZE = 20;
     private final float EDGE_WIDTH = 2f;
+    private final int VERTEX_BORDER_WIDTH= 5;
 
     public StandardLayout() {
        

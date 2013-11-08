@@ -10,8 +10,13 @@ import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.Shape;
 import java.awt.geom.Line2D;
+
+import javax.swing.BorderFactory;
 import javax.swing.JComponent;
-import logic.PointCalculator;
+import javax.swing.JLabel;
+import javax.swing.JTextField;
+
+import logic.VisualizationCalculator;
 import logic.extlib.Edge;
 
 @SuppressWarnings("serial")
@@ -27,6 +32,7 @@ public class EdgeComponent<E> extends JComponent {
 	// Constant values
 	private static final int ARROWTRIANGLEWIDTH = 10;
 	private static final int ARROWTRIANGLEHEIGHT = 5;
+	private static final int SHAPEBORDER = 1;
 
 	// End of constant values
 
@@ -69,85 +75,91 @@ public class EdgeComponent<E> extends JComponent {
 		g2.draw(line);
 
 		// Optionale Shapes
-		if (directed || weighted) {
-			//Wird benötigt für Fallunterscheidungen
+		// Pfeil als Dreieck wenn gerichtet
+		if (directed) {
+			// Wird benötigt für Fallunterscheidungen
 			int deltaX = fromPoint.x - toPoint.x;
 			int deltaY = fromPoint.y - toPoint.y;
-			
-			// Pfeil als Dreieck wenn gerichtet
-			if (directed) {
-				Polygon arrowHead = new Polygon();
-				// Spitze immer gleich
-				arrowHead.addPoint(toPoint.x, toPoint.y);
-				// Spitze links und rechts
-				Point arrowLeft = new Point();
-				Point arrowRight = new Point();
 
-				// Spezialfälle
-				// Senkrecht
-				if (deltaX == 0) {
-					// Richtung
-					if (toPoint.y > fromPoint.y) {
-						arrowLeft.setLocation(toPoint.x - ARROWTRIANGLEWIDTH
-								/ 2, toPoint.y - ARROWTRIANGLEHEIGHT);
-						arrowRight.setLocation(toPoint.x + ARROWTRIANGLEWIDTH
-								/ 2, toPoint.y - ARROWTRIANGLEHEIGHT);
-					} else {
-						arrowLeft.setLocation(toPoint.x - ARROWTRIANGLEWIDTH
-								/ 2, toPoint.y + ARROWTRIANGLEHEIGHT);
-						arrowRight.setLocation(toPoint.x + ARROWTRIANGLEWIDTH
-								/ 2, toPoint.y + ARROWTRIANGLEHEIGHT);
-					}
-				}
-				// Waagrecht
-				else if (deltaY == 0) {
-					// Richtung
-					if (toPoint.x > fromPoint.x) {
-						arrowLeft.setLocation(toPoint.x - ARROWTRIANGLEHEIGHT,
-								toPoint.y - ARROWTRIANGLEWIDTH / 2);
-						arrowRight.setLocation(toPoint.x - ARROWTRIANGLEHEIGHT,
-								toPoint.y + ARROWTRIANGLEWIDTH / 2);
-					} else {
-						arrowLeft.setLocation(toPoint.x + ARROWTRIANGLEHEIGHT,
-								toPoint.y - ARROWTRIANGLEWIDTH / 2);
-						arrowRight.setLocation(toPoint.x + ARROWTRIANGLEHEIGHT,
-								toPoint.y + ARROWTRIANGLEWIDTH / 2);
-					}
-				}
-				// Allgemeiner Fall
-				else {
-					
-					Point p = PointCalculator.getPointOnStraightLine(toPoint,
-							fromPoint, ARROWTRIANGLEHEIGHT);
-				}
+			// Seitliche Ecken
+			Point sidePointOne = new Point();
+			Point sidePointTwo = new Point();
 
-				// Daten für Pfeil bekannt, Pfeil zeichnen
-				arrowHead.addPoint(arrowLeft.x, arrowLeft.y);
-				arrowHead.addPoint(arrowRight.x, arrowRight.y);
-				// Noch einmal die Spitze zum abschliesen des Polygons
-				arrowHead.addPoint(toPoint.x, toPoint.y);
-				g2.fill(arrowHead);
-			}
-			
-			// Gewicht wenn gewichtet
-			if (weighted) {
-				// Senkrecht
-				if (deltaX == 0) {
-
-				}
-				// Waagrecht
-				else if (deltaY == 0) {
-
-				}
-				// Allgemeiner Fall (Abhängig von Steigung)
-				else {
-
+			// Spezialfälle
+			// Senkrecht
+			if (deltaX == 0) {
+				// Richtung
+				if (toPoint.y > fromPoint.y) {
+					sidePointOne.setLocation(
+							toPoint.x - ARROWTRIANGLEWIDTH / 2, toPoint.y
+									- ARROWTRIANGLEHEIGHT);
+					sidePointTwo.setLocation(
+							toPoint.x + ARROWTRIANGLEWIDTH / 2, toPoint.y
+									- ARROWTRIANGLEHEIGHT);
+				} else {
+					sidePointOne.setLocation(
+							toPoint.x - ARROWTRIANGLEWIDTH / 2, toPoint.y
+									+ ARROWTRIANGLEHEIGHT);
+					sidePointTwo.setLocation(
+							toPoint.x + ARROWTRIANGLEWIDTH / 2, toPoint.y
+									+ ARROWTRIANGLEHEIGHT);
 				}
 			}
+			// Waagrecht
+			else if (deltaY == 0) {
+				// Richtung
+				if (toPoint.x > fromPoint.x) {
+					sidePointOne.setLocation(toPoint.x - ARROWTRIANGLEHEIGHT,
+							toPoint.y - ARROWTRIANGLEWIDTH / 2);
+					sidePointTwo.setLocation(toPoint.x - ARROWTRIANGLEHEIGHT,
+							toPoint.y + ARROWTRIANGLEWIDTH / 2);
+				} else {
+					sidePointOne.setLocation(toPoint.x + ARROWTRIANGLEHEIGHT,
+							toPoint.y - ARROWTRIANGLEWIDTH / 2);
+					sidePointTwo.setLocation(toPoint.x + ARROWTRIANGLEHEIGHT,
+							toPoint.y + ARROWTRIANGLEWIDTH / 2);
+				}
+			}
+			// Allgemeiner Fall
+			else {
+				Point[] leftAndRightPoints = VisualizationCalculator
+						.getPointsOnNormalVectorsOfStraightLine(toPoint,
+								fromPoint, ARROWTRIANGLEHEIGHT,
+								ARROWTRIANGLEWIDTH / 2);
+				sidePointOne = leftAndRightPoints[0];
+				sidePointTwo = leftAndRightPoints[1];
+			}
 
-			// Shape setzen
-			this.shape = shapePolygon;
+			// Daten für Pfeil bekannt, Pfeil zeichnen
+			Polygon arrowPolygon = new Polygon();
+			// Spitze immer gleich
+			arrowPolygon.addPoint(toPoint.x, toPoint.y);
+			arrowPolygon.addPoint(sidePointOne.x, sidePointOne.y);
+			arrowPolygon.addPoint(sidePointTwo.x, sidePointTwo.y);
+			// Noch einmal die Spitze zum abschliesen des Polygons
+			arrowPolygon.addPoint(toPoint.x, toPoint.y);
+			g2.fill(arrowPolygon);
 		}
+		// Gewicht wenn gewichtet
+		if (weighted) {
+			// Punkt für Gewichtanzeige
+			Point labelPointOnStraightLine = VisualizationCalculator
+					.getPointOnStraightLine(toPoint, fromPoint,
+							VisualizationCalculator.getLineWidth(fromPoint,
+									toPoint) / 2);
+
+			// Gewicht Label an Punkt anzeigen
+			JLabel l = new JLabel("42");
+			l.setLocation(labelPointOnStraightLine);
+		}
+		if (!directed && !weighted) {
+			// Shape für Linie
+			
+		}
+		// Shape setzen
+		this.shape = shapePolygon;
+		
+		this.setBorder(BorderFactory.createLineBorder(Color.red));
 	}
 
 	// End of paintComponent method

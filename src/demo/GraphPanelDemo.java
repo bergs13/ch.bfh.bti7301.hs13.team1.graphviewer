@@ -21,9 +21,10 @@ public class GraphPanelDemo extends GraphExamples<String, String> {
 		Vertex<String> vA = g.insertVertex("A");
 		Vertex<String> vB = g.insertVertex("B");
 		Vertex<String> vC = g.insertVertex("C");
-		// // Edges
-		// g.insertEdge(vA, vB, "AB");
-		// g.insertEdge(vB, vC, "BC");
+//		// Edges
+//		g.insertEdge(vA, vB, "AB");
+//		g.insertEdge(vB, vC, "BC");
+//		g.insertEdge(vC, vA, "CA");
 
 		// GUI aus Graph
 		JFrame frame = new JFrame();

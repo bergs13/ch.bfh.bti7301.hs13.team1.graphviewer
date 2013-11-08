@@ -1,5 +1,6 @@
 package demo;
 
+import ui.components.EdgeComponent;
 import ui.components.VertexComponent;
 import ui.controls.GraphPanel;
 import java.awt.Cursor;
@@ -17,6 +18,7 @@ import java.util.Iterator;
 import java.util.List;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
+import logic.extlib.Edge;
 import logic.extlib.Graph;
 import logic.extlib.Vertex;
 import logic.DragAndDropTransferHandler;
@@ -56,14 +58,14 @@ public class DemoGraphPanel<V, E> extends JPanel {
 				this.components.add(comp);
 				i++;
 			}
-			// int j = 1;
-			// Iterator<Edge<E>> itE = g.edges();
-			// while (itE.hasNext()) {
-			// EdgeComponent<E> comp = new EdgeComponent<E>(itE.next());
-			// comp.setLocation(new Point(j * 20, j * 20));
-			// this.components.add(comp);
-			// i++;
-			// }
+			int j = 1;
+			Iterator<Edge<E>> itE = g.edges();
+			while (itE.hasNext()) {
+				EdgeComponent<E> comp = new EdgeComponent<E>(itE.next());
+				comp.setLocation(new Point(j * 20, j * 20));
+				this.components.add(comp);
+				i++;
+			}
 		}
 
 		// Again, needs to negotiate with the draggable object

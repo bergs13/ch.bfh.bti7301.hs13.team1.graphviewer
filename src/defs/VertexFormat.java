@@ -12,27 +12,35 @@ import logic.extlib.Vertex;
  *
  * @author Stephan_2
  */
+@SuppressWarnings("serial")
 public class VertexFormat {
 
-    // variabels
+    // Members
     private Color activeColor;
     private Color visitedColor;
     private Color unvisitedColor;
     private Point centerPoint;
-    private GraphLayout layout;
+    private static GraphLayout layout;
     private final Vertex vertex;
     private String label;
     private boolean textVisible;
     private boolean active;
     private boolean visited;
-    private int size;
-    private int borderWidth;
-    private final int DEFAULT_SIZE = 40;
-    private final int MAX_SIZE = 80;
-    private final int MIN_SIZE = 20;
+    private static int size;
+    private static int borderWidth;
+    // End of members
 
+    //Constant Values
+    private static final GraphLayout STANDARD_LAYOUT = new StandardLayout();
+    private static final int DEFAULT_SIZE = 40;
+    private static final int MAX_SIZE = 80;
+    private static final int MIN_SIZE = 20;
+    // End of constant values
+
+    //Constructors
     /**
      *
+     * @param vertex
      * @param newlayout
      */
     public VertexFormat(Vertex vertex, GraphLayout newlayout) {
@@ -42,8 +50,9 @@ public class VertexFormat {
 
     public VertexFormat(Vertex vertex) {
         this.vertex = vertex;
-        setLayout(new StandardLayout());
+        setLayout(STANDARD_LAYOUT);
     }
+    // End of Constructors
 
     /**
      *
@@ -133,7 +142,7 @@ public class VertexFormat {
         this.visited = true;
         this.active = false;
     }
-
+    //get the color accroding to the current state
     public Color getColor() {
         if (active) {
             return activeColor;
@@ -143,24 +152,25 @@ public class VertexFormat {
             return unvisitedColor;
         }
     }
-
-    public void setSize() {
-        this.size = this.layout.getVertexSize();
-        if (size % 2 == 1) {
+    //Set and adjust the size of the Vertex
+    public  void setSize() {
+        VertexFormat.size = layout.getVertexSize();
+        if (size % 2 != 1) {
+        } else {
             size++;
         }
 
         if (size < MIN_SIZE || size > MAX_SIZE) {
-            this.size = DEFAULT_SIZE;
+            VertexFormat.size = DEFAULT_SIZE;
         }
 
     }
 
-    public int getSize() {
+    public static int getSize() {
         return size;
     }
 
-    public int getBorderWidth() {
+    public static int getBorderWidth() {
         return borderWidth;
     }
 
@@ -170,3 +180,5 @@ public class VertexFormat {
 
 	// End of getters and setters
 }
+
+

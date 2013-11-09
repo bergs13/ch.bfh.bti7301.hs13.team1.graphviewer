@@ -5,6 +5,7 @@
  */
 package logic;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import logic.extlib.Edge;
 import logic.extlib.Graph;
@@ -18,13 +19,21 @@ import logic.extlib.Vertex;
  */
 public class Recorder<V, E> {
 
+    //Members
     private final Graph<V, E> graph;
-
+   // private ArrayList<Memento> graphs;
+    //End of Members
+    
+    //Constructors
     public Recorder(Graph g) {
         graph = g;
-    }
+        
 
-    public void breakPoint() {
+    }
+    //End of constructors
+    
+    public void breakPoint(Object element) {
+
         Iterator<Vertex<V>> vertexIterator = graph.vertices();
         while (vertexIterator.hasNext()) {
 

@@ -13,12 +13,12 @@ import java.awt.Color;
  */
 public class StandardLayout implements GraphLayout {
 
-    private final Color ACTIVECOLOR = new Color(255, 0, 0);
-    private final Color VISITEDCOLOR = new Color(0, 0, 255);
-    private final Color UNVISITEDCOLOR = new Color(0, 0, 0);
-    private final int VERTEX_SIZE = 20;
-    private final float EDGE_WIDTH = 2f;
-    private final int VERTEX_BORDER_WIDTH= 5;
+    private static final Color ACTIVECOLOR = new Color(255, 0, 0);
+    private static final Color VISITEDCOLOR = new Color(0, 0, 255);
+    private static final Color UNVISITEDCOLOR = new Color(0, 0, 0);
+    private static final int VERTEX_SIZE = 20;
+    private static final float EDGE_WIDTH = 2f;
+    private static final int VERTEX_BORDER_WIDTH= 5;
 
     public StandardLayout() {
        

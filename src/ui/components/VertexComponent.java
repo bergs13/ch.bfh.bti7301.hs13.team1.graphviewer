@@ -19,39 +19,42 @@ import defs.VertexFormat;
 public class VertexComponent<V> extends JComponent implements Transferable {
 	// Members
 	private Vertex<V> vertex = null;
-        private static VertexFormat format= null;
+        private VertexFormat format= null;
 	// End of members
 
 	// Constant values
-	private static final int LOCATIONCENTERMODIFIER = format.getSize()/2;
-	private static final int INNERCIRCLEDIAMETER = format.getSize()-format.getBorderWidth();
-	private static final int OUTERCIRCLEDIAMETER = format.getSize();
+	private static final int LOCATIONCENTERMODIFIER = VertexFormat.getSize()/2;
+	private static final int INNERCIRCLEDIAMETER = VertexFormat.getSize()-VertexFormat.getBorderWidth();
+	private static final int OUTERCIRCLEDIAMETER = VertexFormat.getSize();
 
 	// End of constant values
 
 	// Constructors
 	public VertexComponent(Vertex<V> vertex) {
 		// Gr�sse Rechteck (Component)
-		this.setPreferredSize(new Dimension(OUTERCIRCLEDIAMETER,
-				OUTERCIRCLEDIAMETER));
-		this.format = new VertexFormat(this.vertex);
+                format = new VertexFormat(this.vertex);
                 this.vertex = vertex;
                 this.vertex.set(format, null);
+                
+		this.setPreferredSize(new Dimension(OUTERCIRCLEDIAMETER,
+				OUTERCIRCLEDIAMETER));
+		
 	}
 
 	// End of constructors
 
 	// PaintComponent method
+        @Override
 	public void paintComponent(Graphics g) {
 		Graphics2D g2 = (Graphics2D) g; // Cast g to Graphics2D
 
-		// Definierbare Sachen aus Vertex-Format (�berschreiben wenn
-		// Vertex-Format implementiert)
-		Color inactiveColor = new Color(0, 0, 255);
-		Color activeColor = new Color(255, 0, 0);
-		boolean active = true;
-		boolean textVisible = true;
-		String displayText = "V";
+//		// Definierbare Sachen aus Vertex-Format (�berschreiben wenn
+//		// Vertex-Format implementiert)
+//		Color inactiveColor = new Color(0, 0, 255);
+//		Color activeColor = new Color(255, 0, 0);
+//		boolean active = true;
+//		boolean textVisible = true;
+//		String displayText = "V";
 
 		// Vertex mit innerem und �usserem Kreis
 		Ellipse2D outer = new Ellipse2D.Double(0, 0, OUTERCIRCLEDIAMETER,
@@ -62,7 +65,7 @@ public class VertexComponent<V> extends JComponent implements Transferable {
 				- INNERCIRCLEDIAMETER / 2, outer.getCenterY()
 				- INNERCIRCLEDIAMETER / 2, INNERCIRCLEDIAMETER,
 				INNERCIRCLEDIAMETER);
-		g2.setColor(inactiveColor);
+		g2.setColor(format.getUnvisitedColor());
 		g2.fill(inner);
                 
 		// Drag & Drop

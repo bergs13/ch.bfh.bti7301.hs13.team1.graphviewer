@@ -23,17 +23,17 @@ public class VertexComponent<V> extends JComponent implements Transferable {
 	// End of members
 
 	// Constant values
-	private static final int LOCATIONCENTERMODIFIER = VertexFormat.getSize()/2;
-	private static final int INNERCIRCLEDIAMETER = VertexFormat.getSize()-VertexFormat.getBorderWidth();
-	private static final int OUTERCIRCLEDIAMETER = VertexFormat.getSize();
+	private static final int LOCATIONCENTERMODIFIER = 20; //VertexFormat.getSize()/2;
+	private static final int INNERCIRCLEDIAMETER = 50; //VertexFormat.getSize()-VertexFormat.getBorderWidth();
+	private static final int OUTERCIRCLEDIAMETER = 40; //VertexFormat.getSize();
 
 	// End of constant values
 
 	// Constructors
 	public VertexComponent(Vertex<V> vertex) {
 		// Gr�sse Rechteck (Component)
-                format = new VertexFormat(this.vertex);
                 this.vertex = vertex;
+                format = new VertexFormat(this.vertex);
                 this.vertex.set(format, null);
                 
 		this.setPreferredSize(new Dimension(OUTERCIRCLEDIAMETER,

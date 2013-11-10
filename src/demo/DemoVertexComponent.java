@@ -25,10 +25,9 @@ public class DemoVertexComponent<V> extends JComponent implements Transferable {
 	// End of members
 
 	// Constant values
-	private final int LOCATIONCENTERMODIFIER = format.getSize() / 2;
-	private final int INNERCIRCLEDIAMETER = format.getSize()
-			- 5;
-	private final int OUTERCIRCLEDIAMETER = format.getSize();
+	private final int LOCATIONCENTERMODIFIER = VertexFormat.getLOCATIONCENTERMODIFIER();
+	private final int INNERCIRCLEDIAMETER = VertexFormat.getINNERCIRCLEDIAMETER();
+	private final int OUTERCIRCLEDIAMETER = VertexFormat.getOUTERCIRCLEDIAMETER();
 
 	// End of constant values
 

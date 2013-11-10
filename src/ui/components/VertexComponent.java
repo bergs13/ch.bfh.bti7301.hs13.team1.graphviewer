@@ -23,9 +23,9 @@ public class VertexComponent<V> extends JComponent implements Transferable {
 	// End of members
 
 	// Constant values
-	private static final int LOCATIONCENTERMODIFIER = 20; //VertexFormat.getSize()/2;
-	private static final int INNERCIRCLEDIAMETER = 50; //VertexFormat.getSize()-VertexFormat.getBorderWidth();
-	private static final int OUTERCIRCLEDIAMETER = 40; //VertexFormat.getSize();
+//	private static final int LOCATIONCENTERMODIFIER = 20;
+//	private static final int INNERCIRCLEDIAMETER = 30;
+//	private static final int OUTERCIRCLEDIAMETER = 40;
 
 	// End of constant values
 
@@ -36,8 +36,8 @@ public class VertexComponent<V> extends JComponent implements Transferable {
                 format = new VertexFormat(this.vertex);
                 this.vertex.set(format, null);
                 
-		this.setPreferredSize(new Dimension(OUTERCIRCLEDIAMETER,
-				OUTERCIRCLEDIAMETER));
+		this.setPreferredSize(new Dimension(VertexFormat.getOUTERCIRCLEDIAMETER(),
+				VertexFormat.getOUTERCIRCLEDIAMETER()));
 		
 	}
 
@@ -57,14 +57,14 @@ public class VertexComponent<V> extends JComponent implements Transferable {
 //		String displayText = "V";
 
 		// Vertex mit innerem und �usserem Kreis
-		Ellipse2D outer = new Ellipse2D.Double(0, 0, OUTERCIRCLEDIAMETER,
-				OUTERCIRCLEDIAMETER);
+		Ellipse2D outer = new Ellipse2D.Double(0, 0, VertexFormat.getOUTERCIRCLEDIAMETER(),
+				VertexFormat.getOUTERCIRCLEDIAMETER());
 		g2.setColor(format.getColor());
 		g2.fill(outer);
 		Ellipse2D inner = new Ellipse2D.Double(outer.getCenterX()
-				- INNERCIRCLEDIAMETER / 2, outer.getCenterY()
-				- INNERCIRCLEDIAMETER / 2, INNERCIRCLEDIAMETER,
-				INNERCIRCLEDIAMETER);
+				- VertexFormat.getINNERCIRCLEDIAMETER() / 2, outer.getCenterY()
+				- VertexFormat.getINNERCIRCLEDIAMETER() / 2, VertexFormat.getINNERCIRCLEDIAMETER(),
+				VertexFormat.getINNERCIRCLEDIAMETER());
 		g2.setColor(format.getUnvisitedColor());
 		g2.fill(inner);
                 
@@ -217,15 +217,15 @@ public class VertexComponent<V> extends JComponent implements Transferable {
 
 	public void setCircleCenterLocation(Point p) {
 		// Standard setLocation - Constant value for the circleCenter
-		this.setLocation(new Point(p.x - LOCATIONCENTERMODIFIER, p.y
-				- LOCATIONCENTERMODIFIER));
+		this.setLocation(new Point(p.x - VertexFormat.getLOCATIONCENTERMODIFIER(), p.y
+				- VertexFormat.getLOCATIONCENTERMODIFIER()));
 	}
 
 	public Point getCircleCenterLocation() {
 		// Standard getLocation + Constant value for the circleCenter
 		Point p = this.getLocation();
-		return new Point(p.x + LOCATIONCENTERMODIFIER, p.y
-				+ LOCATIONCENTERMODIFIER);
+		return new Point(p.x + VertexFormat.getLOCATIONCENTERMODIFIER(), p.y
+				+ VertexFormat.getLOCATIONCENTERMODIFIER());
 	}
 	// End of Methods
 }

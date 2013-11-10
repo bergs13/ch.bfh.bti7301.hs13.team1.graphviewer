@@ -26,8 +26,8 @@ public class VertexFormat {
     private boolean textVisible;
     private boolean active;
     private boolean visited;
-    private static int size;
-    private static int borderWidth;
+    //private static int size;
+    
     // End of members
 
     //Constant Values
@@ -35,6 +35,10 @@ public class VertexFormat {
     private static final int DEFAULT_SIZE = 40;
     private static final int MAX_SIZE = 80;
     private static final int MIN_SIZE = 20;
+    private static final int LOCATIONCENTERMODIFIER = 20;
+    private static final int INNERCIRCLEDIAMETER = 30;
+    private static final int OUTERCIRCLEDIAMETER = 40;
+
     // End of constant values
 
     //Constructors
@@ -53,25 +57,42 @@ public class VertexFormat {
         setLayout(STANDARD_LAYOUT);
     }
     // End of Constructors
-
+    
+    // Getter and setter methods
     /**
      *
      * @param newLayout
      */
-    public final void setLayout(GraphLayout newLayout) {
+    public void setLayout(GraphLayout newLayout) {
         layout = newLayout;
         activeColor = layout.getActiveColor();
         visitedColor = layout.getVisitedColor();
         unvisitedColor = layout.getUnvisitedColor();
         textVisible = layout.getTextVisible();
         label = layout.getDefaultText();
-        this.setSize();
-        borderWidth = (int) size / 10;
-        this.setUnvisited();
+        //this.setSize();
+        
+        this.setVisited();
 
     }
 
-    // Getter and setter methods
+    public static int getLOCATIONCENTERMODIFIER() {
+        return LOCATIONCENTERMODIFIER;
+    }
+
+    public static int getINNERCIRCLEDIAMETER() {
+        return INNERCIRCLEDIAMETER;
+    }
+
+    public static int getOUTERCIRCLEDIAMETER() {
+        return OUTERCIRCLEDIAMETER;
+    }
+    public static GraphLayout getLayout(){
+        return layout;
+        
+    }
+
+    
     public Color getActiveColor() {
         return activeColor;
     }
@@ -153,30 +174,23 @@ public class VertexFormat {
         }
     }
     //Set and adjust the size of the Vertex
-    public  void setSize() {
-        VertexFormat.size = layout.getVertexSize();
-        if (size % 2 != 1) {
-        } else {
-            size++;
-        }
+//    public  void setSize() {
+//        VertexFormat.size = layout.getVertexSize();
+//        if (size % 2 != 1) {
+//        } else {
+//            size++;
+//        }
+//
+//        if (size < MIN_SIZE || size > MAX_SIZE) {
+//            VertexFormat.size = DEFAULT_SIZE;
+//        }
+//
+//    }
+//
+//    public static int getSize() {
+//        return size;
+//    }
 
-        if (size < MIN_SIZE || size > MAX_SIZE) {
-            VertexFormat.size = DEFAULT_SIZE;
-        }
-
-    }
-
-    public static int getSize() {
-        return size;
-    }
-
-    public static int getBorderWidth() {
-        return borderWidth;
-    }
-
-    public void setBorderWidth(int borderWidth) {
-        this.borderWidth = borderWidth;
-    }
 
 	// End of getters and setters
 }

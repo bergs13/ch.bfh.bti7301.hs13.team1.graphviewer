@@ -59,4 +59,9 @@ public class StandardLayout implements GraphLayout {
         return EDGE_WIDTH;
     }
 
+    @Override
+    public int getBorderWidth() {
+        return VERTEX_BORDER_WIDTH;
+    }
+
 }

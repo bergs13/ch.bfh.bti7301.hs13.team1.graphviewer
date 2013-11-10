@@ -18,5 +18,6 @@ public interface GraphLayout {
     String getDefaultText();
     int getVertexSize();
     float getEdgeWidth();
+    int getBorderWidth();
     
 }

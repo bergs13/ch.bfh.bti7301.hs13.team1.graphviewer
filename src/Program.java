@@ -1,5 +1,4 @@
 import logic.extlib.IncidenceListGraph;
-import logic.extlib.Vertex;
 import ui.MainGUI;
 
 public class Program {

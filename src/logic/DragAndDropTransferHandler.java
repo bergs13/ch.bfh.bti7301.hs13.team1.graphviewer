@@ -6,7 +6,7 @@ import java.awt.dnd.DragSourceMotionListener;
 import javax.swing.JComponent;
 import javax.swing.TransferHandler;
 
-import ui.components.VertexComponent;
+import ui.controls.VertexComponent;
 
 /**
  * <p>

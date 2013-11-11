@@ -6,6 +6,7 @@ package defs;
 
 import java.awt.Point;
 import java.awt.Color;
+import logic.extlib.GraphExamples;
 import logic.extlib.Vertex;
 
 /**
@@ -32,13 +33,13 @@ public class VertexFormat {
 
     //Constant Values
     private static final GraphLayout STANDARD_LAYOUT = new StandardLayout();
-    private static final int DEFAULT_SIZE = 40;
-    private static final int MAX_SIZE = 80;
-    private static final int MIN_SIZE = 20;
-    private static final int LOCATIONCENTERMODIFIER = 20;
-    private static final int INNERCIRCLEDIAMETER = 30;
+//    private static final int DEFAULT_SIZE = 40;
+//    private static final int MAX_SIZE = 80;
+//    private static final int MIN_SIZE = 20;
     private static final int OUTERCIRCLEDIAMETER = 40;
-
+    private static final int INNERCIRCLEDIAMETER = OUTERCIRCLEDIAMETER-10;
+    private static final int LOCATIONCENTERMODIFIER = OUTERCIRCLEDIAMETER/2;
+    
     // End of constant values
 
     //Constructors
@@ -173,23 +174,18 @@ public class VertexFormat {
             return unvisitedColor;
         }
     }
-    //Set and adjust the size of the Vertex
-//    public  void setSize() {
-//        VertexFormat.size = layout.getVertexSize();
-//        if (size % 2 != 1) {
-//        } else {
-//            size++;
-//        }
-//
-//        if (size < MIN_SIZE || size > MAX_SIZE) {
-//            VertexFormat.size = DEFAULT_SIZE;
-//        }
-//
-//    }
-//
-//    public static int getSize() {
-//        return size;
-//    }
+    /**
+     * update the the VertexFormat to the current state in the algorithm
+     */
+    public void updateVertexFormat(){
+      if(this.vertex.has(GraphExamples.VISITED)&& !this.visited){
+          this.setVisited();
+      }
+           
+       
+        }
+   
+    
 
 
 	// End of getters and setters

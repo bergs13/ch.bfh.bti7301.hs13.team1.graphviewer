@@ -4,9 +4,9 @@
  */
 package defs;
 
-import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Point;
+import logic.extlib.Edge;
 
 /**
  *
@@ -23,34 +23,36 @@ public class EdgeFormat {
     private Point fromPoint;
     private Point toPoint;
     private GraphLayout layout;
-    private BasicStroke edgeStyle;
+    
     private Color activeColor;
     private Color includedColor;
     private Color unincludedColor;
+    
+    private final Edge edge;
 
-    private final float MAX_WIDTH = 20F;
-    private final float MIN_WIDTH = 2F;
-    private final float DEFAULT_WIDTH = 4F;
+    
 
-    public EdgeFormat(GraphLayout newLayout) {
+    public EdgeFormat(Edge newEdge,GraphLayout newLayout) {
+        this.edge = newEdge;
         setLayout(newLayout);
     }
 
     /**
      *
+     * @param newEdge
      */
-    public EdgeFormat() {
+    public EdgeFormat(Edge newEdge) {
+        this.edge = newEdge;
         setLayout(new StandardLayout());
     }
 
-    public final void setLayout(GraphLayout newLayout) {
+    public final void setLayout( GraphLayout newLayout) {
         layout = newLayout;
         activeColor = layout.getActiveColor();
         includedColor = layout.getVisitedColor();
         unincludedColor = layout.getUnvisitedColor();
         textVisible = layout.getTextVisible();
-        //label = layout.getDefaultText();
-        edgeStyle = new BasicStroke(this.setWidth(layout.getEdgeWidth()));
+        
         this.reset();
     }
    /**
@@ -111,15 +113,7 @@ public class EdgeFormat {
         this.toPoint.setLocation(x, y);
     }
 
-    public BasicStroke getEdgeStyle() {
-        return edgeStyle;
-    }
-
-    public void setEdgeStyle(BasicStroke edgeStyle) {
-        this.edgeStyle = edgeStyle;
-    }
-
-    public Color getActiveColor() {
+   public Color getActiveColor() {
         return activeColor;
     }
 
@@ -151,12 +145,7 @@ public class EdgeFormat {
         this.textVisible = textVisible;
     }
 
-    private float setWidth(float width) {
-        if (width < MIN_WIDTH || width > MAX_WIDTH) {
-            return DEFAULT_WIDTH;
-        }
-        return width;
-    }
+   
 
     //End Getters and Setters
 }

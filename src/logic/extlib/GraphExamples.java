@@ -5,7 +5,7 @@ import java.util.LinkedList;
 
 public class GraphExamples<V,E> {
 	
-	static final Object VISITED = new Object();
+	public static final Object VISITED = new Object();
 	static final Object NUMBER = new Object();
 	static final Object INCOUNT = new Object();
 	static final Object DISTANCE = new Object();

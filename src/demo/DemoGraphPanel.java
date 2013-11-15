@@ -1,10 +1,9 @@
 package demo;
 
-import ui.components.EdgeComponent;
-import ui.components.VertexComponent;
-import ui.controls.GraphPanel;
 import java.awt.Cursor;
 import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
@@ -14,10 +13,15 @@ import java.awt.dnd.DropTargetDropEvent;
 import java.awt.dnd.DropTargetEvent;
 import java.awt.dnd.DropTargetListener;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
+import java.util.Map;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
+import defs.EdgeFormat;
+import defs.VertexFormat;
+import ui.EdgePainter;
+import ui.controls.VertexComponent;
 import logic.extlib.Edge;
 import logic.extlib.Graph;
 import logic.extlib.Vertex;
@@ -41,9 +45,13 @@ public class DemoGraphPanel<V, E> extends JPanel {
 	 */
 	private static DataFlavor vertexComponentDataFlavor = null;
 	/**
-	 * Keep a list of the user-added panels so can re-add
+	 * Keep a list of the vertex components (cache)
 	 */
-	private final List<JComponent> components = new ArrayList<JComponent>();
+	private final Map<Vertex<V>, VertexComponent<V>> vertexComponents = new HashMap<Vertex<V>, VertexComponent<V>>();
+	/**
+	 * Keep a list of the the edgeformats (cache)
+	 */
+	private final ArrayList<EdgeFormat> edgeFormats = new ArrayList<EdgeFormat>();
 
 	// End of Members
 	// Constructors
@@ -52,19 +60,41 @@ public class DemoGraphPanel<V, E> extends JPanel {
 			Iterator<Vertex<V>> itV = g.vertices();
 			int i = 1;
 			while (itV.hasNext()) {
-				DemoVertexComponent<V> comp = new DemoVertexComponent<V>(
-						itV.next());
-				comp.setCircleCenterLocation(new Point(i * 100, i * 100));
-				this.components.add(comp);
+				Vertex<V> v = itV.next();
+				VertexComponent<V> vComp = new VertexComponent<V>(v);
+				vComp.setCircleCenterLocation(new Point(i * 75, i * 100));
+				this.vertexComponents.put(v, vComp);
 				i++;
 			}
-			int j = 1;
-			Iterator<Edge<E>> itE = g.edges();
-			while (itE.hasNext()) {
-				EdgeComponent<E> comp = new EdgeComponent<E>(itE.next());
-				comp.setLocation(new Point(j * 20, j * 20));
-				this.components.add(comp);
-				i++;
+			for (Vertex<V> v : vertexComponents.keySet()) {
+				Point circleCenterSource = vertexComponents.get(v)
+						.getCircleCenterLocation();
+				Iterator<Edge<E>> itE = g.incidentEdges(v);
+				while (itE.hasNext()) {
+					Edge<E> e = itE.next();
+					Point circleCenterTarget = vertexComponents.get(
+							g.opposite(e, v)).getCircleCenterLocation();
+					EdgeFormat eFormat = new EdgeFormat();
+					if (circleCenterTarget.x > circleCenterSource.x) {
+						eFormat.setFromPoint(circleCenterSource.x
+								+ VertexFormat.getOUTERCIRCLEDIAMETER() / 2,
+								circleCenterSource.y);
+						eFormat.setToPoint(
+								circleCenterTarget.x
+										- VertexFormat.getOUTERCIRCLEDIAMETER()
+										/ 2, circleCenterTarget.y);
+					} else {
+						eFormat.setFromPoint(circleCenterSource.x
+								- VertexFormat.getOUTERCIRCLEDIAMETER() / 2,
+								circleCenterSource.y);
+						eFormat.setToPoint(
+								circleCenterTarget.x
+										+ VertexFormat.getOUTERCIRCLEDIAMETER()
+										/ 2, circleCenterTarget.y);
+					}
+					e.set(EdgeFormat.FORMAT, eFormat);
+					this.edgeFormats.add(eFormat);
+				}
 			}
 		}
 
@@ -73,7 +103,7 @@ public class DemoGraphPanel<V, E> extends JPanel {
 
 		// Create the listener to do the work when dropping on this object!
 		this.setDropTarget(new DropTarget(this,
-				new GraphPanelDropTargetListener<V, E>(this)));
+				new DemoGraphPanelDropTargetListener<V, E>(this)));
 
 		this.setLayout(null);
 
@@ -82,6 +112,18 @@ public class DemoGraphPanel<V, E> extends JPanel {
 	}
 
 	// End of Constructors
+	@Override
+	public void paintComponent(Graphics g) {
+		super.paintComponent(g);
+		Graphics2D DemoGraphPanelGraphics = (Graphics2D) g;
+		// Add the edges by format
+		for (EdgeFormat eFormat : edgeFormats) {
+			if (null != DemoGraphPanelGraphics) {
+				EdgePainter.paintEdge(eFormat, (Graphics2D) g);
+			}
+		}
+	}
+
 	/**
 	 * <p>
 	 * Removes all components from the panel and re-adds them.
@@ -95,8 +137,8 @@ public class DemoGraphPanel<V, E> extends JPanel {
 		// Clear out all previously added items
 		this.removeAll();
 
-		// Add the panels, if any
-		for (JComponent comp : this.components) {
+		// Add the vertex components, if any
+		for (JComponent comp : vertexComponents.values()) {
 			Dimension size = comp.getPreferredSize();
 			Point p = comp.getLocation();
 			comp.setBounds(p.x, p.y, size.width, size.height);
@@ -108,6 +150,30 @@ public class DemoGraphPanel<V, E> extends JPanel {
 		this.repaint();
 	}
 
+	private EdgeFormat getEdgeFormat(Point from, Point to) {
+		Point formatFromPoint;
+		Point formatToPoint;
+		for (EdgeFormat f : edgeFormats) {
+			formatFromPoint = f.getFromPoint();
+			formatToPoint = f.getToPoint();
+			if (formatFromPoint.x == from.x && formatFromPoint.y == from.y
+					&& formatToPoint.x == to.x && formatToPoint.y == to.y) {
+				return f;
+			}
+		}
+		return null;
+	}
+
+	public void handleVertexDrop(VertexComponent<V> droppedVertexComponent,
+			DropTargetDropEvent dtde) {
+		if (null != droppedVertexComponent && null != dtde) {
+			// Get the the point of the VertexComponent
+			// for the drop option (the cursor on the drop)
+			droppedVertexComponent.setCircleCenterLocation(dtde.getLocation());
+			repaintContent();
+		}
+	}
+
 	/**
 	 * <p>
 	 * Returns (creating, if necessary) the DataFlavor representing
@@ -115,7 +181,6 @@ public class DemoGraphPanel<V, E> extends JPanel {
 	 * </p>
 	 * 
 	 * @return
-	 * @throws java.lang.Exception
 	 */
 	public static DataFlavor getVertexComponentDataFlavor() throws Exception {
 		// Lazy load/create the flavor
@@ -136,9 +201,9 @@ public class DemoGraphPanel<V, E> extends JPanel {
 	 * The real magic behind the drop!
 	 * </p>
 	 */
-	static class GraphPanelDropTargetListener<V, E> implements
+	static class DemoGraphPanelDropTargetListener<V, E> implements
 			DropTargetListener {
-		private final DemoGraphPanel<V, E> graphPanel;
+		private final DemoGraphPanel<V, E> DemoGraphPanel;
 		/*
 		 * ,* <p> Two cursors with which we are primarily interested while
 		 * dragging: </p> <ul> <li>Cursor for droppable condition</li>
@@ -151,8 +216,9 @@ public class DemoGraphPanel<V, E> extends JPanel {
 				notDroppableCursor = Cursor
 						.getPredefinedCursor(Cursor.CROSSHAIR_CURSOR);
 
-		public GraphPanelDropTargetListener(DemoGraphPanel<V, E> graphPanel) {
-			this.graphPanel = graphPanel;
+		public DemoGraphPanelDropTargetListener(
+				DemoGraphPanel<V, E> DemoGraphPanel) {
+			this.DemoGraphPanel = DemoGraphPanel;
 		}
 
 		// Could easily find uses for these, like cursor changes, etc.
@@ -160,8 +226,8 @@ public class DemoGraphPanel<V, E> extends JPanel {
 		}
 
 		public void dragOver(DropTargetDragEvent dtde) {
-			if (!this.graphPanel.getCursor().equals(droppableCursor)) {
-				this.graphPanel.setCursor(droppableCursor);
+			if (!this.DemoGraphPanel.getCursor().equals(droppableCursor)) {
+				this.DemoGraphPanel.setCursor(droppableCursor);
 			}
 		}
 
@@ -169,7 +235,7 @@ public class DemoGraphPanel<V, E> extends JPanel {
 		}
 
 		public void dragExit(DropTargetEvent dte) {
-			this.graphPanel.setCursor(notDroppableCursor);
+			this.DemoGraphPanel.setCursor(notDroppableCursor);
 		}
 
 		/**
@@ -182,7 +248,7 @@ public class DemoGraphPanel<V, E> extends JPanel {
 		 */
 		public void drop(DropTargetDropEvent dtde) {
 			// Done with cursors, dropping
-			this.graphPanel.setCursor(Cursor.getDefaultCursor());
+			this.DemoGraphPanel.setCursor(Cursor.getDefaultCursor());
 
 			// Just going to grab the expected DataFlavor to make sure
 			// we know what is being dropped
@@ -193,7 +259,7 @@ public class DemoGraphPanel<V, E> extends JPanel {
 
 			try {
 				// Grab expected flavor
-				vertexComponentDataFlavor = GraphPanel
+				vertexComponentDataFlavor = DemoGraphPanel
 						.getVertexComponentDataFlavor();
 
 				transferable = dtde.getTransferable();
@@ -213,19 +279,11 @@ public class DemoGraphPanel<V, E> extends JPanel {
 				return;
 			}
 
-			// Cast it to the VertexComponent. By this point, we have
-			// verified it is
-			// a VertexComponent.
-			VertexComponent<V> droppedVertexComponent = (VertexComponent<V>) transferableObj;
-
-			// Get the the point of the VertexComponent
-			// for the drop option (the cursor on the drop)
-			droppedVertexComponent.setCircleCenterLocation(dtde.getLocation());
-
-			// Request repaint of contents, or else won't update GUI following
-			// drop.
-			// Will add back in the order to which we just sorted
-			this.graphPanel.repaintContent();
+			if (VertexComponent.class.isInstance(transferableObj)) {
+				// refresh DemoGraphPanel (vertex gedroppt)
+				this.DemoGraphPanel.handleVertexDrop(
+						(VertexComponent<V>) transferableObj, dtde);
+			}
 		}
 	}
 	// End of Listeners

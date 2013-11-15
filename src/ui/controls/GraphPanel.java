@@ -2,6 +2,8 @@ package ui.controls;
 
 import java.awt.Cursor;
 import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
@@ -10,6 +12,7 @@ import java.awt.dnd.DropTargetDragEvent;
 import java.awt.dnd.DropTargetDropEvent;
 import java.awt.dnd.DropTargetEvent;
 import java.awt.dnd.DropTargetListener;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -17,8 +20,7 @@ import javax.swing.JComponent;
 import javax.swing.JPanel;
 import defs.EdgeFormat;
 import defs.VertexFormat;
-import ui.components.EdgeComponent;
-import ui.components.VertexComponent;
+import ui.EdgePainter;
 import logic.extlib.Edge;
 import logic.extlib.Graph;
 import logic.extlib.Vertex;
@@ -42,13 +44,13 @@ public class GraphPanel<V, E> extends JPanel {
 	 */
 	private static DataFlavor vertexComponentDataFlavor = null;
 	/**
-	 * Keep a list of the user-added vertex components so can re-add
+	 * Keep a list of the vertex components (cache)
 	 */
 	private final Map<Vertex<V>, VertexComponent<V>> vertexComponents = new HashMap<Vertex<V>, VertexComponent<V>>();
 	/**
-	 * Keep a list of the user-added edge components so can re-add
+	 * Keep a list of the the edgeformats (cache)
 	 */
-	private final Map<Edge<E>, EdgeComponent<E>> edgeComponents = new HashMap<Edge<E>, EdgeComponent<E>>();
+	private final ArrayList<EdgeFormat> edgeFormats = new ArrayList<EdgeFormat>();
 
 	// End of Members
 	// Constructors
@@ -90,7 +92,7 @@ public class GraphPanel<V, E> extends JPanel {
 										/ 2, circleCenterTarget.y);
 					}
 					e.set(EdgeFormat.FORMAT, eFormat);
-					this.edgeComponents.put(e, new EdgeComponent<E>(e));
+					this.edgeFormats.add(eFormat);
 				}
 			}
 		}
@@ -109,6 +111,18 @@ public class GraphPanel<V, E> extends JPanel {
 	}
 
 	// End of Constructors
+	@Override
+	public void paintComponent(Graphics g) {
+		super.paintComponent(g);
+		Graphics2D graphPanelGraphics = (Graphics2D) g;
+		// Add the edges by format
+		for (EdgeFormat eFormat : edgeFormats) {
+			if (null != graphPanelGraphics) {
+				EdgePainter.paintEdge(eFormat, (Graphics2D) g);
+			}
+		}
+	}
+
 	/**
 	 * <p>
 	 * Removes all components from the panel and re-adds them.
@@ -131,17 +145,22 @@ public class GraphPanel<V, E> extends JPanel {
 			comp.validate();
 			comp.repaint();
 		}
-		// Add the edge components, if any
-		for (JComponent comp : edgeComponents.values()) {
-			Dimension size = comp.getPreferredSize();
-			Point p = comp.getLocation();
-			comp.setBounds(p.x, p.y, size.width, size.height);
-			this.add(comp);
-			comp.validate();
-			comp.repaint();
-		}
 		this.validate();
 		this.repaint();
+	}
+
+	private EdgeFormat getEdgeFormat(Point from, Point to) {
+		Point formatFromPoint;
+		Point formatToPoint;
+		for (EdgeFormat f : edgeFormats) {
+			formatFromPoint = f.getFromPoint();
+			formatToPoint = f.getToPoint();
+			if (formatFromPoint.x == from.x && formatFromPoint.y == from.y
+					&& formatToPoint.x == to.x && formatToPoint.y == to.y) {
+				return f;
+			}
+		}
+		return null;
 	}
 
 	public void handleVertexDrop(VertexComponent<V> droppedVertexComponent,

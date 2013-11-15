@@ -1,4 +1,4 @@
-package ui.components;
+package ui.controls;
 
 import java.awt.Dimension;
 import java.awt.Graphics;

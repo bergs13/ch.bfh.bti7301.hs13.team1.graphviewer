@@ -1,7 +1,8 @@
 package demo;
 
 import defs.VertexFormat;
-import ui.components.VertexComponent;
+import ui.controls.VertexComponent;
+
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;

@@ -1,4 +1,4 @@
-package ui;
+package ui.painters;
 
 import java.awt.Color;
 import java.awt.Graphics2D;

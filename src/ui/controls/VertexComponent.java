@@ -32,7 +32,7 @@ public class VertexComponent<V> extends JComponent implements Transferable {
 	public VertexComponent(Vertex<V> vertex) {
 		// Gr�sse Rechteck (Component)
                 this.vertex = vertex;
-                format = new VertexFormat(this.vertex);
+                format = new VertexFormat();
                 this.vertex.set(format, null);
                 
 		this.setPreferredSize(new Dimension(VertexFormat.getOUTERCIRCLEDIAMETER(),

@@ -6,13 +6,11 @@ package defs;
 
 import java.awt.Point;
 import java.awt.Color;
-import logic.extlib.Vertex;
 
 /**
  *
  * @author Stephan_2
  */
-@SuppressWarnings("serial")
 public class VertexFormat {
 
     // Members
@@ -21,7 +19,6 @@ public class VertexFormat {
     private Color unvisitedColor;
     private Point centerPoint;
     private static GraphLayout layout;
-    private final Vertex vertex;
     private String label;
     private boolean textVisible;
     private boolean active;
@@ -32,9 +29,6 @@ public class VertexFormat {
 
     //Constant Values
     private static final GraphLayout STANDARD_LAYOUT = new StandardLayout();
-    private static final int DEFAULT_SIZE = 40;
-    private static final int MAX_SIZE = 80;
-    private static final int MIN_SIZE = 20;
     private static final int LOCATIONCENTERMODIFIER = 20;
     private static final int INNERCIRCLEDIAMETER = 30;
     private static final int OUTERCIRCLEDIAMETER = 40;
@@ -47,13 +41,11 @@ public class VertexFormat {
      * @param vertex
      * @param newlayout
      */
-    public VertexFormat(Vertex vertex, GraphLayout newlayout) {
-        this.vertex = vertex;
+    public VertexFormat(GraphLayout newlayout) {
         setLayout(newlayout);
     }
 
-    public VertexFormat(Vertex vertex) {
-        this.vertex = vertex;
+    public VertexFormat() {
         setLayout(STANDARD_LAYOUT);
     }
     // End of Constructors

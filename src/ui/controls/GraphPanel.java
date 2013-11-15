@@ -20,7 +20,7 @@ import javax.swing.JComponent;
 import javax.swing.JPanel;
 import defs.EdgeFormat;
 import defs.VertexFormat;
-import ui.EdgePainter;
+import ui.painters.EdgePainter;
 import logic.extlib.Edge;
 import logic.extlib.Graph;
 import logic.extlib.Vertex;

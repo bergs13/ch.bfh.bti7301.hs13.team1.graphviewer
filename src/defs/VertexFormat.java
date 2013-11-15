@@ -25,23 +25,20 @@ public class VertexFormat {
     private final Vertex vertex;
     private String label;
     private boolean textVisible;
-    private boolean active;
-    private boolean visited;
-    //private static int size;
-    
-    // End of members
+    private boolean active = false;
+    private boolean visited = false;
 
+    // End of members
     //Constant Values
     private static final GraphLayout STANDARD_LAYOUT = new StandardLayout();
 //    private static final int DEFAULT_SIZE = 40;
 //    private static final int MAX_SIZE = 80;
 //    private static final int MIN_SIZE = 20;
     private static final int OUTERCIRCLEDIAMETER = 40;
-    private static final int INNERCIRCLEDIAMETER = OUTERCIRCLEDIAMETER-10;
-    private static final int LOCATIONCENTERMODIFIER = OUTERCIRCLEDIAMETER/2;
-    
-    // End of constant values
+    private static final int INNERCIRCLEDIAMETER = OUTERCIRCLEDIAMETER - 10;
+    private static final int LOCATIONCENTERMODIFIER = OUTERCIRCLEDIAMETER / 2;
 
+    // End of constant values
     //Constructors
     /**
      *
@@ -58,7 +55,7 @@ public class VertexFormat {
         setLayout(STANDARD_LAYOUT);
     }
     // End of Constructors
-    
+
     // Getter and setter methods
     /**
      *
@@ -71,8 +68,7 @@ public class VertexFormat {
         unvisitedColor = layout.getUnvisitedColor();
         textVisible = layout.getTextVisible();
         label = layout.getDefaultText();
-        //this.setSize();
-        
+        //just temorarily set to visited until implementation of traversation of algorithms
         this.setVisited();
 
     }
@@ -88,12 +84,12 @@ public class VertexFormat {
     public static int getOUTERCIRCLEDIAMETER() {
         return OUTERCIRCLEDIAMETER;
     }
-    public static GraphLayout getLayout(){
+
+    public static GraphLayout getLayout() {
         return layout;
-        
+
     }
 
-    
     public Color getActiveColor() {
         return activeColor;
     }
@@ -164,6 +160,7 @@ public class VertexFormat {
         this.visited = true;
         this.active = false;
     }
+
     //get the color accroding to the current state
     public Color getColor() {
         if (active) {
@@ -174,21 +171,16 @@ public class VertexFormat {
             return unvisitedColor;
         }
     }
+
     /**
      * update the the VertexFormat to the current state in the algorithm
      */
-    public void updateVertexFormat(){
-      if(this.vertex.has(GraphExamples.VISITED)&& !this.visited){
-          this.setVisited();
-      }
-           
-       
+    public void updateVertexFormat() {
+        if (this.vertex.has(GraphExamples.VISITED) && !this.visited) {
+            this.setVisited();
         }
-   
-    
 
+    }
 
 	// End of getters and setters
 }
-
-

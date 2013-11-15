@@ -10,11 +10,13 @@ import java.awt.dnd.DropTargetDragEvent;
 import java.awt.dnd.DropTargetDropEvent;
 import java.awt.dnd.DropTargetEvent;
 import java.awt.dnd.DropTargetListener;
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
+import java.util.Map;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
+import defs.EdgeFormat;
+import defs.VertexFormat;
 import ui.components.EdgeComponent;
 import ui.components.VertexComponent;
 import logic.extlib.Edge;
@@ -40,9 +42,13 @@ public class GraphPanel<V, E> extends JPanel {
 	 */
 	private static DataFlavor vertexComponentDataFlavor = null;
 	/**
-	 * Keep a list of the user-added panels so can re-add
+	 * Keep a list of the user-added vertex components so can re-add
 	 */
-	private final List<JComponent> components = new ArrayList<JComponent>();
+	private final Map<Vertex<V>, VertexComponent<V>> vertexComponents = new HashMap<Vertex<V>, VertexComponent<V>>();
+	/**
+	 * Keep a list of the user-added edge components so can re-add
+	 */
+	private final Map<Edge<E>, EdgeComponent<E>> edgeComponents = new HashMap<Edge<E>, EdgeComponent<E>>();
 
 	// End of Members
 	// Constructors
@@ -51,18 +57,41 @@ public class GraphPanel<V, E> extends JPanel {
 			Iterator<Vertex<V>> itV = g.vertices();
 			int i = 1;
 			while (itV.hasNext()) {
-				VertexComponent<V> comp = new VertexComponent<V>(itV.next());
-				comp.setCircleCenterLocation(new Point(i * 100, i * 100));
-				this.components.add(comp);
+				Vertex<V> v = itV.next();
+				VertexComponent<V> vComp = new VertexComponent<V>(v);
+				vComp.setCircleCenterLocation(new Point(i * 75, i * 100));
+				this.vertexComponents.put(v, vComp);
 				i++;
 			}
-			int j = 1;
-			Iterator<Edge<E>> itE = g.edges();
-			while (itE.hasNext()) {
-				EdgeComponent<E> comp = new EdgeComponent<E>(itE.next());
-				comp.setLocation(new Point(j * 20, j * 20));
-				this.components.add(comp);
-				i++;
+			for (Vertex<V> v : vertexComponents.keySet()) {
+				Point circleCenterSource = vertexComponents.get(v)
+						.getCircleCenterLocation();
+				Iterator<Edge<E>> itE = g.incidentEdges(v);
+				while (itE.hasNext()) {
+					Edge<E> e = itE.next();
+					Point circleCenterTarget = vertexComponents.get(
+							g.opposite(e, v)).getCircleCenterLocation();
+					EdgeFormat eFormat = new EdgeFormat();
+					if (circleCenterTarget.x > circleCenterSource.x) {
+						eFormat.setFromPoint(circleCenterSource.x
+								+ VertexFormat.getOUTERCIRCLEDIAMETER() / 2,
+								circleCenterSource.y);
+						eFormat.setToPoint(
+								circleCenterTarget.x
+										- VertexFormat.getOUTERCIRCLEDIAMETER()
+										/ 2, circleCenterTarget.y);
+					} else {
+						eFormat.setFromPoint(circleCenterSource.x
+								- VertexFormat.getOUTERCIRCLEDIAMETER() / 2,
+								circleCenterSource.y);
+						eFormat.setToPoint(
+								circleCenterTarget.x
+										+ VertexFormat.getOUTERCIRCLEDIAMETER()
+										/ 2, circleCenterTarget.y);
+					}
+					e.set(EdgeFormat.FORMAT, eFormat);
+					this.edgeComponents.put(e, new EdgeComponent<E>(e));
+				}
 			}
 		}
 
@@ -85,16 +114,25 @@ public class GraphPanel<V, E> extends JPanel {
 	 * Removes all components from the panel and re-adds them.
 	 * </p>
 	 * <p>
-	 * This is important for reordering components (user drags and drops a vertex to
-	 * acceptable drop target region)
+	 * This is important for reordering components (user drags and drops a
+	 * vertex to acceptable drop target region)
 	 * </p>
 	 */
 	public void repaintContent() {
 		// Clear out all previously added items
 		this.removeAll();
 
-		// Add the panels, if any
-		for (JComponent comp : this.components) {
+		// Add the vertex components, if any
+		for (JComponent comp : vertexComponents.values()) {
+			Dimension size = comp.getPreferredSize();
+			Point p = comp.getLocation();
+			comp.setBounds(p.x, p.y, size.width, size.height);
+			this.add(comp);
+			comp.validate();
+			comp.repaint();
+		}
+		// Add the edge components, if any
+		for (JComponent comp : edgeComponents.values()) {
 			Dimension size = comp.getPreferredSize();
 			Point p = comp.getLocation();
 			comp.setBounds(p.x, p.y, size.width, size.height);
@@ -104,6 +142,16 @@ public class GraphPanel<V, E> extends JPanel {
 		}
 		this.validate();
 		this.repaint();
+	}
+
+	public void handleVertexDrop(VertexComponent<V> droppedVertexComponent,
+			DropTargetDropEvent dtde) {
+		if (null != droppedVertexComponent && null != dtde) {
+			// Get the the point of the VertexComponent
+			// for the drop option (the cursor on the drop)
+			droppedVertexComponent.setCircleCenterLocation(dtde.getLocation());
+			repaintContent();
+		}
 	}
 
 	/**
@@ -210,19 +258,11 @@ public class GraphPanel<V, E> extends JPanel {
 				return;
 			}
 
-			// Cast it to the VertexComponent. By this point, we have
-			// verified it is
-			// a VertexComponent.
-			VertexComponent<V> droppedVertexComponent = (VertexComponent<V>) transferableObj;
-
-			// Get the the point of the VertexComponent
-			// for the drop option (the cursor on the drop)
-			droppedVertexComponent.setCircleCenterLocation(dtde.getLocation());
-
-			// Request repaint of contents, or else won't update GUI following
-			// drop.
-			// Will add back in the order to which we just sorted
-			this.graphPanel.repaintContent();
+			if (VertexComponent.class.isInstance(transferableObj)) {
+				// refresh graphpanel (vertex gedroppt)
+				this.graphPanel.handleVertexDrop(
+						(VertexComponent<V>) transferableObj, dtde);
+			}
 		}
 	}
 	// End of Listeners

@@ -395,7 +395,8 @@ public class IncidenceListGraph<V,E> implements Graph<V, E> {
 	private class IGLDecorable implements Decorable {
 		private HashMap<Object,Object> attrs = new HashMap<Object,Object>(2);
 		private final Object DUMMY = new Object();
-		@Override
+		
+                @Override
 		public Object get(Object attr) {
 			Object ret = attrs.get(attr);
 			if (ret==null) throw new RuntimeException("no attribute "+attr);

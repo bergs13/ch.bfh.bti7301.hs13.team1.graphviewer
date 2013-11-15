@@ -56,7 +56,7 @@ public class VectorR2 {
 		// vNormal((v0x/v0y)) = (-v0x/v0y) && (v0x/-v0y)
 		VectorR2[] normalVectors = new VectorR2[2];
 		normalVectors[0] = new VectorR2(this.x, -this.y);
-		normalVectors[0] = new VectorR2(-this.x, this.y);
+		normalVectors[1] = new VectorR2(-this.x, this.y);
 		return normalVectors;
 	}
 

@@ -47,14 +47,14 @@ public class EdgeComponent<E> extends JComponent {
 	public void paintComponent(Graphics g) {
 		Graphics2D g2 = (Graphics2D) g; // Cast g to Graphics2D
 
-		// TODO: Noch mal schauen ob wirklich benötigt und wenn ja, ev. auch bei
+		// TODO: Noch mal schauen ob wirklich benï¿½tigt und wenn ja, ev. auch bei
 		// VertexComponent
 		if (antiAliasing) {
 			g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
 					RenderingHints.VALUE_ANTIALIAS_ON);
 		}
 
-		// Definierbare Sachen aus Edge-Format (Überschreiben wenn Format
+		// Definierbare Sachen aus Edge-Format (ï¿½berschreiben wenn Format
 		// vorhanden)
 		Point fromPoint = new Point(0, 0);
 		Point toPoint = new Point(100, 100);
@@ -66,7 +66,7 @@ public class EdgeComponent<E> extends JComponent {
 
 		g2.setColor(active ? activeColor : inactiveColor);
 
-		// Polygon für Shape der Component
+		// Polygon fï¿½r Shape der Component
 		Polygon shapePolygon = new Polygon();
 
 		// Linie immer
@@ -77,7 +77,7 @@ public class EdgeComponent<E> extends JComponent {
 		// Optionale Shapes
 		// Pfeil als Dreieck wenn gerichtet
 		if (directed) {
-			// Wird benötigt für Fallunterscheidungen
+			// Wird benï¿½tigt fï¿½r Fallunterscheidungen
 			int deltaX = fromPoint.x - toPoint.x;
 			int deltaY = fromPoint.y - toPoint.y;
 
@@ -85,7 +85,7 @@ public class EdgeComponent<E> extends JComponent {
 			Point sidePointOne = new Point();
 			Point sidePointTwo = new Point();
 
-			// Spezialfälle
+			// Spezialfï¿½lle
 			// Senkrecht
 			if (deltaX == 0) {
 				// Richtung
@@ -130,7 +130,7 @@ public class EdgeComponent<E> extends JComponent {
 				sidePointTwo = leftAndRightPoints[1];
 			}
 
-			// Daten für Pfeil bekannt, Pfeil zeichnen
+			// Daten fï¿½r Pfeil bekannt, Pfeil zeichnen
 			Polygon arrowPolygon = new Polygon();
 			// Spitze immer gleich
 			arrowPolygon.addPoint(toPoint.x, toPoint.y);
@@ -142,7 +142,7 @@ public class EdgeComponent<E> extends JComponent {
 		}
 		// Gewicht wenn gewichtet
 		if (weighted) {
-			// Punkt für Gewichtanzeige
+			// Punkt fï¿½r Gewichtanzeige
 			Point labelPointOnStraightLine = VisualizationCalculator
 					.getPointOnStraightLine(toPoint, fromPoint,
 							VisualizationCalculator.getLineWidth(fromPoint,
@@ -153,7 +153,7 @@ public class EdgeComponent<E> extends JComponent {
 			l.setLocation(labelPointOnStraightLine);
 		}
 		if (!directed && !weighted) {
-			// Shape für Linie
+			// Shape fï¿½r Linie
 			
 		}
 		// Shape setzen

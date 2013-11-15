@@ -13,6 +13,7 @@ import logic.extlib.Edge;
  * @author Stephan_2
  */
 public class EdgeFormat {
+    public static Object FORMAT;
 
     private boolean isDirected;
     private boolean active;
@@ -20,8 +21,8 @@ public class EdgeFormat {
     private boolean textVisible;
     
     private String label;
-    private Point fromPoint;
-    private Point toPoint;
+    private Point fromPoint = new Point();
+    private Point toPoint = new Point();
     private GraphLayout layout;
     
     private Color activeColor;

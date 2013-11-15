@@ -34,15 +34,7 @@ public class Recorder<V, E> {
     
     public void breakPoint(Object element) {
 
-        Iterator<Vertex<V>> vertexIterator = graph.vertices();
-        while (vertexIterator.hasNext()) {
-
-        }
-        Iterator<Edge<E>> edgeIterator = graph.edges();
-
-        while (edgeIterator.hasNext()) {
-
-        }
+        //record state or
 
     }
 }

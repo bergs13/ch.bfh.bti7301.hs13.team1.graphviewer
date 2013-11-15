@@ -5,8 +5,11 @@
         <group>
             <file>file:/C:/Users/Stephan_2/Documents/NetBeansProjects/Graphviewer/src/defs/VertexFormat.java</file>
             <file>file:/C:/Users/Stephan_2/Documents/NetBeansProjects/Graphviewer/src/logic/extlib/Edge.java</file>
+            <file>file:/C:/Users/Stephan_2/Documents/NetBeansProjects/Graphviewer/src/defs/EdgeFormat.java</file>
             <file>file:/C:/Users/Stephan_2/Documents/NetBeansProjects/Graphviewer/src/logic/extlib/GraphExamples.java</file>
+            <file>file:/C:/Users/Stephan_2/Documents/NetBeansProjects/Graphviewer/src/ui/components/EdgeComponent.java</file>
             <file>file:/C:/Users/Stephan_2/Documents/NetBeansProjects/Graphviewer/src/logic/extlib/IncidenceListGraph.java</file>
+            <file>file:/C:/Users/Stephan_2/Documents/NetBeansProjects/Graphviewer/src/ui/components/VertexComponent.java</file>
         </group>
     </open-files>
 </project-private>

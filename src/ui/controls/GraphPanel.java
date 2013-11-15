@@ -19,6 +19,7 @@ import java.util.Map;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 import defs.EdgeFormat;
+import defs.FormatHelper;
 import defs.VertexFormat;
 import ui.painters.EdgePainter;
 import logic.extlib.Edge;
@@ -50,7 +51,7 @@ public class GraphPanel<V, E> extends JPanel {
 	/**
 	 * Keep a list of the the edgeformats (cache)
 	 */
-	private final ArrayList<EdgeFormat> edgeFormats = new ArrayList<EdgeFormat>();
+	private final ArrayList<Edge<E>> edges = new ArrayList<Edge<E>>();
 
 	// End of Members
 	// Constructors
@@ -91,8 +92,8 @@ public class GraphPanel<V, E> extends JPanel {
 										+ VertexFormat.getOUTERCIRCLEDIAMETER()
 										/ 2, circleCenterTarget.y);
 					}
-					e.set(EdgeFormat.FORMAT, eFormat);
-					this.edgeFormats.add(eFormat);
+					e.set(FormatHelper.FORMAT, eFormat);
+					this.edges.add(e);
 				}
 			}
 		}
@@ -116,9 +117,11 @@ public class GraphPanel<V, E> extends JPanel {
 		super.paintComponent(g);
 		Graphics2D graphPanelGraphics = (Graphics2D) g;
 		// Add the edges by format
-		for (EdgeFormat eFormat : edgeFormats) {
+		for (Edge<E> edge : this.edges) {
 			if (null != graphPanelGraphics) {
-				EdgePainter.paintEdge(eFormat, (Graphics2D) g);
+				EdgePainter.paintEdge(
+						FormatHelper.getFormat(EdgeFormat.class, edge),
+						(Graphics2D) g);
 			}
 		}
 	}
@@ -137,7 +140,7 @@ public class GraphPanel<V, E> extends JPanel {
 		this.removeAll();
 
 		// Add the vertex components, if any
-		for (JComponent comp : vertexComponents.values()) {
+		for (JComponent comp : this.vertexComponents.values()) {
 			Dimension size = comp.getPreferredSize();
 			Point p = comp.getLocation();
 			comp.setBounds(p.x, p.y, size.width, size.height);
@@ -147,20 +150,6 @@ public class GraphPanel<V, E> extends JPanel {
 		}
 		this.validate();
 		this.repaint();
-	}
-
-	private EdgeFormat getEdgeFormat(Point from, Point to) {
-		Point formatFromPoint;
-		Point formatToPoint;
-		for (EdgeFormat f : edgeFormats) {
-			formatFromPoint = f.getFromPoint();
-			formatToPoint = f.getToPoint();
-			if (formatFromPoint.x == from.x && formatFromPoint.y == from.y
-					&& formatToPoint.x == to.x && formatToPoint.y == to.y) {
-				return f;
-			}
-		}
-		return null;
 	}
 
 	public void handleVertexDrop(VertexComponent<V> droppedVertexComponent,

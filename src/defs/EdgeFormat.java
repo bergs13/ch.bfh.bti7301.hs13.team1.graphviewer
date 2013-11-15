@@ -32,10 +32,6 @@ public class EdgeFormat {
     private final float MIN_WIDTH = 2F;
     private final float DEFAULT_WIDTH = 4F;
     
-    //Constant Values
-    public static final Object FORMAT = new Object();
-    //End of constant values
-
     
     public EdgeFormat(GraphLayout newLayout) {
         setLayout(newLayout);

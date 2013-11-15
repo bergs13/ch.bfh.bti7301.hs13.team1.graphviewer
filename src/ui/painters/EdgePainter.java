@@ -26,24 +26,19 @@ public class EdgePainter {
 			g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
 					RenderingHints.VALUE_ANTIALIAS_ON);
 		}
-
-		// Definierbare Sachen aus Edge-Format (Überschreiben wenn Format
-		// vorhanden)
-
-		Point fromPoint;
-		Point toPoint;
-		if (null != edgeFormat) {
-			fromPoint = edgeFormat.getFromPoint();
-			toPoint = edgeFormat.getToPoint();
-		} else {
-			fromPoint = new Point(100, 100);
-			toPoint = new Point(0, 0);
+	
+		// Definierbare Sachen aus Edge-Format (Muss vorhanden sein!)
+		if(null == edgeFormat)
+		{
+			return;
 		}
-		Color inactiveColor = new Color(0, 0, 255);
-		Color activeColor = new Color(255, 0, 0);
-		boolean active = true;
-		boolean weighted = true;
-		boolean directed = true;
+		Point fromPoint = edgeFormat.getFromPoint();
+		Point toPoint= edgeFormat.getToPoint();
+		Color activeColor	=edgeFormat.getActiveColor();
+		Color inactiveColor = edgeFormat.getUnincludedColor();
+		boolean active = edgeFormat.isActive();
+		boolean weighted =  true;
+		boolean directed = edgeFormat.isIsDirected();
 
 		g2.setColor(active ? activeColor : inactiveColor);
 

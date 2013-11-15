@@ -13,60 +13,68 @@ import javax.swing.JComponent;
 import javax.swing.TransferHandler;
 import logic.extlib.Vertex;
 import logic.DragAndDropTransferHandler;
+import defs.FormatHelper;
 import defs.VertexFormat;
+
 @SuppressWarnings("serial")
 public class VertexComponent<V> extends JComponent implements Transferable {
 	// Members
 	private Vertex<V> vertex = null;
-        private VertexFormat format= null;
+
 	// End of members
 
 	// Constant values
-//	private static final int LOCATIONCENTERMODIFIER = 20;
-//	private static final int INNERCIRCLEDIAMETER = 30;
-//	private static final int OUTERCIRCLEDIAMETER = 40;
+	// private static final int LOCATIONCENTERMODIFIER = 20;
+	// private static final int INNERCIRCLEDIAMETER = 30;
+	// private static final int OUTERCIRCLEDIAMETER = 40;
 
 	// End of constant values
 
 	// Constructors
 	public VertexComponent(Vertex<V> vertex) {
-		// Grï¿½sse Rechteck (Component)
-                this.vertex = vertex;
-                format = new VertexFormat();
-                this.vertex.set(format, null);
-                
-		this.setPreferredSize(new Dimension(VertexFormat.getOUTERCIRCLEDIAMETER(),
-				VertexFormat.getOUTERCIRCLEDIAMETER()));
-		
+		// Grösse Rechteck (Component)
+		this.vertex = vertex;
+		if (null == FormatHelper.getFormat(VertexFormat.class, this.vertex)) {
+			// Default-Format
+			this.vertex.set(FormatHelper.FORMAT, new VertexFormat());
+		}
+		this.setPreferredSize(new Dimension(VertexFormat
+				.getOUTERCIRCLEDIAMETER(), VertexFormat
+				.getOUTERCIRCLEDIAMETER()));
 	}
 
 	// End of constructors
 
 	// PaintComponent method
-        @Override
+	@Override
 	public void paintComponent(Graphics g) {
 		Graphics2D g2 = (Graphics2D) g; // Cast g to Graphics2D
 
-//		// Definierbare Sachen aus Vertex-Format (ï¿½berschreiben wenn
-//		// Vertex-Format implementiert)
-//		Color inactiveColor = new Color(0, 0, 255);
-//		Color activeColor = new Color(255, 0, 0);
-//		boolean active = true;
-//		boolean textVisible = true;
-//		String displayText = "V";
+		// Definierbare Sachen aus Vertex-Format (Muss vorhanden sein!)
+		VertexFormat format = FormatHelper.getFormat(VertexFormat.class,
+				this.vertex);
+		// // Definierbare Sachen aus Vertex-Format (ï¿½berschreiben wenn
+		// // Vertex-Format implementiert)
+		// Color inactiveColor = new Color(0, 0, 255);
+		// Color activeColor = new Color(255, 0, 0);
+		// boolean active = true;
+		// boolean textVisible = true;
+		// String displayText = "V";
 
 		// Vertex mit innerem und ï¿½usserem Kreis
-		Ellipse2D outer = new Ellipse2D.Double(0, 0, VertexFormat.getOUTERCIRCLEDIAMETER(),
+		Ellipse2D outer = new Ellipse2D.Double(0, 0,
+				VertexFormat.getOUTERCIRCLEDIAMETER(),
 				VertexFormat.getOUTERCIRCLEDIAMETER());
 		g2.setColor(format.getColor());
 		g2.fill(outer);
 		Ellipse2D inner = new Ellipse2D.Double(outer.getCenterX()
 				- VertexFormat.getINNERCIRCLEDIAMETER() / 2, outer.getCenterY()
-				- VertexFormat.getINNERCIRCLEDIAMETER() / 2, VertexFormat.getINNERCIRCLEDIAMETER(),
+				- VertexFormat.getINNERCIRCLEDIAMETER() / 2,
+				VertexFormat.getINNERCIRCLEDIAMETER(),
 				VertexFormat.getINNERCIRCLEDIAMETER());
 		g2.setColor(format.getUnvisitedColor());
 		g2.fill(inner);
-                
+
 		// Drag & Drop
 		// Add the listener which will export this VertexComponent for
 		// dragging
@@ -216,7 +224,8 @@ public class VertexComponent<V> extends JComponent implements Transferable {
 
 	public void setCircleCenterLocation(Point p) {
 		// Standard setLocation - Constant value for the circleCenter
-		this.setLocation(new Point(p.x - VertexFormat.getLOCATIONCENTERMODIFIER(), p.y
+		this.setLocation(new Point(p.x
+				- VertexFormat.getLOCATIONCENTERMODIFIER(), p.y
 				- VertexFormat.getLOCATIONCENTERMODIFIER()));
 	}
 

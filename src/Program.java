@@ -1,4 +1,5 @@
 import logic.extlib.IncidenceListGraph;
+import logic.extlib.Vertex;
 import ui.MainGUI;
 
 public class Program {
@@ -41,12 +42,15 @@ public class Program {
 		final IncidenceListGraph<String, String> gr = new IncidenceListGraph<>(
 				true);
 		// Vertices
-		/*Vertex<String> vA = */gr.insertVertex("A");
-		gr.insertVertex("B");
-		gr.insertVertex("C");
-		//// Edges
-		//gr.insertEdge(vA, vB, "AB");
-		//gr.insertEdge(vB, vC, "BC");
+		Vertex<String> vA = gr.insertVertex("A");
+		Vertex<String> vB = gr.insertVertex("B");
+		Vertex<String> vC = gr.insertVertex("C");
+		// Edges
+		gr.insertEdge(vA, vB, "AB");
+		gr.insertEdge(vB, vC, "BC");
+		// // Edges
+		// gr.insertEdge(vA, vB, "AB");
+		// gr.insertEdge(vB, vC, "BC");
 		/* Create and display the form */
 		java.awt.EventQueue.invokeLater(new Runnable() {
 			public void run() {

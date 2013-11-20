@@ -1,5 +1,6 @@
 package ui.controls;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -9,6 +10,8 @@ import java.awt.datatransfer.Transferable;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Ellipse2D;
+
+import javax.swing.BorderFactory;
 import javax.swing.JComponent;
 import javax.swing.TransferHandler;
 import logic.extlib.Vertex;
@@ -20,15 +23,7 @@ import defs.VertexFormat;
 public class VertexComponent<V> extends JComponent implements Transferable {
 	// Members
 	private Vertex<V> vertex = null;
-
 	// End of members
-
-	// Constant values
-	// private static final int LOCATIONCENTERMODIFIER = 20;
-	// private static final int INNERCIRCLEDIAMETER = 30;
-	// private static final int OUTERCIRCLEDIAMETER = 40;
-
-	// End of constant values
 
 	// Constructors
 	public VertexComponent(Vertex<V> vertex) {
@@ -74,7 +69,7 @@ public class VertexComponent<V> extends JComponent implements Transferable {
 				VertexFormat.getINNERCIRCLEDIAMETER());
 		g2.setColor(format.getUnvisitedColor());
 		g2.fill(inner);
-
+		
 		// Drag & Drop
 		// Add the listener which will export this VertexComponent for
 		// dragging
@@ -203,7 +198,7 @@ public class VertexComponent<V> extends JComponent implements Transferable {
 	// End of Listeners
 	// End of Drag & Drop
 
-	// Methods
+	//Other Methods
 	/**
 	 * <p>
 	 * Returns (creating, if necessary) the DataFlavor representing Vertex
@@ -235,5 +230,5 @@ public class VertexComponent<V> extends JComponent implements Transferable {
 		return new Point(p.x + VertexFormat.getLOCATIONCENTERMODIFIER(), p.y
 				+ VertexFormat.getLOCATIONCENTERMODIFIER());
 	}
-	// End of Methods
+	// End of other Methods
 }

@@ -67,7 +67,9 @@ public class GraphPanel<V, E> extends JPanel {
 			while (itV.hasNext()) {
 				Vertex<V> v = itV.next();
 				VertexComponent<V> vComp = new VertexComponent<V>(v);
+				
 				vComp.setCircleCenterLocation(new Point(i * 75, i * 100));
+		
 				this.vertexVertexComponents.put(v, vComp);
 				i++;
 			}
@@ -110,6 +112,7 @@ public class GraphPanel<V, E> extends JPanel {
 	}
 
 	// End of Constructors
+	
 	@Override
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
@@ -187,8 +190,23 @@ public class GraphPanel<V, E> extends JPanel {
 				.getCircleCenterLocation();
 		Point circleCenterTarget = vertexVertexComponents.get(g.opposite(e, v))
 				.getCircleCenterLocation();
-
-		EdgeFormat eFormat = new EdgeFormat();
+		
+		//Umpolen wenn nötig, wenn gerichtet
+		if(g.isDirected())
+		{
+			if(g.destination(e).equals(v))
+			{
+				Point temp = circleCenterSource;
+				circleCenterSource = circleCenterTarget;
+				circleCenterTarget = temp; 
+			}
+		}
+		
+		EdgeFormat eFormat = FormatHelper.getFormat(EdgeFormat.class, e);
+		if(null == eFormat)
+		{
+			eFormat = new EdgeFormat();
+		}
 		Point eFFromPoint = VisualizationCalculator.getPointOnStraightLine(
 				circleCenterSource, circleCenterTarget,
 				VertexFormat.getOUTERCIRCLEDIAMETER() / 2);

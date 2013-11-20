@@ -1,3 +1,7 @@
+import defs.EdgeFormat;
+import defs.FormatHelper;
+import defs.VertexFormat;
+import logic.extlib.Edge;
 import logic.extlib.IncidenceListGraph;
 import logic.extlib.Vertex;
 import ui.MainGUI;
@@ -41,13 +45,35 @@ public class Program {
 		// </editor-fold>
 		final IncidenceListGraph<String, String> gr = new IncidenceListGraph<>(
 				true);
+
 		// Vertices
+		// Vertex 1
 		Vertex<String> vA = gr.insertVertex("A");
+		// Format Vertex 1
+		VertexFormat vF1 = new VertexFormat();
+		vF1.setLabel("A");
+		vA.set(FormatHelper.FORMAT, vF1);
+		// Vertex 2
 		Vertex<String> vB = gr.insertVertex("B");
+		// Vertex 3
 		Vertex<String> vC = gr.insertVertex("C");
+
 		// Edges
-		gr.insertEdge(vA, vB, "AB");
-		gr.insertEdge(vB, vC, "BC");
+		// Edge 1
+		Edge<String> eAB = gr.insertEdge(vA, vB, "AB");
+		// Format Edge 1
+		EdgeFormat eF1 = new EdgeFormat();
+		eF1.setIsDirected(true);
+		eF1.setLabel("AB");
+		eF1.setTextVisible(true);
+		eAB.set(FormatHelper.FORMAT, eF1);
+		// Edge 2
+		Edge<String> eBC = gr.insertEdge(vB, vC, "BC");
+		// Format Edge 2
+		EdgeFormat eF2 = new EdgeFormat();
+		eF2.setTextVisible(true);
+		eBC.set(FormatHelper.FORMAT, eF2);
+
 		// // Edges
 		// gr.insertEdge(vA, vB, "AB");
 		// gr.insertEdge(vB, vC, "BC");

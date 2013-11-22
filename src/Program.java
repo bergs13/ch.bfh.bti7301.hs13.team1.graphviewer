@@ -43,7 +43,7 @@ public class Program {
 					java.util.logging.Level.SEVERE, null, ex);
 		}
 		// </editor-fold>
-		final IncidenceListGraph<String, String> gr = new IncidenceListGraph<>(
+		final IncidenceListGraph<String, String> gr = new IncidenceListGraph<String, String>(
 				true);
 
 		// Vertices

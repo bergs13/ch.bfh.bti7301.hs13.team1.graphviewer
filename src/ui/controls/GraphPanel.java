@@ -12,13 +12,20 @@ import java.awt.dnd.DropTargetDragEvent;
 import java.awt.dnd.DropTargetDropEvent;
 import java.awt.dnd.DropTargetEvent;
 import java.awt.dnd.DropTargetListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Map.Entry;
+import java.util.Observable;
+import java.util.Observer;
 import javax.swing.JComponent;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
+
 import defs.EdgeFormat;
 import defs.FormatHelper;
 import defs.VertexFormat;
@@ -31,21 +38,21 @@ import logic.GraphPanelModel;
 import logic.VisualizationCalculator;
 
 @SuppressWarnings("serial")
-public class GraphPanel<V, E> extends JPanel {
-	GraphPanelModel<V, E> model = null;
-	/**
-	 * Keep a list of the vertex components (cache)
-	 */
+public class GraphPanel<V, E> extends JPanel implements Observer {
+	private GraphPanelModel<V, E> model = null;
 	private final Map<Vertex<V>, VertexComponent<V>> vertexVertexComponents = new HashMap<Vertex<V>, VertexComponent<V>>();
+	private JMenuItem menuItemAddVertex = new JMenuItem("Add");
+	private JPopupMenu popupMenu = new JPopupMenu();
 
 	// End of Members
 
 	// Constructors
-	public GraphPanel(GraphPanelModel<V, E> model) {
+	public GraphPanel(final GraphPanelModel<V, E> model) {
 		if (null == model) {
 			throw new IllegalArgumentException("no model set for graph panel");
 		}
 		this.model = model;
+		this.model.addObserver(this);
 
 		int i = 1;
 		Iterator<Vertex<V>> itV = model.getGraph().vertices();
@@ -76,17 +83,36 @@ public class GraphPanel<V, E> extends JPanel {
 
 		// Paint the vertices
 		for (JComponent comp : this.vertexVertexComponents.values()) {
-			addAndPaintVertexComponent(comp);
+			paintVertexComponent(comp);
 		}
 		// .. and edges
 		repaintEdges();
+
+		popupMenu.add(menuItemAddVertex);
+		this.setComponentPopupMenu(popupMenu);
 	}
 
 	// End of Constructors
 
 	// Painting methods
 	// vertices
-	private void addAndPaintVertexComponent(JComponent comp) {
+	private void addAndPaintVertexComponent(Vertex<V> vertex) {
+		if (null == vertex) {
+			return;
+		}
+
+		// GUI update
+		VertexComponent<V> vComp = new VertexComponent<V>(vertex);
+
+		// Find position
+		vComp.setCircleCenterLocation(new Point(1 * 75, 1 * 100));
+
+		// add to list
+		this.vertexVertexComponents.put(vertex, vComp);
+		paintVertexComponent(vComp);
+	}
+
+	private void paintVertexComponent(JComponent comp) {
 		Dimension size = comp.getPreferredSize();
 		Point p = comp.getLocation();
 		comp.setBounds(p.x, p.y, size.width, size.height);
@@ -99,7 +125,7 @@ public class GraphPanel<V, E> extends JPanel {
 		// Remove the component
 		this.remove(comp);
 		// readd the component
-		addAndPaintVertexComponent(comp);
+		paintVertexComponent(comp);
 	}
 
 	/**
@@ -150,50 +176,6 @@ public class GraphPanel<V, E> extends JPanel {
 
 	// End of painting methods
 
-	// Graph manipulation methods
-	public void addVertex(VertexFormat format) {
-		Vertex<V> vNew = model.addVertex(format);
-
-		// GUI update
-		VertexComponent<V> vComp = new VertexComponent<V>(vNew);
-		// Find position
-		vComp.setCircleCenterLocation(new Point(1 * 75, 1 * 100));
-		// add to list
-		this.vertexVertexComponents.put(vNew, vComp);
-		// add to UI (painting included
-		addAndPaintVertexComponent(vComp);
-	}
-
-	public void updateVertexComponent(VertexComponent<V> vComponent,
-			VertexFormat newFormat) {
-		if (null == vComponent) {
-			throw new IllegalArgumentException(
-					"no vertex component set in updateVertex method.");
-		}
-
-		Vertex<V> vertex = getVertexByComponent(vComponent);
-		model.updateVertex(vertex, newFormat);
-
-		// GUI updates (repaint)
-		if (this.vertexVertexComponents.containsKey(vertex)) {
-			VertexComponent<V> comp = this.vertexVertexComponents.get(vertex);
-			repaintVertexComponent(comp);
-		}
-	}
-
-	public void deleteVertex(Vertex<V> vertex) {
-		// Remove from list and GUI
-		if (this.vertexVertexComponents.containsKey(vertex)) {
-			VertexComponent<V> comp = this.vertexVertexComponents
-					.remove(vertex);
-			// Remove the component
-			this.remove(comp);
-			comp = null;
-		}
-	}
-
-	// End of graph manipulation methods
-
 	// Drag & Drop
 	/**
 	 * <p>
@@ -210,13 +192,18 @@ public class GraphPanel<V, E> extends JPanel {
 	 */
 	private static DataFlavor vertexComponentDataFlavor = null;
 
-	public void handleVertexDrop(VertexComponent<V> droppedVertexComponent,
+	public void handleObjectDrop(Object transferableObj,
 			DropTargetDropEvent dtde) {
-		if (null != droppedVertexComponent && null != dtde) {
-			// Get the the point of the VertexComponent
-			// for the drop option (the cursor on the drop)
-			droppedVertexComponent.setCircleCenterLocation(dtde.getLocation());
-			repaintDroppedAndAdjacent(droppedVertexComponent);
+		if (VertexComponent.class.isInstance(transferableObj)) {
+			@SuppressWarnings("unchecked")
+			VertexComponent<V> vComp = (VertexComponent<V>) transferableObj;
+			if (null != vComp && null != dtde) {
+				// refresh graphpanel (vertex gedroppt)
+				// Get the the point of the VertexComponent
+				// for the drop option (the cursor on the drop)
+				vComp.setCircleCenterLocation(dtde.getLocation());
+				repaintDroppedAndAdjacent(vComp);
+			}
 		}
 	}
 
@@ -323,17 +310,40 @@ public class GraphPanel<V, E> extends JPanel {
 			if (transferableObj == null) {
 				return;
 			}
-
-			if (VertexComponent.class.isInstance(transferableObj)) {
-				// refresh graphpanel (vertex gedroppt)
-				this.graphPanel.handleVertexDrop(
-						(VertexComponent<V>) transferableObj, dtde);
-			}
+			this.graphPanel.handleObjectDrop(transferableObj, dtde);
 		}
 	}
 
 	// End of Listeners
 	// End of Drag & Drop
+
+	// Observer methods
+	@Override
+	public void update(Observable observable, Object objArgs) {
+		// Argumente müssen bestimmte Form haben
+		if (Vertex.class.isInstance(objArgs)) {
+			Vertex<V> vertex = (Vertex<V>) objArgs;
+			if (null == vertex) {
+				// Delete
+				// Remove from list and GUI
+				VertexComponent<V> comp = this.vertexVertexComponents
+						.remove(vertex);
+				// Remove the component
+				this.remove(comp);
+				comp = null;
+			} else if (this.vertexVertexComponents.containsKey(vertex)) {
+				VertexComponent<V> vComp = this.vertexVertexComponents
+						.get(vertex);
+				// Update
+				repaintVertexComponent(vComp);
+			} else {
+				// Add
+				addAndPaintVertexComponent(vertex);
+			}
+		}
+	}
+
+	// End of observer methods
 
 	// Helper methods
 
@@ -389,5 +399,6 @@ public class GraphPanel<V, E> extends JPanel {
 		}
 		return vertex;
 	}
+
 	// End of Helper methods
 }

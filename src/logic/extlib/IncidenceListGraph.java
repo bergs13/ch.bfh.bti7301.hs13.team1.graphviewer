@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Observable;
 
 /**
  * A implementation of the Graph interface based on incidence lists (at each vertex a list of 
@@ -392,7 +393,7 @@ public class IncidenceListGraph<V,E> implements Graph<V, E> {
 		}		
 	}
 	
-	private class IGLDecorable implements Decorable {
+	private class IGLDecorable extends Observable implements Decorable {
 		private HashMap<Object,Object> attrs = new HashMap<Object,Object>(2);
 		private final Object DUMMY = new Object();
 		@Override

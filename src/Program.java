@@ -3,6 +3,7 @@ import defs.FormatHelper;
 import defs.VertexFormat;
 import logic.extlib.Edge;
 import logic.extlib.IncidenceListGraph;
+import logic.extlib.Vertex;
 import ui.MainGUI;
 
 public class Program {

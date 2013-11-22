@@ -26,8 +26,8 @@ public class VertexComponent<V> extends JComponent implements Transferable {
 
 	// Constructors
 	public VertexComponent(Vertex<V> vertex) {
-		// Grösse Rechteck (Component)
-		this.vertex = vertex;
+		// Grï¿½sse Rechteck (Component)
+		this.vertex = vertex;            
 		if (null == FormatHelper.getFormat(VertexFormat.class, this.vertex)) {
 			// Default-Format
 			this.vertex.set(FormatHelper.FORMAT, new VertexFormat());

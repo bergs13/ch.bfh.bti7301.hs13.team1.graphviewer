@@ -1,17 +1,18 @@
 package logic.extlib;
+import defs.PublicConstants;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 
 public class GraphExamples<V,E> {
 	
-	public static final Object VISITED = new Object();
-	static final Object NUMBER = new Object();
-	static final Object INCOUNT = new Object();
-	static final Object DISTANCE = new Object();
-	static final Object PQLOCATOR = new Object();
-	static final Object WEIGHT = new Object();
-	static final Object MSF = new Object();
+	static final Object VISITED = PublicConstants.VISITED;
+	static final Object NUMBER = PublicConstants.NUMBER;
+	static final Object INCOUNT = PublicConstants.INCOUNT;
+	static final Object DISTANCE = PublicConstants.DISTANCE;
+	static final Object PQLOCATOR = PublicConstants.PQLOCATOR;
+	static final Object WEIGHT = PublicConstants.WEIGHT;
+	static final Object MSF = PublicConstants.MSF;
 	
 
 	final int kruskal(Graph<V,E> g){

@@ -412,9 +412,20 @@ public class IncidenceListGraph<V,E> implements Graph<V, E> {
 
 		@Override
 		public void set(Object attr, Object val) {
+                    //standard set logic
 			Object value = DUMMY;
 			if (val != null) value = val;
 			attrs.put(attr, value);
+                        
+                        //format updates depending on attributes set
+                          if(Vertex.class.isInstance(this))
+                        {
+                            
+                        }
+                        else if(Edge.class.isInstance(this))
+                        {
+                            
+                        }
 		}
 
 		@Override

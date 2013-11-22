@@ -111,16 +111,6 @@ public class GraphPanel<V, E> extends JPanel {
 		this.repaint();
 	}
 
-	public void handleVertexDrop(VertexComponent<V> droppedVertexComponent,
-			DropTargetDropEvent dtde) {
-		if (null != droppedVertexComponent && null != dtde) {
-			// Get the the point of the VertexComponent
-			// for the drop option (the cursor on the drop)
-			droppedVertexComponent.setCircleCenterLocation(dtde.getLocation());
-			repaintContent();
-		}
-	}
-
 	// End of Constructors
 	
 	@Override

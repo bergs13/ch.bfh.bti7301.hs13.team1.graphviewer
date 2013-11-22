@@ -2,6 +2,8 @@ package ui.controls;
 
 import java.awt.Cursor;
 import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
@@ -10,23 +12,28 @@ import java.awt.dnd.DropTargetDragEvent;
 import java.awt.dnd.DropTargetDropEvent;
 import java.awt.dnd.DropTargetEvent;
 import java.awt.dnd.DropTargetListener;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Map.Entry;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 import defs.EdgeFormat;
+import defs.FormatHelper;
 import defs.VertexFormat;
-import ui.components.EdgeComponent;
-import ui.components.VertexComponent;
+import ui.painters.EdgePainter;
 import logic.extlib.Edge;
 import logic.extlib.Graph;
+import logic.extlib.IncidenceListGraph;
 import logic.extlib.Vertex;
 import logic.DragAndDropTransferHandler;
+import logic.VisualizationCalculator;
 
 @SuppressWarnings("serial")
 public class GraphPanel<V, E> extends JPanel {
 	// Members
+	private IncidenceListGraph<V, E> graph;
 	/**
 	 * <p>
 	 * This represents the data that is transmitted in drag and drop.
@@ -42,57 +49,43 @@ public class GraphPanel<V, E> extends JPanel {
 	 */
 	private static DataFlavor vertexComponentDataFlavor = null;
 	/**
-	 * Keep a list of the user-added vertex components so can re-add
+	 * Keep a list of the vertex components (cache)
 	 */
-	private final Map<Vertex<V>, VertexComponent<V>> vertexComponents = new HashMap<Vertex<V>, VertexComponent<V>>();
+	private final Map<Vertex<V>, VertexComponent<V>> vertexVertexComponents = new HashMap<Vertex<V>, VertexComponent<V>>();
 	/**
-	 * Keep a list of the user-added edge components so can re-add
+	 * Keep a list of the the edgeformats (cache)
 	 */
-	private final Map<Edge<E>, EdgeComponent<E>> edgeComponents = new HashMap<Edge<E>, EdgeComponent<E>>();
+	private final ArrayList<Edge<E>> edges = new ArrayList<Edge<E>>();
 
 	// End of Members
 	// Constructors
-	public GraphPanel(Graph<V, E> g) {
+	public GraphPanel(IncidenceListGraph<V, E> g) {
 		if (null != g) {
-			Iterator<Vertex<V>> itV = g.vertices();
+			this.graph = g;
+			Iterator<Vertex<V>> itV = this.graph.vertices();
 			int i = 1;
 			while (itV.hasNext()) {
 				Vertex<V> v = itV.next();
 				VertexComponent<V> vComp = new VertexComponent<V>(v);
+				
 				vComp.setCircleCenterLocation(new Point(i * 75, i * 100));
-				this.vertexComponents.put(v, vComp);
+		
+				this.vertexVertexComponents.put(v, vComp);
 				i++;
 			}
-			for (Vertex<V> v : vertexComponents.keySet()) {
-				Point circleCenterSource = vertexComponents.get(v)
-						.getCircleCenterLocation();
-				Iterator<Edge<E>> itE = g.incidentEdges(v);
+			for (Vertex<V> v : vertexVertexComponents.keySet()) {
+
+				Iterator<Edge<E>> itE = this.graph.incidentEdges(v);
 				while (itE.hasNext()) {
 					Edge<E> e = itE.next();
-					Point circleCenterTarget = vertexComponents.get(
-							g.opposite(e, v)).getCircleCenterLocation();
-					EdgeFormat eFormat = new EdgeFormat();
-					if (circleCenterTarget.x > circleCenterSource.x) {
-						eFormat.setFromPoint(circleCenterSource.x
-								+ VertexFormat.getOUTERCIRCLEDIAMETER() / 2,
-								circleCenterSource.y);
-						eFormat.setToPoint(
-								circleCenterTarget.x
-										- VertexFormat.getOUTERCIRCLEDIAMETER()
-										/ 2, circleCenterTarget.y);
-					} else {
-						eFormat.setFromPoint(circleCenterSource.x
-								- VertexFormat.getOUTERCIRCLEDIAMETER() / 2,
-								circleCenterSource.y);
-						eFormat.setToPoint(
-								circleCenterTarget.x
-										+ VertexFormat.getOUTERCIRCLEDIAMETER()
-										/ 2, circleCenterTarget.y);
-					}
-					e.set(EdgeFormat.FORMAT, eFormat);
-					this.edgeComponents.put(e, new EdgeComponent<E>(e));
+
+					reCalculateAndSetEdgeFormatPoints(this.graph, v, e);
+
+					this.edges.add(e);
 				}
 			}
+		} else {
+			this.graph = new IncidenceListGraph<V, E>(true);
 		}
 
 		// Again, needs to negotiate with the draggable object
@@ -105,25 +98,7 @@ public class GraphPanel<V, E> extends JPanel {
 		this.setLayout(null);
 
 		// Paint the components
-		repaintContent();
-	}
-
-	// End of Constructors
-	/**
-	 * <p>
-	 * Removes all components from the panel and re-adds them.
-	 * </p>
-	 * <p>
-	 * This is important for reordering components (user drags and drops a
-	 * vertex to acceptable drop target region)
-	 * </p>
-	 */
-	public void repaintContent() {
-		// Clear out all previously added items
-		this.removeAll();
-
-		// Add the vertex components, if any
-		for (JComponent comp : vertexComponents.values()) {
+		for (JComponent comp : this.vertexVertexComponents.values()) {
 			Dimension size = comp.getPreferredSize();
 			Point p = comp.getLocation();
 			comp.setBounds(p.x, p.y, size.width, size.height);
@@ -131,15 +106,7 @@ public class GraphPanel<V, E> extends JPanel {
 			comp.validate();
 			comp.repaint();
 		}
-		// Add the edge components, if any
-		for (JComponent comp : edgeComponents.values()) {
-			Dimension size = comp.getPreferredSize();
-			Point p = comp.getLocation();
-			comp.setBounds(p.x, p.y, size.width, size.height);
-			this.add(comp);
-			comp.validate();
-			comp.repaint();
-		}
+		// for the edges
 		this.validate();
 		this.repaint();
 	}
@@ -153,6 +120,115 @@ public class GraphPanel<V, E> extends JPanel {
 			repaintContent();
 		}
 	}
+
+	// End of Constructors
+	
+	@Override
+	public void paintComponent(Graphics g) {
+		super.paintComponent(g);
+		Graphics2D graphPanelGraphics = (Graphics2D) g;
+		// Add the edges by format
+		for (Edge<E> edge : this.edges) {
+			if (null != graphPanelGraphics) {
+				EdgePainter.paintEdge(
+						FormatHelper.getFormat(EdgeFormat.class, edge),
+						(Graphics2D) g);
+			}
+		}
+	}
+
+	public void handleVertexDrop(VertexComponent<V> droppedVertexComponent,
+			DropTargetDropEvent dtde) {
+		if (null != droppedVertexComponent && null != dtde) {
+			// Get the the point of the VertexComponent
+			// for the drop option (the cursor on the drop)
+			droppedVertexComponent.setCircleCenterLocation(dtde.getLocation());
+			repaintDroppedAndAdjacent(droppedVertexComponent);
+		}
+	}
+	
+	/**
+	 * <p>
+	 * Removes all components from the panel and re-adds them.
+	 * </p>
+	 * <p>
+	 * This is important for reordering components (user drags and drops a
+	 * vertex to acceptable drop target region)
+	 * </p>
+	 */
+	public void repaintDroppedAndAdjacent(VertexComponent<V> comp) {
+		// Remove the component
+		this.remove(comp);
+		// readd the component
+		Dimension size = comp.getPreferredSize();
+		Point p = comp.getLocation();
+		comp.setBounds(p.x, p.y, size.width, size.height);
+		this.add(comp);
+		// repaint the component
+		comp.validate();
+		comp.repaint();
+
+		// Change the format of incident edges
+		for (Entry<Vertex<V>, VertexComponent<V>> mapEntry : this.vertexVertexComponents
+				.entrySet()) {
+			if (mapEntry.getValue().equals(comp)) {
+				Vertex<V> firstVertex = mapEntry.getKey();
+				Iterator<Edge<E>> itE = this.graph.incidentEdges(firstVertex);
+				while (itE.hasNext()) {
+					Edge<E> e = itE.next();
+
+					reCalculateAndSetEdgeFormatPoints(this.graph, firstVertex, e);
+				}
+			}
+		}
+		// repaint the panel for applying the new edgeformat
+		this.validate();
+		this.repaint();
+	}
+
+	/**
+	 * calculate the edge length by the source and target vertex (via graph) and
+	 * set the format
+	 * 
+	 * @param v
+	 * @param e
+	 */
+	private void reCalculateAndSetEdgeFormatPoints(Graph<V, E> g, Vertex<V> v,
+			Edge<E> e) {
+
+		Point circleCenterSource = vertexVertexComponents.get(v)
+				.getCircleCenterLocation();
+		Point circleCenterTarget = vertexVertexComponents.get(g.opposite(e, v))
+				.getCircleCenterLocation();
+		
+		//Umpolen wenn n�tig, wenn gerichtet
+		if(g.isDirected())
+		{
+			if(g.destination(e).equals(v))
+			{
+				Point temp = circleCenterSource;
+				circleCenterSource = circleCenterTarget;
+				circleCenterTarget = temp; 
+			}
+		}
+		
+		EdgeFormat eFormat = FormatHelper.getFormat(EdgeFormat.class, e);
+		if(null == eFormat)
+		{
+			eFormat = new EdgeFormat();
+		}
+		Point eFFromPoint = VisualizationCalculator.getPointOnStraightLine(
+				circleCenterSource, circleCenterTarget,
+				VertexFormat.getOUTERCIRCLEDIAMETER() / 2);
+		Point eFToPoint = VisualizationCalculator.getPointOnStraightLine(
+				circleCenterTarget, circleCenterSource,
+				VertexFormat.getOUTERCIRCLEDIAMETER() / 2);
+		eFormat.setFromPoint(eFFromPoint.x, eFFromPoint.y);
+		eFormat.setToPoint(eFToPoint.x, eFToPoint.y);
+		e.set(FormatHelper.FORMAT, eFormat);
+	}
+
+
 
 	/**
 	 * <p>

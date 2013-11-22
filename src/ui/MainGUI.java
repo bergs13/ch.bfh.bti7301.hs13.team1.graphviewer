@@ -22,7 +22,7 @@ public class MainGUI<V, E> extends javax.swing.JFrame {
      */
     public MainGUI(IncidenceListGraph<V, E> g) {
         initComponents();
-        graphPanel = new GraphPanel<>(g);
+        graphPanel = new GraphPanel<V, E>(g);
         graphPanel.setBorder(javax.swing.BorderFactory
                 .createLineBorder(new java.awt.Color(0, 0, 0)));
 

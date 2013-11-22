@@ -31,13 +31,11 @@ public class EdgeFormat {
     
     private final Edge edge;
 
+    private final float MAX_WIDTH = 20F;
+    private final float MIN_WIDTH = 2F;
+    private final float DEFAULT_WIDTH = 4F;
     
-
-    public EdgeFormat(Edge newEdge,GraphLayout newLayout) {
-        this.edge = newEdge;
-        setLayout(newLayout);
-    }
-
+    
     /**
      *
      * @param newEdge

@@ -6,14 +6,11 @@ package defs;
 
 import java.awt.Point;
 import java.awt.Color;
-import logic.extlib.GraphExamples;
-import logic.extlib.Vertex;
 
 /**
  *
  * @author Stephan_2
  */
-@SuppressWarnings("serial")
 public class VertexFormat {
 
     // Members
@@ -22,7 +19,6 @@ public class VertexFormat {
     private Color unvisitedColor;
     private Point centerPoint;
     private static GraphLayout layout;
-    private final Vertex vertex;
     private String label;
     private boolean textVisible;
     private boolean active = false;
@@ -31,9 +27,6 @@ public class VertexFormat {
     // End of members
     //Constant Values
     private static final GraphLayout STANDARD_LAYOUT = new StandardLayout();
-//    private static final int DEFAULT_SIZE = 40;
-//    private static final int MAX_SIZE = 80;
-//    private static final int MIN_SIZE = 20;
     private static final int OUTERCIRCLEDIAMETER = 40;
     private static final int INNERCIRCLEDIAMETER = OUTERCIRCLEDIAMETER - 10;
     private static final int LOCATIONCENTERMODIFIER = OUTERCIRCLEDIAMETER / 2;
@@ -45,13 +38,11 @@ public class VertexFormat {
      * @param vertex
      * @param newlayout
      */
-    public VertexFormat(Vertex vertex, GraphLayout newlayout) {
-        this.vertex = vertex;
+    public VertexFormat(GraphLayout newlayout) {
         setLayout(newlayout);
     }
 
-    public VertexFormat(Vertex vertex) {
-        this.vertex = vertex;
+    public VertexFormat() {
         setLayout(STANDARD_LAYOUT);
     }
     // End of Constructors
@@ -172,15 +163,7 @@ public class VertexFormat {
         }
     }
 
-    /**
-     * update the the VertexFormat to the current state in the algorithm
-     */
-    public void updateVertexFormat() {
-        if (this.vertex.has(GraphExamples.VISITED) && !this.visited) {
-            this.setVisited();
-        }
-
-    }
+    
 
 	// End of getters and setters
 }

@@ -10,63 +10,70 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Ellipse2D;
 import javax.swing.JComponent;
+import javax.swing.JLabel;
 import javax.swing.TransferHandler;
 import logic.extlib.Vertex;
 import logic.DragAndDropTransferHandler;
+import defs.FormatHelper;
 import defs.VertexFormat;
+
 @SuppressWarnings("serial")
 public class VertexComponent<V> extends JComponent implements Transferable {
 	// Members
 	private Vertex<V> vertex = null;
-        private VertexFormat format= null;
+
 	// End of members
-
-	// Constant values
-//	private static final int LOCATIONCENTERMODIFIER = 20;
-//	private static final int INNERCIRCLEDIAMETER = 30;
-//	private static final int OUTERCIRCLEDIAMETER = 40;
-
-	// End of constant values
 
 	// Constructors
 	public VertexComponent(Vertex<V> vertex) {
 		// Gr�sse Rechteck (Component)
-                this.vertex = vertex;
-                format = new VertexFormat();
-                this.vertex.set(format, null);
-                
-		this.setPreferredSize(new Dimension(VertexFormat.getOUTERCIRCLEDIAMETER(),
-				VertexFormat.getOUTERCIRCLEDIAMETER()));
-		
+		this.vertex = vertex;
+		if (null == FormatHelper.getFormat(VertexFormat.class, this.vertex)) {
+			// Default-Format
+			this.vertex.set(FormatHelper.FORMAT, new VertexFormat());
+		}
+		this.setPreferredSize(new Dimension(VertexFormat
+				.getOUTERCIRCLEDIAMETER(), VertexFormat
+				.getOUTERCIRCLEDIAMETER()));
 	}
 
 	// End of constructors
 
 	// PaintComponent method
-        @Override
+	@Override
 	public void paintComponent(Graphics g) {
 		Graphics2D g2 = (Graphics2D) g; // Cast g to Graphics2D
 
-//		// Definierbare Sachen aus Vertex-Format (�berschreiben wenn
-//		// Vertex-Format implementiert)
-//		Color inactiveColor = new Color(0, 0, 255);
-//		Color activeColor = new Color(255, 0, 0);
-//		boolean active = true;
-//		boolean textVisible = true;
-//		String displayText = "V";
+		// Definierbare Sachen aus Vertex-Format (Muss vorhanden sein!)
+		VertexFormat format = FormatHelper.getFormat(VertexFormat.class,
+				this.vertex);
+		// // Definierbare Sachen aus Vertex-Format (�berschreiben wenn
+		// // Vertex-Format implementiert)
+		// Color inactiveColor = new Color(0, 0, 255);
+		// Color activeColor = new Color(255, 0, 0);
+		// boolean active = true;
+		// boolean textVisible = true;
+		// String displayText = "V";
 
 		// Vertex mit innerem und �usserem Kreis
-		Ellipse2D outer = new Ellipse2D.Double(0, 0, VertexFormat.getOUTERCIRCLEDIAMETER(),
+		Ellipse2D outer = new Ellipse2D.Double(0, 0,
+				VertexFormat.getOUTERCIRCLEDIAMETER(),
 				VertexFormat.getOUTERCIRCLEDIAMETER());
 		g2.setColor(format.getColor());
 		g2.fill(outer);
 		Ellipse2D inner = new Ellipse2D.Double(outer.getCenterX()
 				- VertexFormat.getINNERCIRCLEDIAMETER() / 2, outer.getCenterY()
-				- VertexFormat.getINNERCIRCLEDIAMETER() / 2, VertexFormat.getINNERCIRCLEDIAMETER(),
+				- VertexFormat.getINNERCIRCLEDIAMETER() / 2,
+				VertexFormat.getINNERCIRCLEDIAMETER(),
 				VertexFormat.getINNERCIRCLEDIAMETER());
 		g2.setColor(format.getUnvisitedColor());
 		g2.fill(inner);
-                
+
+		// Label Vertex
+		JLabel label = new JLabel(format.getLabel());
+		// Verschieben zu Punkt
+		label.setLocation(this.getCircleCenterLocation());
+
 		// Drag & Drop
 		// Add the listener which will export this VertexComponent for
 		// dragging
@@ -195,7 +202,7 @@ public class VertexComponent<V> extends JComponent implements Transferable {
 	// End of Listeners
 	// End of Drag & Drop
 
-	// Methods
+	// Other Methods
 	/**
 	 * <p>
 	 * Returns (creating, if necessary) the DataFlavor representing Vertex
@@ -216,7 +223,8 @@ public class VertexComponent<V> extends JComponent implements Transferable {
 
 	public void setCircleCenterLocation(Point p) {
 		// Standard setLocation - Constant value for the circleCenter
-		this.setLocation(new Point(p.x - VertexFormat.getLOCATIONCENTERMODIFIER(), p.y
+		this.setLocation(new Point(p.x
+				- VertexFormat.getLOCATIONCENTERMODIFIER(), p.y
 				- VertexFormat.getLOCATIONCENTERMODIFIER()));
 	}
 
@@ -226,5 +234,5 @@ public class VertexComponent<V> extends JComponent implements Transferable {
 		return new Point(p.x + VertexFormat.getLOCATIONCENTERMODIFIER(), p.y
 				+ VertexFormat.getLOCATIONCENTERMODIFIER());
 	}
-	// End of Methods
+	// End of other Methods
 }

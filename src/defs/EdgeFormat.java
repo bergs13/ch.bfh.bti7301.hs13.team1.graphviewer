@@ -20,8 +20,8 @@ public class EdgeFormat {
     private boolean textVisible;
     
     private String label;
-    private Point fromPoint;
-    private Point toPoint;
+    private Point fromPoint = new Point();
+    private Point toPoint = new Point();
     private GraphLayout layout;
     private BasicStroke edgeStyle;
     private Color activeColor;
@@ -31,7 +31,8 @@ public class EdgeFormat {
     private final float MAX_WIDTH = 20F;
     private final float MIN_WIDTH = 2F;
     private final float DEFAULT_WIDTH = 4F;
-
+    
+    
     public EdgeFormat(GraphLayout newLayout) {
         setLayout(newLayout);
     }

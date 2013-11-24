@@ -35,7 +35,7 @@ public class VertexComponent<V> extends JComponent implements Transferable {
 		this.vertex = vertex;
 		if (null == FormatHelper.getFormat(VertexFormat.class, this.vertex)) {
 			// Default-Format
-			this.vertex.set(FormatHelper.FORMAT, new VertexFormat());
+			this.vertex.set(FormatHelper.FORMAT, new VertexFormat<V>());
 		}
 		this.setPreferredSize(new Dimension(VertexFormat
 				.getOUTERCIRCLEDIAMETER(), VertexFormat

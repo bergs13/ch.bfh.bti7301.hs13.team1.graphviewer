@@ -6,12 +6,17 @@ package defs;
 
 import java.awt.Point;
 import java.awt.Color;
+import java.util.Observable;
+import java.util.Observer;
+
+import logic.extlib.Vertex;
 
 /**
  *
  * @author Stephan_2
+ * @param <V>
  */
-public class VertexFormat {
+public class VertexFormat<V> implements Observer{
 
     // Members
     private Color activeColor;
@@ -23,7 +28,7 @@ public class VertexFormat {
     private boolean textVisible;
     private boolean active;
     private boolean visited;
-    //private static int size;
+   
     
     // End of members
 
@@ -155,7 +160,7 @@ public class VertexFormat {
         this.visited = true;
         this.active = false;
     }
-    //get the color accroding to the current state
+    //get the color according to the current state
     public Color getColor() {
         if (active) {
             return activeColor;
@@ -165,26 +170,23 @@ public class VertexFormat {
             return unvisitedColor;
         }
     }
-    //Set and adjust the size of the Vertex
-//    public  void setSize() {
-//        VertexFormat.size = layout.getVertexSize();
-//        if (size % 2 != 1) {
-//        } else {
-//            size++;
-//        }
-//
-//        if (size < MIN_SIZE || size > MAX_SIZE) {
-//            VertexFormat.size = DEFAULT_SIZE;
-//        }
-//
-//    }
-//
-//    public static int getSize() {
-//        return size;
-//    }
+ 	// End of getters and setters
+
+ // Observer methods
+	@Override
+	public void update(Observable observable, Object objArgs) {
+		if (Vertex.class.isInstance(objArgs)) {
+			Vertex<V> vertex = (Vertex<V>) objArgs;
+				if (vertex.has(PublicConstants.VISITED)){
+					this.setVisited();
+				}
+		}
+		
+		
+	}
+//End of observer methods
 
 
-	// End of getters and setters
 }
 
 

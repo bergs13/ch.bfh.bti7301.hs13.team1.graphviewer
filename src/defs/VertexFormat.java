@@ -176,6 +176,7 @@ public class VertexFormat<V> implements Observer{
 	@Override
 	public void update(Observable observable, Object objArgs) {
 		if (Vertex.class.isInstance(objArgs)) {
+			@SuppressWarnings("unchecked")
 			Vertex<V> vertex = (Vertex<V>) objArgs;
 				if (vertex.has(PublicConstants.VISITED)){
 					this.setVisited();

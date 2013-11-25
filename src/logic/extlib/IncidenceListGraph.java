@@ -6,6 +6,9 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Observable;
+import java.util.Observer;
+
+import defs.FormatHelper;
 
 /**
  * A implementation of the Graph interface based on incidence lists (at each vertex a list of 
@@ -415,13 +418,21 @@ public class IncidenceListGraph<V,E> implements Graph<V, E> {
 			Object value = DUMMY;
 			if (val != null) value = val;
 			attrs.put(attr, value);
+			if (attr == FormatHelper.FORMAT){
+				this.addObserver((Observer) val);
+			}
+			this.setChanged();
+			this.notifyObservers();
 		}
 
 		@Override
 		public Object destroy(Object attr) {
 			Object ret = attrs.get(attr);
 			attrs.remove(attr);
+			this.setChanged();
+			this.notifyObservers();
 			return ret;
+			
 		}
 
 		@Override

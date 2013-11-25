@@ -21,6 +21,7 @@ import defs.VertexFormat;
 public class VertexComponent<V> extends JComponent implements Transferable {
 	// Members
 	private Vertex<V> vertex = null;
+
 	// End of members
 
 	// Constructors

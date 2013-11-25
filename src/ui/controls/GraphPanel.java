@@ -14,6 +14,8 @@ import java.awt.dnd.DropTargetEvent;
 import java.awt.dnd.DropTargetListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -22,8 +24,6 @@ import java.util.NoSuchElementException;
 import java.util.Map.Entry;
 import java.util.Observable;
 import java.util.Observer;
-
-import javax.jws.WebParam.Mode;
 import javax.swing.JComponent;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
@@ -43,6 +43,7 @@ public class GraphPanel<V, E> extends JComponent implements Observer {
 	private GraphPanelModel<V, E> model = null;
 	private final Map<Vertex<V>, VertexComponent<V>> vertexVertexComponents = new HashMap<Vertex<V>, VertexComponent<V>>();
 	private JMenuItem menuItemAddVertex = new JMenuItem("Add");
+	Vertex<V> selectedVertex = null;
 	private JMenuItem menuItemUpdVertex = new JMenuItem("Update");
 	private JMenuItem menuItemDelVertex = new JMenuItem("Delete");
 	private JPopupMenu popupMenu = new JPopupMenu();
@@ -94,18 +95,28 @@ public class GraphPanel<V, E> extends JComponent implements Observer {
 		// .. and edges
 		repaintEdges();
 
+//		// Selektion
+//		this.addMouseListener(new MouseAdapter() {
+//			@Override
+//			public void mousePressed(MouseEvent e) {
+//				Object source = e.getSource();
+//				if (VertexComponent.class.isInstance(source)) {
+//					selectedVertex = getVertexByComponent((VertexComponent<V>) source);
+//				}
+//			}
+//		});
 		// context menu and actions
 		popupMenu.add(menuItemAddVertex);
 		menuItemAddVertex.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				// Liste für Quell-Vertex-Auswahl
 				ArrayList<Vertex<V>> arrLV = new ArrayList<Vertex<V>>();
 				Iterator<Vertex<V>> itV = model.getGraph().vertices();
 				while (itV.hasNext()) {
 					arrLV.add(itV.next());
 				}
-				VertexFormatEditor<V> editor = new VertexFormatEditor<V>(arrLV, null, new VertexFormat());
+				VertexFormatEditor<V> editor = new VertexFormatEditor<V>(
+						new VertexFormat(), arrLV);
 				editor.setVisible(true);
 				model.addVertex(editor.getSourceVertex(), editor.getFormat());
 			}
@@ -114,14 +125,26 @@ public class GraphPanel<V, E> extends JComponent implements Observer {
 		menuItemUpdVertex.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				model.updateVertex(null, new VertexFormat());
+				if (null != selectedVertex) {
+					VertexFormat format = FormatHelper.getFormat(
+							VertexFormat.class, selectedVertex);
+					if (null == format) {
+						format = new VertexFormat();
+					}
+					VertexFormatEditor<V> editor = new VertexFormatEditor<V>(
+							format, null);
+					editor.setVisible(true);
+					model.updateVertex(selectedVertex, editor.getFormat());
+				}
 			}
 		});
 		popupMenu.add(menuItemDelVertex);
 		menuItemDelVertex.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				model.deleteVertex(null);
+				if (null != selectedVertex) {
+					model.deleteVertex(selectedVertex);
+				}
 			}
 		});
 		this.setComponentPopupMenu(popupMenu);

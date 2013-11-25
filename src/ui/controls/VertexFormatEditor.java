@@ -1,20 +1,15 @@
 package ui.controls;
 
 import java.awt.Color;
-import java.awt.Container;
 import java.awt.GridLayout;
-import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
-import java.util.Iterator;
-
 import javax.swing.JButton;
 import javax.swing.JColorChooser;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
-import javax.swing.JPanel;
 import javax.swing.JTextField;
 import defs.VertexFormat;
 import logic.extlib.Vertex;
@@ -26,11 +21,9 @@ public class VertexFormatEditor<V> extends JDialog {
 	Vertex<V> vertex = null;
 	VertexFormat format = null;
 
-	public VertexFormatEditor(ArrayList<Vertex<V>> sourceVertices,
-			Vertex<V> vertex, final VertexFormat format) {
+	public VertexFormatEditor(final VertexFormat format,ArrayList<Vertex<V>> sourceVertices) {
 		super();
 		this.setModalityType(ModalityType.APPLICATION_MODAL);
-		this.vertex = vertex;
 		this.format = format;
 
 		// Layout
@@ -95,15 +88,9 @@ public class VertexFormatEditor<V> extends JDialog {
 		this.add(new JLabel("Label:"));
 		this.add(new JTextField(format.getLabel()));
 	}
-
 	public Vertex<V> getSourceVertex() {
 		return this.sourceVertex;
 	}
-
-	public Vertex<V> getVertex() {
-		return this.vertex;
-	}
-
 	public VertexFormat getFormat() {
 		return null == this.format ? new VertexFormat() : this.format;
 	}

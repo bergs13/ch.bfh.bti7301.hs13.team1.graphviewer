@@ -11,8 +11,6 @@ import java.awt.event.MouseEvent;
 import java.awt.geom.Ellipse2D;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
-import javax.swing.JMenuItem;
-import javax.swing.JPopupMenu;
 import javax.swing.TransferHandler;
 import logic.extlib.Vertex;
 import logic.DragAndDropTransferHandler;
@@ -23,10 +21,6 @@ import defs.VertexFormat;
 public class VertexComponent<V> extends JComponent implements Transferable {
 	// Members
 	private Vertex<V> vertex = null;
-	private JMenuItem menuItemUpdVertex = new JMenuItem("Update");
-	private JMenuItem menuItemDelVertex = new JMenuItem("Delete");
-	private JPopupMenu popupMenu = new JPopupMenu();
-
 	// End of members
 
 	// Constructors
@@ -40,9 +34,6 @@ public class VertexComponent<V> extends JComponent implements Transferable {
 		this.setPreferredSize(new Dimension(VertexFormat
 				.getOUTERCIRCLEDIAMETER(), VertexFormat
 				.getOUTERCIRCLEDIAMETER()));
-		popupMenu.add(menuItemUpdVertex);
-		popupMenu.add(menuItemDelVertex);
-		this.setComponentPopupMenu(popupMenu);
 	}
 
 	// End of constructors

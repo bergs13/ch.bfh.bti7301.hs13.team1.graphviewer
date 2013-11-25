@@ -12,8 +12,9 @@ import java.awt.dnd.DropTargetDragEvent;
 import java.awt.dnd.DropTargetDropEvent;
 import java.awt.dnd.DropTargetEvent;
 import java.awt.dnd.DropTargetListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -21,11 +22,11 @@ import java.util.NoSuchElementException;
 import java.util.Map.Entry;
 import java.util.Observable;
 import java.util.Observer;
+
+import javax.jws.WebParam.Mode;
 import javax.swing.JComponent;
 import javax.swing.JMenuItem;
-import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
-
 import defs.EdgeFormat;
 import defs.FormatHelper;
 import defs.VertexFormat;
@@ -38,10 +39,12 @@ import logic.GraphPanelModel;
 import logic.VisualizationCalculator;
 
 @SuppressWarnings("serial")
-public class GraphPanel<V, E> extends JPanel implements Observer {
+public class GraphPanel<V, E> extends JComponent implements Observer {
 	private GraphPanelModel<V, E> model = null;
 	private final Map<Vertex<V>, VertexComponent<V>> vertexVertexComponents = new HashMap<Vertex<V>, VertexComponent<V>>();
 	private JMenuItem menuItemAddVertex = new JMenuItem("Add");
+	private JMenuItem menuItemUpdVertex = new JMenuItem("Update");
+	private JMenuItem menuItemDelVertex = new JMenuItem("Delete");
 	private JPopupMenu popupMenu = new JPopupMenu();
 
 	// End of Members
@@ -59,7 +62,10 @@ public class GraphPanel<V, E> extends JPanel implements Observer {
 		while (itV.hasNext()) {
 			Vertex<V> vertex = itV.next();
 			VertexComponent<V> vComp = new VertexComponent<V>(vertex);
+
+			// Vertices in einem Kreis verteilen
 			vComp.setCircleCenterLocation(new Point(i * 75, i * 100));
+
 			this.vertexVertexComponents.put(vertex, vComp);
 			i++;
 		}
@@ -88,7 +94,36 @@ public class GraphPanel<V, E> extends JPanel implements Observer {
 		// .. and edges
 		repaintEdges();
 
+		// context menu and actions
 		popupMenu.add(menuItemAddVertex);
+		menuItemAddVertex.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				// Liste für Quell-Vertex-Auswahl
+				ArrayList<Vertex<V>> arrLV = new ArrayList<Vertex<V>>();
+				Iterator<Vertex<V>> itV = model.getGraph().vertices();
+				while (itV.hasNext()) {
+					arrLV.add(itV.next());
+				}
+				VertexFormatEditor<V> editor = new VertexFormatEditor<V>(arrLV, null, new VertexFormat());
+				editor.setVisible(true);
+				model.addVertex(editor.getSourceVertex(), editor.getFormat());
+			}
+		});
+		popupMenu.add(menuItemUpdVertex);
+		menuItemUpdVertex.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				model.updateVertex(null, new VertexFormat());
+			}
+		});
+		popupMenu.add(menuItemDelVertex);
+		menuItemDelVertex.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				model.deleteVertex(null);
+			}
+		});
 		this.setComponentPopupMenu(popupMenu);
 	}
 
@@ -103,13 +138,19 @@ public class GraphPanel<V, E> extends JPanel implements Observer {
 
 		// GUI update
 		VertexComponent<V> vComp = new VertexComponent<V>(vertex);
-
-		// Find position
+		// Find position for new vertex
 		vComp.setCircleCenterLocation(new Point(1 * 75, 1 * 100));
-
 		// add to list
 		this.vertexVertexComponents.put(vertex, vComp);
+		// paint
 		paintVertexComponent(vComp);
+		// calculate and paint the edges of the new vertex comp
+		Iterator<Edge<E>> itE = model.getGraph().incidentEdges(vertex);
+		while (itE.hasNext()) {
+			reCalculateAndSetEdgeFormatPoints(vertex, itE.next());
+		}
+		// repaint the edges (applying new edgeformat)
+		repaintEdges();
 	}
 
 	private void paintVertexComponent(JComponent comp) {

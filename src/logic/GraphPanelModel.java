@@ -35,16 +35,23 @@ public class GraphPanelModel<V, E> extends Observable {
 	}
 
 	// Graph manipulation Methods
-	public void addVertex(VertexFormat format) {
+	public void addVertex(Vertex<V> sourceVertex, VertexFormat format) {
 		// Update data
 		// Check format
 		if (format == null) {
 			format = new VertexFormat();
 		}
-		// create object and set format
-		V element = null;
-		Vertex<V> vNew = this.graph.insertVertex(element);
+		// create object
+		V vElement = null;
+		Vertex<V> vNew = this.graph.insertVertex(vElement);
+		// set format
 		vNew.set(FormatHelper.FORMAT, format);
+		// connect via edge if has source (if there is no source, it will be
+		// null)
+		if (null != sourceVertex) {
+			E eElement = null;
+			this.graph.insertEdge(sourceVertex, vNew, eElement);
+		}
 
 		// Update UI
 		setChanged();

@@ -7,7 +7,6 @@ import java.awt.Point;
 import java.awt.Polygon;
 import java.awt.RenderingHints;
 import java.awt.geom.Line2D;
-
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import logic.VisualizationCalculator;
@@ -17,9 +16,6 @@ public class EdgePainter {
 	// Members
 	private static boolean antiAliasing = true;
 	// End of Members
-	// Constant values
-	private static final int ARROWTRIANGLEWIDTH = 20;
-	private static final int ARROWTRIANGLEHEIGHT = 30;
 
 	// End of constant values
 
@@ -55,7 +51,7 @@ public class EdgePainter {
 			// Seitliche Ecken
 			Point[] leftAndRightPoints = VisualizationCalculator
 					.getPointsOnNormalVectorsOfStraightLine(toPoint, fromPoint,
-							ARROWTRIANGLEHEIGHT, ARROWTRIANGLEWIDTH / 2);
+							EdgeFormat.getARROWTRIANGLEHEIGHT(),EdgeFormat.getARROWTRIANGLEWIDTH() / 2);
 
 			// Daten f�r Pfeil bekannt, Pfeil zeichnen
 			int[] arrowX = new int[] { toPoint.x, leftAndRightPoints[0].x,

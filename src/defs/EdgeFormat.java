@@ -9,174 +9,182 @@ import java.awt.Color;
 import java.awt.Point;
 import java.util.Observable;
 import java.util.Observer;
-
 import logic.extlib.Edge;
-import logic.extlib.Vertex;
 
 /**
- *
+ * 
  * @author Stephan_2
  * @param <E>
  */
-public class EdgeFormat<E> implements Observer{
+public class EdgeFormat<E> implements Observer {
 
-    private boolean isDirected;
-    private boolean active;
-    private boolean included;
-    private boolean textVisible;
-    
-    private String label;
-    private Point fromPoint = new Point();
-    private Point toPoint = new Point();
-    private GraphLayout layout;
-    private BasicStroke edgeStyle;
-    private Color activeColor;
-    private Color includedColor;
-    private Color unincludedColor;
+	private boolean isDirected;
+	private boolean active;
+	private boolean included;
+	private boolean textVisible;
 
-    private final float MAX_WIDTH = 20F;
-    private final float MIN_WIDTH = 2F;
-    private final float DEFAULT_WIDTH = 4F;
-    
-    
-    public EdgeFormat(GraphLayout newLayout) {
-        setLayout(newLayout);
-    }
+	private String label;
+	private Point fromPoint = new Point();
+	private Point toPoint = new Point();
+	private GraphLayout layout;
+	private BasicStroke edgeStyle;
+	private Color activeColor;
+	private Color includedColor;
+	private Color unincludedColor;
 
-    /**
+	private final float MAX_WIDTH = 20F;
+	private final float MIN_WIDTH = 2F;
+	private final float DEFAULT_WIDTH = 4F;
+	private static final int ARROWTRIANGLEWIDTH = 20;
+	private static final int ARROWTRIANGLEHEIGHT = 30;
+
+	public EdgeFormat(GraphLayout newLayout) {
+		setLayout(newLayout);
+	}
+
+	/**
      *
      */
-    public EdgeFormat() {
-        setLayout(new StandardLayout());
-    }
+	public EdgeFormat() {
+		setLayout(new StandardLayout());
+	}
 
-    public final void setLayout(GraphLayout newLayout) {
-        layout = newLayout;
-        activeColor = layout.getActiveColor();
-        includedColor = layout.getVisitedColor();
-        unincludedColor = layout.getUnvisitedColor();
-        textVisible = layout.getTextVisible();
-        //label = layout.getDefaultText();
-        edgeStyle = new BasicStroke(this.setWidth(layout.getEdgeWidth()));
-        this.reset();
-    }
-   /**
-    * reset this edget to Start State
-    */
-    private void reset() {
-        active = false;
-        included = false;
+	public final void setLayout(GraphLayout newLayout) {
+		layout = newLayout;
+		activeColor = layout.getActiveColor();
+		includedColor = layout.getVisitedColor();
+		unincludedColor = layout.getUnvisitedColor();
+		textVisible = layout.getTextVisible();
+		// label = layout.getDefaultText();
+		edgeStyle = new BasicStroke(this.setWidth(layout.getEdgeWidth()));
+		this.reset();
+	}
 
-    }
-//Start Getters and Setters
+	public static int getARROWTRIANGLEWIDTH() {
+		return ARROWTRIANGLEWIDTH;
+	}
 
-    public boolean isIsDirected() {
-        return isDirected;
-    }
+	public static int getARROWTRIANGLEHEIGHT() {
+		return ARROWTRIANGLEHEIGHT;
+	}
 
-    public void setIsDirected(boolean isDirected) {
-        this.isDirected = isDirected;
-    }
+	/**
+	 * reset this edget to Start State
+	 */
+	private void reset() {
+		active = false;
+		included = false;
 
-    public boolean isActive() {
-        return active;
-    }
+	}
 
-    public void setActive(boolean active) {
-        this.active = active;
-    }
+	// Start Getters and Setters
 
-    public boolean isIncluded() {
-        return included;
-    }
+	public boolean isIsDirected() {
+		return isDirected;
+	}
 
-    public void setIncluded(boolean included) {
-        this.included = included;
-    }
+	public void setIsDirected(boolean isDirected) {
+		this.isDirected = isDirected;
+	}
 
-    public String getLabel() {
-        return label;
-    }
+	public boolean isActive() {
+		return active;
+	}
 
-    public void setLabel(String label) {
-        this.label = label;
-    }
+	public void setActive(boolean active) {
+		this.active = active;
+	}
 
-    public Point getFromPoint() {
-        return fromPoint;
-    }
+	public boolean isIncluded() {
+		return included;
+	}
 
-    public void setFromPoint(int x, int y) {
-        this.fromPoint.setLocation(x, y);
-    }
+	public void setIncluded(boolean included) {
+		this.included = included;
+	}
 
-    public Point getToPoint() {
-        return toPoint;
-    }
+	public String getLabel() {
+		return label;
+	}
 
-    public void setToPoint(int x, int y) {
-        this.toPoint.setLocation(x, y);
-    }
+	public void setLabel(String label) {
+		this.label = label;
+	}
 
-    public BasicStroke getEdgeStyle() {
-        return edgeStyle;
-    }
+	public Point getFromPoint() {
+		return fromPoint;
+	}
 
-    public void setEdgeStyle(BasicStroke edgeStyle) {
-        this.edgeStyle = edgeStyle;
-    }
+	public void setFromPoint(int x, int y) {
+		this.fromPoint.setLocation(x, y);
+	}
 
-    public Color getActiveColor() {
-        return activeColor;
-    }
+	public Point getToPoint() {
+		return toPoint;
+	}
 
-    public void setActiveColor(Color activeColor) {
-        this.activeColor = activeColor;
-    }
+	public void setToPoint(int x, int y) {
+		this.toPoint.setLocation(x, y);
+	}
 
-    public Color getIncludedColor() {
-        return includedColor;
-    }
+	public BasicStroke getEdgeStyle() {
+		return edgeStyle;
+	}
 
-    public void setIncludedColor(Color includedColor) {
-        this.includedColor = includedColor;
-    }
+	public void setEdgeStyle(BasicStroke edgeStyle) {
+		this.edgeStyle = edgeStyle;
+	}
 
-    public Color getUnincludedColor() {
-        return unincludedColor;
-    }
+	public Color getActiveColor() {
+		return activeColor;
+	}
 
-    public void setUnincludedColor(Color unincludedColor) {
-        this.unincludedColor = unincludedColor;
-    }
+	public void setActiveColor(Color activeColor) {
+		this.activeColor = activeColor;
+	}
 
-    public boolean isTextVisible() {
-        return textVisible;
-    }
+	public Color getIncludedColor() {
+		return includedColor;
+	}
 
-    public void setTextVisible(boolean textVisible) {
-        this.textVisible = textVisible;
-    }
+	public void setIncludedColor(Color includedColor) {
+		this.includedColor = includedColor;
+	}
 
-    private float setWidth(float width) {
-        if (width < MIN_WIDTH || width > MAX_WIDTH) {
-            return DEFAULT_WIDTH;
-        }
-        return width;
-    }
+	public Color getUnincludedColor() {
+		return unincludedColor;
+	}
+
+	public void setUnincludedColor(Color unincludedColor) {
+		this.unincludedColor = unincludedColor;
+	}
+
+	public boolean isTextVisible() {
+		return textVisible;
+	}
+
+	public void setTextVisible(boolean textVisible) {
+		this.textVisible = textVisible;
+	}
+
+	private float setWidth(float width) {
+		if (width < MIN_WIDTH || width > MAX_WIDTH) {
+			return DEFAULT_WIDTH;
+		}
+		return width;
+	}
 
 	@Override
 	public void update(Observable observable, Object objArgs) {
 		if (Edge.class.isInstance(objArgs)) {
 			@SuppressWarnings("unchecked")
 			Edge<E> vertex = (Edge<E>) objArgs;
-				if (vertex.has(PublicConstants.VISITED)){
-					//this.setVisited();
-				}
+			if (vertex.has(PublicConstants.VISITED)) {
+				// this.setVisited();
+			}
 		}
-		
-		
+
 	}
 
-    //End Getters and Setters
+	// End Getters and Setters
 }

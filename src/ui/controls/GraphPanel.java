@@ -14,8 +14,6 @@ import java.awt.dnd.DropTargetEvent;
 import java.awt.dnd.DropTargetListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -44,6 +42,10 @@ public class GraphPanel<V, E> extends JComponent implements Observer {
 	private final Map<Vertex<V>, VertexComponent<V>> vertexVertexComponents = new HashMap<Vertex<V>, VertexComponent<V>>();
 	private JMenuItem menuItemAddVertex = new JMenuItem("Add");
 	Vertex<V> selectedVertex = null;
+	private JMenuItem menuItemUpdVertexFormat = new JMenuItem(
+			"Update vertex format");
+	private JMenuItem menuItemUpdEdgeFormat = new JMenuItem(
+			"Update edge format");
 	private JMenuItem menuItemUpdVertex = new JMenuItem("Update");
 	private JMenuItem menuItemDelVertex = new JMenuItem("Delete");
 	private JPopupMenu popupMenu = new JPopupMenu();
@@ -71,7 +73,8 @@ public class GraphPanel<V, E> extends JComponent implements Observer {
 		// display vertices in a circle
 		ArrayList<Point> centerPoints = VisualizationCalculator
 				.getCircularAlignedPoints(n,
-						VertexFormat.getOUTERCIRCLEDIAMETER(), 50);
+						VertexFormat.getOUTERCIRCLEDIAMETER(),
+						EdgeFormat.getARROWTRIANGLEHEIGHT() * 2);
 		int centerPointIndex = 0;
 		for (VertexComponent<V> vComp : this.vertexVertexComponents.values()) {
 			vComp.setCircleCenterLocation(centerPoints.get(centerPointIndex));
@@ -112,22 +115,18 @@ public class GraphPanel<V, E> extends JComponent implements Observer {
 		// }
 		// }
 		// });
+
 		// context menu and actions
+		// manipulation
 		popupMenu.add(menuItemAddVertex);
 		menuItemAddVertex.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				ArrayList<Vertex<V>> arrLV = new ArrayList<Vertex<V>>();
-				Iterator<Vertex<V>> itV = model.getGraph().vertices();
-				while (itV.hasNext()) {
-					arrLV.add(itV.next());
-				}
-				VertexFormatEditor<V> editor = new VertexFormatEditor<V>(
-						new VertexFormat(), arrLV);
-				editor.setVisible(true);
-				if (editor.getSaved()) {
-					model.addVertex(editor.getSourceVertex(),
-							editor.getFormat());
+				VertexAddDialog<V> vAddDialog = new VertexAddDialog<V>(model
+						.getGraph().vertices());
+				vAddDialog.setVisible(true);
+				if (vAddDialog.getSaved()) {
+					model.addVertex(vAddDialog.getSourceVertex());
 				}
 			}
 		});
@@ -136,17 +135,7 @@ public class GraphPanel<V, E> extends JComponent implements Observer {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				if (null != selectedVertex) {
-					VertexFormat format = FormatHelper.getFormat(
-							VertexFormat.class, selectedVertex);
-					if (null == format) {
-						format = new VertexFormat();
-					}
-					VertexFormatEditor<V> editor = new VertexFormatEditor<V>(
-							format, null);
-					editor.setVisible(true);
-					if (editor.getSaved()) {
-						model.updateVertex(selectedVertex, editor.getFormat());
-					}
+					model.updateVertex(selectedVertex);
 				}
 			}
 		});
@@ -157,6 +146,39 @@ public class GraphPanel<V, E> extends JComponent implements Observer {
 				if (null != selectedVertex) {
 					model.deleteVertex(selectedVertex);
 				}
+			}
+		});
+		// format
+		popupMenu.add(menuItemUpdVertexFormat);
+		menuItemUpdVertexFormat.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				VertexFormat format = model.getVertexFormat();
+				if (null == format) {
+					format = new VertexFormat();
+				}
+				VertexFormatDialog vFormatDialog = new VertexFormatDialog(
+						format);
+				vFormatDialog.setVisible(true);
+				if (vFormatDialog.getSaved()) {
+					model.updateVertexFormat(vFormatDialog.getFormat());
+				}
+			}
+		});
+		popupMenu.add(menuItemUpdEdgeFormat);
+		menuItemUpdEdgeFormat.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				EdgeFormat format = model.getEdgeFormat();
+				if (null == format) {
+					format = new EdgeFormat();
+				}
+				// EdgeFormatDialog eFormatDialog = new
+				// EdgeFormatDialog(format);
+				// eFormatDialog.setVisible(true);
+				// if (eFormatDialog.getSaved()) {
+				// model.updateEdgeFormat(eFormatDialog.getFormat());
+				// }
 			}
 		});
 		this.setComponentPopupMenu(popupMenu);

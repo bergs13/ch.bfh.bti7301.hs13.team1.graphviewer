@@ -22,9 +22,9 @@ public class VertexAddDialog<V> extends JDialog {
 		this.setModalityType(ModalityType.APPLICATION_MODAL);
 
 		// Layout
-		this.setLayout(new GridLayout(3, 2));
-		this.setMinimumSize(new Dimension(90, 90));
-		this.setMaximumSize(new Dimension(90, 90));
+		this.setLayout(new GridLayout(2, 2, 6,3));
+		this.setMinimumSize(new Dimension(78, 69));
+		this.setMaximumSize(new Dimension(78, 69));
 
 		// Input fields
 		// Source vertex

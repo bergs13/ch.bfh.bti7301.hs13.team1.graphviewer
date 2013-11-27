@@ -99,7 +99,7 @@ public class GraphPanel<V, E> extends JComponent implements Observer {
 		this.setLayout(null);
 
 		// Paint the vertices
-		for (JComponent comp : this.vertexVertexComponents.values()) {
+		for (VertexComponent<V> comp : this.vertexVertexComponents.values()) {
 			paintVertexComponent(comp);
 		}
 		// .. and edges
@@ -210,7 +210,7 @@ public class GraphPanel<V, E> extends JComponent implements Observer {
 		repaintEdges();
 	}
 
-	private void paintVertexComponent(JComponent comp) {
+	private void paintVertexComponent(VertexComponent<V> comp) {
 		Dimension size = comp.getPreferredSize();
 		Point p = comp.getLocation();
 		comp.setBounds(p.x, p.y, size.width, size.height);
@@ -419,7 +419,13 @@ public class GraphPanel<V, E> extends JComponent implements Observer {
 	@Override
 	public void update(Observable observable, Object objArgs) {
 		// Argumente müssen bestimmte Form haben
-		if (Vertex.class.isInstance(objArgs)) {
+		if (VertexFormat.class.equals(objArgs)) {
+			for (VertexComponent<V> comp : this.vertexVertexComponents.values()) {
+				repaintVertexComponent(comp);
+			}
+		} else if (EdgeFormat.class.equals(objArgs)) {
+			repaintEdges();
+		} else if (Vertex.class.isInstance(objArgs)) {
 			Vertex<V> vertex = (Vertex<V>) objArgs;
 			if (null == vertex) {
 				// Delete

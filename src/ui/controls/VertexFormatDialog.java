@@ -25,9 +25,9 @@ public class VertexFormatDialog extends JDialog {
 		this.format = format;
 
 		// Layout
-		this.setLayout(new GridLayout(6, 2));
-		this.setMinimumSize(new Dimension(190, 190));
-		this.setMaximumSize(new Dimension(190, 190));
+		this.setLayout(new GridLayout(6, 2, 6,3));
+		this.setMinimumSize(new Dimension(212,201));
+		this.setMaximumSize(new Dimension(212,201));
 
 		// Input fields
 		// Unvisited color

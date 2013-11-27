@@ -1,6 +1,7 @@
 package logic;
 
 import java.awt.Point;
+import java.util.ArrayList;
 import defs.VectorR2;
 
 public class VisualizationCalculator {
@@ -54,6 +55,79 @@ public class VisualizationCalculator {
 		points[1] = new Point((int) Math.round(vX2.getX()),
 				(int) Math.round(vX2.getY()));
 
+		return points;
+	}
+
+	public static ArrayList<Point> getCircularAlignedPoints(int circleCount,
+			int circleDiameter, int gap) {
+		if (circleCount < 0 || circleDiameter < 0 || gap < 0) {
+			throw new IllegalArgumentException(
+					"one or more invalid parameters.");
+		}
+
+		// calculate main circle data
+		// radius by circumferrence (c: n * diameter + n * gap) => c = 2r*PI
+		// => r = c/PI/2
+		double mainCircleRadius = (circleCount * circleDiameter + circleCount
+				* gap)
+				/ Math.PI / 2;
+		// center position (base of the new coordinate system)
+		Point mainCircleCenter = new Point(
+				(int) Math.round(mainCircleRadius + circleDiameter / 2 + 10/* inset */),
+				(int) Math
+						.round(mainCircleRadius + circleDiameter / 2 + 10/* inset */));
+
+		// calculate points on main circle
+		// prepare variables
+		ArrayList<Point> points = new ArrayList<Point>();
+		double pointsAdded = 0;
+		double totalAngleChange = 0;
+		double angleChangePerCircle = 360 / circleCount;
+		double angleForCalculation;
+		while (pointsAdded < circleCount) {
+			if (0 == pointsAdded) {
+				points.add(new Point((int) Math
+						.round(mainCircleCenter.x + /* deltaX */0), (int) Math
+						.round(mainCircleCenter.y
+								+ /* deltaY */-mainCircleRadius)));
+			} else {
+				totalAngleChange = pointsAdded * angleChangePerCircle;
+				if (totalAngleChange < 90) {
+					angleForCalculation = 90 - totalAngleChange;
+					points.add(new Point((int) Math.round(mainCircleCenter.x
+							+ /* deltaX */Math.sin(angleForCalculation)
+							* mainCircleRadius), (int) Math
+							.round(mainCircleCenter.y
+									- /* deltaY */Math.cos(angleForCalculation)
+									* mainCircleRadius)));
+				} else if (totalAngleChange < 180) {
+					angleForCalculation = totalAngleChange - 90;
+					points.add(new Point((int) Math.round(mainCircleCenter.x
+							+ /* deltaX */Math.sin(angleForCalculation)
+							* mainCircleRadius), (int) Math
+							.round(mainCircleCenter.y - /* -deltaY */(-1)
+									* Math.cos(angleForCalculation)
+									* mainCircleRadius)));
+				} else if (totalAngleChange < 270) {
+					angleForCalculation = 270 - totalAngleChange;
+					points.add(new Point((int) Math.round(mainCircleCenter.x
+							+ /* -deltaX */(-1) * Math.sin(angleForCalculation)
+							* mainCircleRadius), (int) Math
+							.round(mainCircleCenter.y - /* -deltaY */(-1)
+									* Math.cos(angleForCalculation)
+									* mainCircleRadius)));
+				} else /* < 360 */{
+					angleForCalculation = totalAngleChange - 270;
+					points.add(new Point((int) Math.round(mainCircleCenter.x
+							+ /* -deltaX */(-1) * Math.sin(angleForCalculation)
+							* mainCircleRadius), (int) Math
+							.round(mainCircleCenter.y
+									- /* deltaY */Math.cos(angleForCalculation)
+									* mainCircleRadius)));
+				}
+			}
+			pointsAdded++;
+		}
 		return points;
 	}
 }

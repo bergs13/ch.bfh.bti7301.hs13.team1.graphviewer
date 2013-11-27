@@ -46,37 +46,45 @@ public class Program {
 		final IncidenceListGraph<String, String> gr = new IncidenceListGraph<String, String>(
 				true);
 
-		// Vertices
-		// Vertex 1
-		Vertex<String> vA = gr.insertVertex("A");
-		// Format Vertex 1
-		VertexFormat vF1 = new VertexFormat();
-		vF1.setLabel("A");
-		vA.set(FormatHelper.FORMAT, vF1);
-		// Vertex 2
-		Vertex<String> vB = gr.insertVertex("B");
-		// Vertex 3
-		Vertex<String> vC = gr.insertVertex("C");
+		// Create a graph
+		Vertex<String> prevV = null;
+		for (int i = 0; i < 10; i++) {
+			// Vertices
+			// Vertex Source
+			Vertex<String> vi = null;
+			if (null == prevV) {
+				// Vertex i
+				vi = gr.insertVertex("V " + i);
+				// Format Vertex i
+				VertexFormat vFi = new VertexFormat();
+				vFi.setLabel("V " + i);
+				vi.set(FormatHelper.FORMAT, vFi);
+			} else {
+				vi = prevV;
+			}
+			// Vertex Target
+			Vertex<String> vi1 = gr.insertVertex("V " + i + 1);
+			VertexFormat vFi1 = new VertexFormat();
+			vFi1.setLabel("V " + i + 1);
+			vi1.set(FormatHelper.FORMAT, vFi1);
+			prevV = vi1;
 
-		// Edges
-		// Edge 1
-		Edge<String> eAB = gr.insertEdge(vA, vB, "AB");
-		// Format Edge 1
-		EdgeFormat eF1 = new EdgeFormat();
-		eF1.setIsDirected(true);
-		eF1.setLabel("AB");
-		eF1.setTextVisible(true);
-		eAB.set(FormatHelper.FORMAT, eF1);
-		// Edge 2
-		Edge<String> eBC = gr.insertEdge(vB, vC, "BC");
-		// Format Edge 2
-		EdgeFormat eF2 = new EdgeFormat();
-		eF2.setTextVisible(true);
-		eBC.set(FormatHelper.FORMAT, eF2);
+			// Edge VSource => VTarget
+			if (i % 2 == 0) {
+				Edge<String> ei1 = gr.insertEdge(vi, vi1, "E " + i + 1);
+				EdgeFormat eF1 = new EdgeFormat();
+				eF1.setIsDirected(true);
+				eF1.setLabel("E " + i + 1);
+				eF1.setTextVisible(true);
+				ei1.set(FormatHelper.FORMAT, eF1);
+			} else {
+				Edge<String> eBC = gr.insertEdge(vi, vi1, "E " + i + 1);
+				EdgeFormat eF2 = new EdgeFormat();
+				eF2.setTextVisible(true);
+				eBC.set(FormatHelper.FORMAT, eF2);
+			}
+		}
 
-		// // Edges
-		// gr.insertEdge(vA, vB, "AB");
-		// gr.insertEdge(vB, vC, "BC");
 		/* Create and display the form */
 		java.awt.EventQueue.invokeLater(new Runnable() {
 			public void run() {

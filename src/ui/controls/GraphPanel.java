@@ -58,17 +58,24 @@ public class GraphPanel<V, E> extends JComponent implements Observer {
 		this.model = model;
 		this.model.addObserver(this);
 
-		int i = 1;
+		// Count vertices/circles for alignment (n)
+		int n = 0;
 		Iterator<Vertex<V>> itV = model.getGraph().vertices();
 		while (itV.hasNext()) {
 			Vertex<V> vertex = itV.next();
 			VertexComponent<V> vComp = new VertexComponent<V>(vertex);
-
-			// Vertices in einem Kreis verteilen
-			vComp.setCircleCenterLocation(new Point(i * 75, i * 100));
-
 			this.vertexVertexComponents.put(vertex, vComp);
-			i++;
+			n++;
+		}
+
+		// display vertices in a circle
+		ArrayList<Point> centerPoints = VisualizationCalculator
+				.getCircularAlignedPoints(n,
+						VertexFormat.getOUTERCIRCLEDIAMETER(), 50);
+		int centerPointIndex = 0;
+		for (VertexComponent<V> vComp : this.vertexVertexComponents.values()) {
+			vComp.setCircleCenterLocation(centerPoints.get(centerPointIndex));
+			centerPointIndex++;
 		}
 
 		for (Vertex<V> vertex : this.vertexVertexComponents.keySet()) {
@@ -95,16 +102,16 @@ public class GraphPanel<V, E> extends JComponent implements Observer {
 		// .. and edges
 		repaintEdges();
 
-//		// Selektion
-//		this.addMouseListener(new MouseAdapter() {
-//			@Override
-//			public void mousePressed(MouseEvent e) {
-//				Object source = e.getSource();
-//				if (VertexComponent.class.isInstance(source)) {
-//					selectedVertex = getVertexByComponent((VertexComponent<V>) source);
-//				}
-//			}
-//		});
+		// // Selektion
+		// this.addMouseListener(new MouseAdapter() {
+		// @Override
+		// public void mousePressed(MouseEvent e) {
+		// Object source = e.getSource();
+		// if (VertexComponent.class.isInstance(source)) {
+		// selectedVertex = getVertexByComponent((VertexComponent<V>) source);
+		// }
+		// }
+		// });
 		// context menu and actions
 		popupMenu.add(menuItemAddVertex);
 		menuItemAddVertex.addActionListener(new ActionListener() {
@@ -118,7 +125,10 @@ public class GraphPanel<V, E> extends JComponent implements Observer {
 				VertexFormatEditor<V> editor = new VertexFormatEditor<V>(
 						new VertexFormat(), arrLV);
 				editor.setVisible(true);
-				model.addVertex(editor.getSourceVertex(), editor.getFormat());
+				if (editor.getSaved()) {
+					model.addVertex(editor.getSourceVertex(),
+							editor.getFormat());
+				}
 			}
 		});
 		popupMenu.add(menuItemUpdVertex);
@@ -134,7 +144,9 @@ public class GraphPanel<V, E> extends JComponent implements Observer {
 					VertexFormatEditor<V> editor = new VertexFormatEditor<V>(
 							format, null);
 					editor.setVisible(true);
-					model.updateVertex(selectedVertex, editor.getFormat());
+					if (editor.getSaved()) {
+						model.updateVertex(selectedVertex, editor.getFormat());
+					}
 				}
 			}
 		});

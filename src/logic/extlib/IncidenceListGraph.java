@@ -438,6 +438,8 @@ public class IncidenceListGraph<V,E> implements Graph<V, E> {
 		@Override
 		public void clearAll() {
 			attrs.clear();
+			this.setChanged();
+			this.notifyObservers();
 		}
 
 	}

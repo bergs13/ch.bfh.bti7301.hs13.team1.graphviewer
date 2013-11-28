@@ -16,7 +16,7 @@ import logic.extlib.Vertex;
  * @author Stephan_2
  * @param <V>
  */
-public class VertexFormat<V> implements Observer{
+public class VertexFormat implements Observer{
 
     // Members
     private Color activeColor;
@@ -28,6 +28,7 @@ public class VertexFormat<V> implements Observer{
     private boolean textVisible;
     private boolean active;
     private boolean visited;
+    private  Vertex vertex;
    
     
     // End of members
@@ -50,8 +51,9 @@ public class VertexFormat<V> implements Observer{
         setLayout(newlayout);
     }
 
-    public VertexFormat() {
-        setLayout(STANDARD_LAYOUT);
+    public VertexFormat(Vertex theVertex) {
+        this.vertex = theVertex;
+    	setLayout(STANDARD_LAYOUT);
     }
     // End of Constructors
     
@@ -172,19 +174,18 @@ public class VertexFormat<V> implements Observer{
     }
  	// End of getters and setters
 
- // Observer methods
+ 
+	// Observer methods
 	@Override
 	public void update(Observable observable, Object objArgs) {
-		if (Vertex.class.isInstance(objArgs)) {
-			@SuppressWarnings("unchecked")
-			Vertex<V> vertex = (Vertex<V>) objArgs;
-				if (vertex.has(PublicConstants.VISITED)){
-					this.setVisited();
-				}
+		if (vertex.has(PublicConstants.VISITED)	|| vertex.has(PublicConstants.MSF)) {
+			this.setVisited();
+		} else {
+			this.setUnvisited();
 		}
-		
-		
 	}
+			
+	
 //End of observer methods
 
 

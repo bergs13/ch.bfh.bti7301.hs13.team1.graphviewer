@@ -1,12 +1,9 @@
 package logic;
 
-import java.util.Iterator;
 import java.util.Observable;
-import defs.EdgeFormat;
 import defs.FormatHelper;
 import defs.GraphFormat;
 import defs.VertexFormat;
-import logic.extlib.Edge;
 import logic.extlib.GraphExamples;
 import logic.extlib.IncidenceListGraph;
 import logic.extlib.Vertex;

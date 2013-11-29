@@ -51,9 +51,8 @@ public class VertexFormat implements Observer{
         setLayout(newlayout);
     }
 
-    public VertexFormat(Vertex theVertex) {
-        this.vertex = theVertex;
-    	setLayout(STANDARD_LAYOUT);
+    public VertexFormat() {
+        setLayout(STANDARD_LAYOUT);
     }
     // End of Constructors
     

@@ -11,32 +11,37 @@ import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import logic.VisualizationCalculator;
 import defs.EdgeFormat;
+import defs.GraphFormat;
 
 public class EdgePainter {
 	// Members
 	private static boolean antiAliasing = true;
+
 	// End of Members
 
-	// End of constant values
-
-	public static void paintEdge(EdgeFormat edgeFormat, Graphics2D g2) {
+	// methods
+	public static void paintEdge(GraphFormat graphFormat,
+			EdgeFormat edgeFormat, Graphics2D g2) {
 		// TODO: Ev. auch bei VertexComponent
 		if (antiAliasing) {
 			g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
 					RenderingHints.VALUE_ANTIALIAS_ON);
 		}
 
-		// Definierbare Sachen aus Edge-Format (Muss vorhanden sein!)
-		if (null == edgeFormat) {
+		// Formate müssen vorhanden sein
+		if (null == graphFormat || null == edgeFormat) {
 			return;
 		}
+
+		// Graph format (Für alle Edges gleich)
+		boolean weighted = graphFormat.isWeighed();
+		boolean directed = graphFormat.isDirected();
+		Color activeColor = graphFormat.getActiveColor();
+		Color inactiveColor = graphFormat.getUnincludedColor();
+		// Edge-Format
 		Point fromPoint = edgeFormat.getFromPoint();
 		Point toPoint = edgeFormat.getToPoint();
-		Color activeColor = edgeFormat.getActiveColor();
-		Color inactiveColor = edgeFormat.getUnincludedColor();
 		boolean active = edgeFormat.isActive();
-		boolean weighted = edgeFormat.isTextVisible();
-		boolean directed = edgeFormat.isIsDirected();
 
 		g2.setColor(active ? activeColor : inactiveColor);
 
@@ -51,7 +56,8 @@ public class EdgePainter {
 			// Seitliche Ecken
 			Point[] leftAndRightPoints = VisualizationCalculator
 					.getPointsOnNormalVectorsOfStraightLine(toPoint, fromPoint,
-							EdgeFormat.getARROWTRIANGLEHEIGHT(),EdgeFormat.getARROWTRIANGLEWIDTH() / 2);
+							GraphFormat.ARROWTRIANGLEHEIGHT,
+							GraphFormat.ARROWTRIANGLEWIDTH / 2);
 
 			// Daten fï¿½r Pfeil bekannt, Pfeil zeichnen
 			int[] arrowX = new int[] { toPoint.x, leftAndRightPoints[0].x,
@@ -78,4 +84,5 @@ public class EdgePainter {
 			label.setBorder(BorderFactory.createLineBorder(Color.red));
 		}
 	}
+	// End of methods
 }

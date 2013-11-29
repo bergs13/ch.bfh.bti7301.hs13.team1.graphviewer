@@ -27,6 +27,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import defs.EdgeFormat;
 import defs.FormatHelper;
+import defs.GraphFormat;
 import defs.VertexFormat;
 import ui.painters.EdgePainter;
 import logic.extlib.Edge;
@@ -41,13 +42,10 @@ public class GraphPanel<V, E> extends JComponent implements Observer {
 	private GraphPanelModel<V, E> model = null;
 	private final Map<Vertex<V>, VertexComponent<V>> vertexVertexComponents = new HashMap<Vertex<V>, VertexComponent<V>>();
 	private JMenuItem menuItemAddVertex = new JMenuItem("Add");
-	Vertex<V> selectedVertex = null;
-	private JMenuItem menuItemUpdVertexFormat = new JMenuItem(
-			"Update vertex format");
-	private JMenuItem menuItemUpdEdgeFormat = new JMenuItem(
-			"Update edge format");
-	private JMenuItem menuItemUpdVertex = new JMenuItem("Update");
 	private JMenuItem menuItemDelVertex = new JMenuItem("Delete");
+	private JMenuItem menuItemUpdGraphFormat = new JMenuItem(
+			"Change graph format");
+	private JMenuItem menuItemUpdVertexFormat = new JMenuItem("Change format");
 	private JPopupMenu popupMenu = new JPopupMenu();
 
 	// End of Members
@@ -65,16 +63,16 @@ public class GraphPanel<V, E> extends JComponent implements Observer {
 		Iterator<Vertex<V>> itV = model.getGraph().vertices();
 		while (itV.hasNext()) {
 			Vertex<V> vertex = itV.next();
-			VertexComponent<V> vComp = new VertexComponent<V>(vertex);
+			VertexComponent<V> vComp = new VertexComponent<V>(vertex,
+					model.getGraphFormat());
 			this.vertexVertexComponents.put(vertex, vComp);
 			n++;
 		}
 
 		// display vertices in a circle
 		ArrayList<Point> centerPoints = VisualizationCalculator
-				.getCircularAlignedPoints(n,
-						VertexFormat.getOUTERCIRCLEDIAMETER(),
-						EdgeFormat.getARROWTRIANGLEHEIGHT() * 2);
+				.getCircularAlignedPoints(n, GraphFormat.OUTERCIRCLEDIAMETER,
+						GraphFormat.ARROWTRIANGLEHEIGHT * 2);
 		int centerPointIndex = 0;
 		for (VertexComponent<V> vComp : this.vertexVertexComponents.values()) {
 			vComp.setCircleCenterLocation(centerPoints.get(centerPointIndex));
@@ -126,16 +124,8 @@ public class GraphPanel<V, E> extends JComponent implements Observer {
 						.getGraph().vertices());
 				vAddDialog.setVisible(true);
 				if (vAddDialog.getSaved()) {
-					model.addVertex(vAddDialog.getSourceVertex());
-				}
-			}
-		});
-		popupMenu.add(menuItemUpdVertex);
-		menuItemUpdVertex.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				if (null != selectedVertex) {
-					model.updateVertex(selectedVertex);
+					model.addVertex(vAddDialog.getSourceVertex(),
+							new VertexFormat());
 				}
 			}
 		});
@@ -143,42 +133,35 @@ public class GraphPanel<V, E> extends JComponent implements Observer {
 		menuItemDelVertex.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				if (null != selectedVertex) {
-					model.deleteVertex(selectedVertex);
-				}
+				model.deleteSelectedVertex();
 			}
 		});
 		// format
+		popupMenu.add(menuItemUpdGraphFormat);
+		menuItemUpdGraphFormat.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				GraphFormat format = model.getGraphFormat();
+				if (null == format) {
+					format = new GraphFormat();
+				}
+				GraphFormatDialog gFormatDialog = new GraphFormatDialog(format);
+				gFormatDialog.setVisible(true);
+				if (gFormatDialog.getSaved()) {
+					model.updateGraphFormat(gFormatDialog.getFormat());
+				}
+			}
+		});
 		popupMenu.add(menuItemUpdVertexFormat);
 		menuItemUpdVertexFormat.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				VertexFormat format = model.getVertexFormat();
-				if (null == format) {
-					format = new VertexFormat();
-				}
-				VertexFormatDialog vFormatDialog = new VertexFormatDialog(
-						format);
+				VertexFormatDialog vFormatDialog = new VertexFormatDialog(model
+						.getSelectedVertexFormat());
 				vFormatDialog.setVisible(true);
 				if (vFormatDialog.getSaved()) {
-					model.updateVertexFormat(vFormatDialog.getFormat());
+					model.setSelectedVertexFormat(vFormatDialog.getFormat());
 				}
-			}
-		});
-		popupMenu.add(menuItemUpdEdgeFormat);
-		menuItemUpdEdgeFormat.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				EdgeFormat format = model.getEdgeFormat();
-				if (null == format) {
-					format = new EdgeFormat();
-				}
-				// EdgeFormatDialog eFormatDialog = new
-				// EdgeFormatDialog(format);
-				// eFormatDialog.setVisible(true);
-				// if (eFormatDialog.getSaved()) {
-				// model.updateEdgeFormat(eFormatDialog.getFormat());
-				// }
 			}
 		});
 		this.setComponentPopupMenu(popupMenu);
@@ -194,7 +177,8 @@ public class GraphPanel<V, E> extends JComponent implements Observer {
 		}
 
 		// GUI update
-		VertexComponent<V> vComp = new VertexComponent<V>(vertex);
+		VertexComponent<V> vComp = new VertexComponent<V>(vertex,
+				model.getGraphFormat());
 		// Find position for new vertex
 		vComp.setCircleCenterLocation(new Point(1 * 75, 1 * 100));
 		// add to list
@@ -265,7 +249,7 @@ public class GraphPanel<V, E> extends JComponent implements Observer {
 		Iterator<Edge<E>> itE = model.getGraph().edges();
 		while (itE.hasNext()) {
 			if (null != graphPanelGraphics) {
-				EdgePainter.paintEdge(
+				EdgePainter.paintEdge(model.getGraphFormat(),
 						FormatHelper.getFormat(EdgeFormat.class, itE.next()),
 						(Graphics2D) g);
 			}
@@ -480,10 +464,10 @@ public class GraphPanel<V, E> extends JComponent implements Observer {
 		}
 		Point eFFromPoint = VisualizationCalculator.getPointOnStraightLine(
 				circleCenterSource, circleCenterTarget,
-				VertexFormat.getOUTERCIRCLEDIAMETER() / 2);
+				GraphFormat.OUTERCIRCLEDIAMETER / 2);
 		Point eFToPoint = VisualizationCalculator.getPointOnStraightLine(
 				circleCenterTarget, circleCenterSource,
-				VertexFormat.getOUTERCIRCLEDIAMETER() / 2);
+				GraphFormat.OUTERCIRCLEDIAMETER / 2);
 		eFormat.setFromPoint(eFFromPoint.x, eFFromPoint.y);
 		eFormat.setToPoint(eFToPoint.x, eFToPoint.y);
 		e.set(FormatHelper.FORMAT, eFormat);

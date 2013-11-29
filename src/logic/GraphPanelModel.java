@@ -2,9 +2,9 @@ package logic;
 
 import java.util.Iterator;
 import java.util.Observable;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 import defs.EdgeFormat;
 import defs.FormatHelper;
+import defs.GraphFormat;
 import defs.VertexFormat;
 import logic.extlib.Edge;
 import logic.extlib.GraphExamples;
@@ -15,36 +15,21 @@ public class GraphPanelModel<V, E> extends Observable {
 	// Members
 	private IncidenceListGraph<V, E> graph;
 	private GraphExamples<V, E> graphExamples;
-	private VertexFormat vertexFormat;
-	private EdgeFormat edgeFormat;
+	private GraphFormat graphFormat;
+	Vertex<V> selectedVertex = null;
 
 	// End of Members
 
 	// Constructors
 	public GraphPanelModel(IncidenceListGraph<V, E> g) {
 		this.graphExamples = new GraphExamples<V, E>();
+		this.graphFormat = new GraphFormat();
 
 		// input graph?
 		if (null != g) {
 			this.graph = g;
-			if (g.vertices().hasNext()) {
-				this.vertexFormat = FormatHelper.getFormat(VertexFormat.class,
-						g.vertices().next());
-				if (null == this.vertexFormat) {
-					this.vertexFormat = new VertexFormat();
-				}
-			}
-			if (g.edges().hasNext()) {
-				this.edgeFormat = FormatHelper.getFormat(EdgeFormat.class, g
-						.edges().next());
-				if (null == this.edgeFormat) {
-					this.edgeFormat = new EdgeFormat();
-				}
-			}
 		} else {
 			this.graph = new IncidenceListGraph<V, E>(true);
-			this.vertexFormat = new VertexFormat();
-			this.edgeFormat = new EdgeFormat();
 		}
 	}
 
@@ -54,23 +39,47 @@ public class GraphPanelModel<V, E> extends Observable {
 	public IncidenceListGraph<V, E> getGraph() {
 		return this.graph;
 	}
-	public VertexFormat getVertexFormat()
-	{
-		return this.vertexFormat;
+
+	public GraphFormat getGraphFormat() {
+		return this.graphFormat;
 	}
-	public EdgeFormat getEdgeFormat()
-	{
-		return this.edgeFormat;
+
+	public Vertex<V> getSelectedVertex() {
+		return selectedVertex;
 	}
-	
+
+	public void setSelectedVertex(Vertex<V> selectedVertex) {
+		this.selectedVertex = selectedVertex;
+	}
+
+	public VertexFormat getSelectedVertexFormat() {
+		VertexFormat f = null;
+		if (null != this.selectedVertex) {
+			f = FormatHelper.getFormat(VertexFormat.class, this.selectedVertex);
+		}
+		if (null == f) {
+			f = new VertexFormat();
+		}
+		return f;
+	}
+
+	public VertexFormat setSelectedVertexFormat(VertexFormat newFormat) {
+if(null != this.selectedVertex && null != newFormat)
+{
+	}
+	}
+
 	// Graph manipulation Methods
-	public void addVertex(Vertex<V> sourceVertex) {
+	public void addVertex(Vertex<V> sourceVertex, VertexFormat format) {
 		// Update data
 		// create object
 		V vElement = null;
 		Vertex<V> vNew = this.graph.insertVertex(vElement);
 		// set format
-		vNew.set(FormatHelper.FORMAT, this.vertexFormat);
+		if (null == format) {
+			format = new VertexFormat();
+		}
+		vNew.set(FormatHelper.FORMAT, format);
 		// connect via edge if has source (if there is no source, it will be
 		// null)
 		if (null != sourceVertex) {
@@ -83,67 +92,44 @@ public class GraphPanelModel<V, E> extends Observable {
 		notifyObservers(vNew);
 	}
 
-	public void updateVertex(Vertex<V> vertex) {
+	public void deleteSelectedVertex() {
+		if (null != this.selectedVertex) {
+			// Update data
+			// Remove Vertex
+			this.graph.removeVertex(this.selectedVertex);
+			this.selectedVertex = null;
 
+			// Update UI
+			setChanged();
+			notifyObservers(this.selectedVertex);
+		}
 	}
 
-	public void deleteVertex(Vertex<V> vertex) {
-		// Update data
-		// Remove Vertex
-		this.graph.removeVertex(vertex);
-		vertex = null;
-
-		// Update UI
-		setChanged();
-		notifyObservers(vertex);
-	}
+	// End of graph manipulation methods
 
 	// Format updates
-	public void updateVertexFormat(VertexFormat newFormat) {
+	public void updateGraphFormat(GraphFormat newFormat) {
 		// Check and update format
 		if (null == newFormat) {
-			newFormat = this.vertexFormat;
+			newFormat = this.graphFormat;
 			if (null == newFormat) {
-				newFormat = new VertexFormat();
+				newFormat = new GraphFormat();
 			}
 		}
-		this.vertexFormat = newFormat;
-		Iterator<Vertex<V>> itV = this.graph.vertices();
-		while(itV.hasNext())
-		{
-			itV.next().set(FormatHelper.FORMAT, this.vertexFormat);
-		}
-		
+		this.graphFormat = newFormat;
+
 		// Update UI
 		setChanged();
 		notifyObservers(VertexFormat.class);
 	}
 
-	public void updateEdgeFormat(EdgeFormat newFormat) {
-		// Check and update format
-		if (null == newFormat) {
-			newFormat = this.edgeFormat;
-			if (null == newFormat) {
-				newFormat = new EdgeFormat();
-			}
-		}
-		this.edgeFormat = newFormat;
-		Iterator<Edge<E>> itE = this.graph.edges();
-		while(itE.hasNext())
-		{
-			itE.next().set(FormatHelper.FORMAT, this.edgeFormat);
-		}
-		
-		// Update UI
-		setChanged();
-		notifyObservers(EdgeFormat.class);
-	}
-
-	// End of graph manipulation methods
+	// End of format updates
 
 	// Simulation methods
 	public void applyAlgorithm(String key) {
-		throw new NotImplementedException();
+		if (key.equals("DUMMY")) {
+			this.graphExamples.dijkstra(this.graph, null);
+		}
 	}
 	// End of simulation methods
 

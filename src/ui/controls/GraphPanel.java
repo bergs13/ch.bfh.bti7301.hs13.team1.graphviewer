@@ -403,11 +403,10 @@ public class GraphPanel<V, E> extends JComponent implements Observer {
 	@Override
 	public void update(Observable observable, Object objArgs) {
 		// Argumente müssen bestimmte Form haben
-		if (VertexFormat.class.equals(objArgs)) {
+		if (GraphFormat.class.equals(objArgs)) {
 			for (VertexComponent<V> comp : this.vertexVertexComponents.values()) {
 				repaintVertexComponent(comp);
 			}
-		} else if (EdgeFormat.class.equals(objArgs)) {
 			repaintEdges();
 		} else if (Vertex.class.isInstance(objArgs)) {
 			Vertex<V> vertex = (Vertex<V>) objArgs;

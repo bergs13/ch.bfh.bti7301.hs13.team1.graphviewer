@@ -1,12 +1,9 @@
 package logic;
 
-import java.util.Iterator;
 import java.util.Observable;
-import defs.EdgeFormat;
 import defs.FormatHelper;
 import defs.GraphFormat;
 import defs.VertexFormat;
-import logic.extlib.Edge;
 import logic.extlib.GraphExamples;
 import logic.extlib.IncidenceListGraph;
 import logic.extlib.Vertex;
@@ -63,10 +60,14 @@ public class GraphPanelModel<V, E> extends Observable {
 		return f;
 	}
 
-	public VertexFormat setSelectedVertexFormat(VertexFormat newFormat) {
-if(null != this.selectedVertex && null != newFormat)
-{
-	}
+	public void setSelectedVertexFormat(VertexFormat newFormat) {
+		if (null != this.selectedVertex && null != newFormat) {
+			this.selectedVertex.set(FormatHelper.FORMAT, newFormat);
+			
+			// Update UI
+			setChanged();
+			notifyObservers(this.selectedVertex);
+		}
 	}
 
 	// Graph manipulation Methods
@@ -120,7 +121,7 @@ if(null != this.selectedVertex && null != newFormat)
 
 		// Update UI
 		setChanged();
-		notifyObservers(VertexFormat.class);
+		notifyObservers(GraphFormat.class);
 	}
 
 	// End of format updates

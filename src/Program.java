@@ -45,7 +45,6 @@ public class Program {
 		// </editor-fold>
 		final IncidenceListGraph<String, String> gr = new IncidenceListGraph<String, String>(
 				true);
-
 		// Create a graph
 		Vertex<String> prevV = null;
 		for (int i = 0; i < 10; i++) {
@@ -57,7 +56,6 @@ public class Program {
 				vi = gr.insertVertex("V " + i);
 				// Format Vertex i
 				VertexFormat vFi = new VertexFormat();
-				vFi.setLabel("V " + i);
 				vi.set(FormatHelper.FORMAT, vFi);
 			} else {
 				vi = prevV;
@@ -65,7 +63,6 @@ public class Program {
 			// Vertex Target
 			Vertex<String> vi1 = gr.insertVertex("V " + i + 1);
 			VertexFormat vFi1 = new VertexFormat();
-			vFi1.setLabel("V " + i + 1);
 			vi1.set(FormatHelper.FORMAT, vFi1);
 			prevV = vi1;
 
@@ -74,13 +71,10 @@ public class Program {
 				Edge<String> ei1 = gr.insertEdge(vi, vi1, "E " + i + 1);
 				EdgeFormat eF1 = new EdgeFormat();
 				eF1.setIsDirected(true);
-				eF1.setLabel("E " + i + 1);
-				eF1.setTextVisible(true);
 				ei1.set(FormatHelper.FORMAT, eF1);
 			} else {
 				Edge<String> eBC = gr.insertEdge(vi, vi1, "E " + i + 1);
 				EdgeFormat eF2 = new EdgeFormat();
-				eF2.setTextVisible(true);
 				eBC.set(FormatHelper.FORMAT, eF2);
 			}
 		}

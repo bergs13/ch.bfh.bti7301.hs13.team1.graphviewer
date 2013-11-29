@@ -15,6 +15,7 @@ public interface GraphLayout {
     Color getVisitedColor();
     Color getUnvisitedColor();
     Color getIncludedEdgeColor();
+    Color getUnincludedColor();
     boolean getLabelVisible();
     String getDefaultText();
     

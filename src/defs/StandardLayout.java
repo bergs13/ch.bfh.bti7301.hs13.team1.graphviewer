@@ -49,7 +49,12 @@ public class StandardLayout implements GraphLayout {
 
     @Override
     public Color getIncludedEdgeColor() {
-        return ACTIVECOLOR;
+        return VISITEDCOLOR;
+    }
+
+    @Override
+    public Color getUnincludedColor() {
+       return UNVISITEDCOLOR;
     }
 
    

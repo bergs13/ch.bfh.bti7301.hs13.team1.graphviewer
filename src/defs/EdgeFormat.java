@@ -7,16 +7,13 @@ package defs;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Point;
-import java.util.Observable;
-import java.util.Observer;
-import logic.extlib.Edge;
 
 /**
  * 
  * @author Stephan_2
  * @param <E>
  */
-public class EdgeFormat<E> implements Observer {
+public class EdgeFormat {
 
 	private boolean isDirected;
 	private boolean active;
@@ -173,18 +170,5 @@ public class EdgeFormat<E> implements Observer {
 		}
 		return width;
 	}
-
-	@Override
-	public void update(Observable observable, Object objArgs) {
-		if (Edge.class.isInstance(objArgs)) {
-			@SuppressWarnings("unchecked")
-			Edge<E> vertex = (Edge<E>) objArgs;
-			if (vertex.has(PublicConstants.VISITED)) {
-				// this.setVisited();
-			}
-		}
-
-	}
-
 	// End Getters and Setters
 }

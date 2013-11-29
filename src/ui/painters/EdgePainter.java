@@ -11,6 +11,7 @@ import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import logic.VisualizationCalculator;
 import defs.EdgeFormat;
+import defs.GraphFormat;
 
 public class EdgePainter {
 	// Members
@@ -34,7 +35,7 @@ public class EdgePainter {
 
 		// Graph format (Für alle Edges gleich)
 		boolean weighted = graphFormat.isWeighed();
-		boolean directed = graphFormat.isIsDirected();
+		boolean directed = graphFormat.isDirected();
 		Color activeColor = graphFormat.getActiveColor();
 		Color inactiveColor = graphFormat.getUnincludedColor();
 		// Edge-Format
@@ -55,8 +56,8 @@ public class EdgePainter {
 			// Seitliche Ecken
 			Point[] leftAndRightPoints = VisualizationCalculator
 					.getPointsOnNormalVectorsOfStraightLine(toPoint, fromPoint,
-							EdgeFormat.getARROWTRIANGLEHEIGHT(),
-							EdgeFormat.getARROWTRIANGLEWIDTH() / 2);
+							GraphFormat.ARROWTRIANGLEHEIGHT,
+							GraphFormat.ARROWTRIANGLEWIDTH / 2);
 
 			// Daten fï¿½r Pfeil bekannt, Pfeil zeichnen
 			int[] arrowX = new int[] { toPoint.x, leftAndRightPoints[0].x,

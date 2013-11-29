@@ -15,6 +15,7 @@ import javax.swing.TransferHandler;
 import logic.extlib.Vertex;
 import logic.DragAndDropTransferHandler;
 import defs.FormatHelper;
+import defs.GraphFormat;
 import defs.VertexFormat;
 
 @SuppressWarnings("serial")
@@ -34,9 +35,8 @@ public class VertexComponent<V> extends JComponent implements Transferable {
 			this.vertex.set(FormatHelper.FORMAT, new VertexFormat());
 		}
 		// Grösse Component festlegen
-		this.setPreferredSize(new Dimension(VertexFormat
-				.getOUTERCIRCLEDIAMETER(), VertexFormat
-				.getOUTERCIRCLEDIAMETER()));
+		this.setPreferredSize(new Dimension(GraphFormat.OUTERCIRCLEDIAMETER,
+				GraphFormat.OUTERCIRCLEDIAMETER));
 	}
 
 	// End of constructors
@@ -59,16 +59,16 @@ public class VertexComponent<V> extends JComponent implements Transferable {
 
 		// Vertex mit innerem und ï¿½usserem Kreis
 		Ellipse2D outer = new Ellipse2D.Double(0, 0,
-				VertexFormat.getOUTERCIRCLEDIAMETER(),
-				VertexFormat.getOUTERCIRCLEDIAMETER());
-		g2.setColor(format.getColor());
+				GraphFormat.OUTERCIRCLEDIAMETER,
+				GraphFormat.OUTERCIRCLEDIAMETER);
+		g2.setColor(this.graphFormat.getVertexColor(format));
 		g2.fill(outer);
 		Ellipse2D inner = new Ellipse2D.Double(outer.getCenterX()
-				- VertexFormat.getINNERCIRCLEDIAMETER() / 2, outer.getCenterY()
-				- VertexFormat.getINNERCIRCLEDIAMETER() / 2,
-				VertexFormat.getINNERCIRCLEDIAMETER(),
-				VertexFormat.getINNERCIRCLEDIAMETER());
-		g2.setColor(format.getUnvisitedColor());
+				- GraphFormat.INNERCIRCLEDIAMETER / 2, outer.getCenterY()
+				- GraphFormat.INNERCIRCLEDIAMETER / 2,
+				GraphFormat.INNERCIRCLEDIAMETER,
+				GraphFormat.INNERCIRCLEDIAMETER);
+		g2.setColor(this.graphFormat.getUnvisitedColor());
 		g2.fill(inner);
 
 		// Label Vertex
@@ -225,16 +225,15 @@ public class VertexComponent<V> extends JComponent implements Transferable {
 
 	public void setCircleCenterLocation(Point p) {
 		// Standard setLocation - Constant value for the circleCenter
-		this.setLocation(new Point(p.x
-				- VertexFormat.getLOCATIONCENTERMODIFIER(), p.y
-				- VertexFormat.getLOCATIONCENTERMODIFIER()));
+		this.setLocation(new Point(p.x - GraphFormat.LOCATIONCENTERMODIFIER,
+				p.y - GraphFormat.LOCATIONCENTERMODIFIER));
 	}
 
 	public Point getCircleCenterLocation() {
 		// Standard getLocation + Constant value for the circleCenter
 		Point p = this.getLocation();
-		return new Point(p.x + VertexFormat.getLOCATIONCENTERMODIFIER(), p.y
-				+ VertexFormat.getLOCATIONCENTERMODIFIER());
+		return new Point(p.x + GraphFormat.LOCATIONCENTERMODIFIER, p.y
+				+ GraphFormat.LOCATIONCENTERMODIFIER);
 	}
 
 	public void setGraphFormat(GraphFormat graphFormat) {

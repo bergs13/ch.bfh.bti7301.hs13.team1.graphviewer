@@ -27,6 +27,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import defs.EdgeFormat;
 import defs.FormatHelper;
+import defs.GraphFormat;
 import defs.VertexFormat;
 import ui.painters.EdgePainter;
 import logic.extlib.Edge;
@@ -42,7 +43,6 @@ public class GraphPanel<V, E> extends JComponent implements Observer {
 	private final Map<Vertex<V>, VertexComponent<V>> vertexVertexComponents = new HashMap<Vertex<V>, VertexComponent<V>>();
 	private JMenuItem menuItemAddVertex = new JMenuItem("Add");
 	private JMenuItem menuItemDelVertex = new JMenuItem("Delete");
-	Vertex<V> selectedVertex = null;
 	private JMenuItem menuItemUpdGraphFormat = new JMenuItem(
 			"Change graph format");
 	private JMenuItem menuItemUpdVertexFormat = new JMenuItem("Change format");
@@ -63,16 +63,16 @@ public class GraphPanel<V, E> extends JComponent implements Observer {
 		Iterator<Vertex<V>> itV = model.getGraph().vertices();
 		while (itV.hasNext()) {
 			Vertex<V> vertex = itV.next();
-			VertexComponent<V> vComp = new VertexComponent<V>(vertex);
+			VertexComponent<V> vComp = new VertexComponent<V>(vertex,
+					model.getGraphFormat());
 			this.vertexVertexComponents.put(vertex, vComp);
 			n++;
 		}
 
 		// display vertices in a circle
 		ArrayList<Point> centerPoints = VisualizationCalculator
-				.getCircularAlignedPoints(n,
-						VertexFormat.getOUTERCIRCLEDIAMETER(),
-						EdgeFormat.getARROWTRIANGLEHEIGHT() * 2);
+				.getCircularAlignedPoints(n, GraphFormat.OUTERCIRCLEDIAMETER,
+						GraphFormat.ARROWTRIANGLEHEIGHT * 2);
 		int centerPointIndex = 0;
 		for (VertexComponent<V> vComp : this.vertexVertexComponents.values()) {
 			vComp.setCircleCenterLocation(centerPoints.get(centerPointIndex));
@@ -133,7 +133,7 @@ public class GraphPanel<V, E> extends JComponent implements Observer {
 		menuItemDelVertex.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-					model.deleteSelectedVertex();
+				model.deleteSelectedVertex();
 			}
 		});
 		// format
@@ -156,12 +156,13 @@ public class GraphPanel<V, E> extends JComponent implements Observer {
 		menuItemUpdVertexFormat.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-					VertexFormatDialog vFormatDialog = new VertexFormatDialog(model.getSelectedVertexFormat());
-					vFormatDialog.setVisible(true);
-					if (vFormatDialog.getSaved()) {
-						model.setSelectedVertexFormat(vFormatDialog.getFormat());
-					}
+				VertexFormatDialog vFormatDialog = new VertexFormatDialog(model
+						.getSelectedVertexFormat());
+				vFormatDialog.setVisible(true);
+				if (vFormatDialog.getSaved()) {
+					model.setSelectedVertexFormat(vFormatDialog.getFormat());
 				}
+			}
 		});
 		this.setComponentPopupMenu(popupMenu);
 	}
@@ -176,7 +177,8 @@ public class GraphPanel<V, E> extends JComponent implements Observer {
 		}
 
 		// GUI update
-		VertexComponent<V> vComp = new VertexComponent<V>(vertex, model.getGraphFormat());
+		VertexComponent<V> vComp = new VertexComponent<V>(vertex,
+				model.getGraphFormat());
 		// Find position for new vertex
 		vComp.setCircleCenterLocation(new Point(1 * 75, 1 * 100));
 		// add to list
@@ -247,9 +249,7 @@ public class GraphPanel<V, E> extends JComponent implements Observer {
 		Iterator<Edge<E>> itE = model.getGraph().edges();
 		while (itE.hasNext()) {
 			if (null != graphPanelGraphics) {
-				EdgePainter.paintEdge(
-						FormatHelper.getFormat(GraphFormat.class,
-								model.getGraph()),
+				EdgePainter.paintEdge(model.getGraphFormat(),
 						FormatHelper.getFormat(EdgeFormat.class, itE.next()),
 						(Graphics2D) g);
 			}
@@ -464,10 +464,10 @@ public class GraphPanel<V, E> extends JComponent implements Observer {
 		}
 		Point eFFromPoint = VisualizationCalculator.getPointOnStraightLine(
 				circleCenterSource, circleCenterTarget,
-				VertexFormat.getOUTERCIRCLEDIAMETER() / 2);
+				GraphFormat.OUTERCIRCLEDIAMETER / 2);
 		Point eFToPoint = VisualizationCalculator.getPointOnStraightLine(
 				circleCenterTarget, circleCenterSource,
-				VertexFormat.getOUTERCIRCLEDIAMETER() / 2);
+				GraphFormat.OUTERCIRCLEDIAMETER / 2);
 		eFormat.setFromPoint(eFFromPoint.x, eFFromPoint.y);
 		eFormat.setToPoint(eFToPoint.x, eFToPoint.y);
 		e.set(FormatHelper.FORMAT, eFormat);

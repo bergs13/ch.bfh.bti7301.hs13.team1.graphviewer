@@ -79,7 +79,7 @@ public class GraphFormatDialog extends JDialog {
 		cBLVisible.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				format.setTextVisible((boolean) cBLVisible.getSelectedItem());
+				format.setLabelVisible((boolean) cBLVisible.getSelectedItem());
 			};
 		});
 		this.add(cBLVisible);

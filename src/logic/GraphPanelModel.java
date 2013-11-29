@@ -4,6 +4,7 @@ import java.util.Iterator;
 import java.util.Observable;
 import defs.EdgeFormat;
 import defs.FormatHelper;
+import defs.GraphFormat;
 import defs.VertexFormat;
 import logic.extlib.Edge;
 import logic.extlib.GraphExamples;
@@ -14,8 +15,8 @@ public class GraphPanelModel<V, E> extends Observable {
 	// Members
 	private IncidenceListGraph<V, E> graph;
 	private GraphExamples<V, E> graphExamples;
-	private static EdgePainter edgePainter;
 	private GraphFormat graphFormat;
+	Vertex<V> selectedVertex = null;
 
 	// End of Members
 
@@ -23,7 +24,7 @@ public class GraphPanelModel<V, E> extends Observable {
 	public GraphPanelModel(IncidenceListGraph<V, E> g) {
 		this.graphExamples = new GraphExamples<V, E>();
 		this.graphFormat = new GraphFormat();
-		
+
 		// input graph?
 		if (null != g) {
 			this.graph = g;
@@ -39,8 +40,33 @@ public class GraphPanelModel<V, E> extends Observable {
 		return this.graph;
 	}
 
-	public VertexFormat getGraphFormat() {
+	public GraphFormat getGraphFormat() {
 		return this.graphFormat;
+	}
+
+	public Vertex<V> getSelectedVertex() {
+		return selectedVertex;
+	}
+
+	public void setSelectedVertex(Vertex<V> selectedVertex) {
+		this.selectedVertex = selectedVertex;
+	}
+
+	public VertexFormat getSelectedVertexFormat() {
+		VertexFormat f = null;
+		if (null != this.selectedVertex) {
+			f = FormatHelper.getFormat(VertexFormat.class, this.selectedVertex);
+		}
+		if (null == f) {
+			f = new VertexFormat();
+		}
+		return f;
+	}
+
+	public VertexFormat setSelectedVertexFormat(VertexFormat newFormat) {
+if(null != this.selectedVertex && null != newFormat)
+{
+	}
 	}
 
 	// Graph manipulation Methods
@@ -66,15 +92,17 @@ public class GraphPanelModel<V, E> extends Observable {
 		notifyObservers(vNew);
 	}
 
-	public void deleteVertex(Vertex<V> vertex) {
-		// Update data
-		// Remove Vertex
-		this.graph.removeVertex(vertex);
-		vertex = null;
+	public void deleteSelectedVertex() {
+		if (null != this.selectedVertex) {
+			// Update data
+			// Remove Vertex
+			this.graph.removeVertex(this.selectedVertex);
+			this.selectedVertex = null;
 
-		// Update UI
-		setChanged();
-		notifyObservers(vertex);
+			// Update UI
+			setChanged();
+			notifyObservers(this.selectedVertex);
+		}
 	}
 
 	// End of graph manipulation methods
@@ -83,16 +111,12 @@ public class GraphPanelModel<V, E> extends Observable {
 	public void updateGraphFormat(GraphFormat newFormat) {
 		// Check and update format
 		if (null == newFormat) {
-			newFormat = this.vertexFormat;
+			newFormat = this.graphFormat;
 			if (null == newFormat) {
-				newFormat = new VertexFormat();
+				newFormat = new GraphFormat();
 			}
 		}
-		this.vertexFormat = newFormat;
-		Iterator<Vertex<V>> itV = this.graph.vertices();
-		while (itV.hasNext()) {
-			itV.next().set(FormatHelper.FORMAT, this.vertexFormat);
-		}
+		this.graphFormat = newFormat;
 
 		// Update UI
 		setChanged();

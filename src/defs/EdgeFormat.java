@@ -15,8 +15,9 @@ import java.awt.Point;
 public class EdgeFormat {
 
 	private boolean isDirected;
+        private boolean isWeighted;
 	private boolean active;
-	private boolean inMSF;
+	private boolean included;
 	private String label;
 	private Point fromPoint = new Point();
 	private Point toPoint = new Point();
@@ -30,7 +31,7 @@ public class EdgeFormat {
 	 */
 	private void reset() {
 		active = false;
-		inMSF = false;
+		included = false;
 
 	}
 
@@ -53,11 +54,11 @@ public class EdgeFormat {
 	}
 
 	public boolean isInMSF() {
-		return inMSF;
+		return included;
 	}
 
 	public void setInMSF(boolean inMSF) {
-		this.inMSF = inMSF;
+		this.included = inMSF;
 	}
 
 	public String getLabel() {

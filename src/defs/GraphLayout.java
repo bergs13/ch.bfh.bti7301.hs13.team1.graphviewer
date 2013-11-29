@@ -14,7 +14,7 @@ public interface GraphLayout {
     Color getActiveColor();
     Color getVisitedColor();
     Color getUnvisitedColor();
-    Color getMSFColor();
+    Color getIncludedEdgeColor();
     boolean getLabelVisible();
     String getDefaultText();
     

@@ -20,7 +20,8 @@ public class VertexUpdaterTest {
      */
     public static void main(String[] args) {
         // TODO code application logic here
-    IncidenceListGraph<String, String> graph = new IncidenceListGraph(true);
+      TestData testData = new TestData();  
+    IncidenceListGraph<String, String> graph = testData.getTestGraph();
     
     graph.insertVertex("A");
     GraphPanelModel model = new GraphPanelModel(graph);

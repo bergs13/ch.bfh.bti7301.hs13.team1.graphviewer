@@ -9,18 +9,12 @@ import java.awt.Color;
  */
 public class GraphFormat {
 
-    public Color getInMSFColor() {
-        return inMSFColor;
-    }
-
-    public void setInMSFColor(Color inMSFColor) {
-        this.inMSFColor = inMSFColor;
-    }
+    
     
     private Color activeColor;
     private Color visitedColor;
     private Color unvisitedColor;
-    private Color inMSFColor;
+    private Color includedColor;
     private boolean labelVisible;
     
 //size of Vertex 
@@ -78,5 +72,11 @@ public class GraphFormat {
     public void setLabelVisible(boolean labelVisible) {
         this.labelVisible = labelVisible;
     }
-    
+    public Color getIncludedColor() {
+        return includedColor;
+    }
+
+    public void setIncludedColor(Color includedColor) {
+        this.includedColor = includedColor;
+    }
 }

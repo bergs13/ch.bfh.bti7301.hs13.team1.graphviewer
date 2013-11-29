@@ -48,7 +48,7 @@ public class StandardLayout implements GraphLayout {
     }
 
     @Override
-    public Color getMSFColor() {
+    public Color getIncludedEdgeColor() {
         return ACTIVECOLOR;
     }
 

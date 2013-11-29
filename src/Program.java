@@ -45,7 +45,6 @@ public class Program {
 		// </editor-fold>
 		final IncidenceListGraph<String, String> gr = new IncidenceListGraph<String, String>(
 				true);
-
 		// Create a graph
 		Vertex<String> prevV = null;
 		for (int i = 0; i < 10; i++) {

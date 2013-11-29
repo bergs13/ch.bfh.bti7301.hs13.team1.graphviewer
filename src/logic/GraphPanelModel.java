@@ -2,7 +2,6 @@ package logic;
 
 import java.util.Iterator;
 import java.util.Observable;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 import defs.EdgeFormat;
 import defs.FormatHelper;
 import defs.VertexFormat;
@@ -15,36 +14,21 @@ public class GraphPanelModel<V, E> extends Observable {
 	// Members
 	private IncidenceListGraph<V, E> graph;
 	private GraphExamples<V, E> graphExamples;
-	private VertexFormat vertexFormat;
-	private EdgeFormat edgeFormat;
+	private static EdgePainter edgePainter;
+	private GraphFormat graphFormat;
 
 	// End of Members
 
 	// Constructors
 	public GraphPanelModel(IncidenceListGraph<V, E> g) {
 		this.graphExamples = new GraphExamples<V, E>();
-
+		this.graphFormat = new GraphFormat();
+		
 		// input graph?
 		if (null != g) {
 			this.graph = g;
-			if (g.vertices().hasNext()) {
-				this.vertexFormat = FormatHelper.getFormat(VertexFormat.class,
-						g.vertices().next());
-				if (null == this.vertexFormat) {
-					this.vertexFormat = new VertexFormat();
-				}
-			}
-			if (g.edges().hasNext()) {
-				this.edgeFormat = FormatHelper.getFormat(EdgeFormat.class, g
-						.edges().next());
-				if (null == this.edgeFormat) {
-					this.edgeFormat = new EdgeFormat();
-				}
-			}
 		} else {
 			this.graph = new IncidenceListGraph<V, E>(true);
-			this.vertexFormat = new VertexFormat();
-			this.edgeFormat = new EdgeFormat();
 		}
 	}
 
@@ -54,23 +38,22 @@ public class GraphPanelModel<V, E> extends Observable {
 	public IncidenceListGraph<V, E> getGraph() {
 		return this.graph;
 	}
-	public VertexFormat getVertexFormat()
-	{
-		return this.vertexFormat;
+
+	public VertexFormat getGraphFormat() {
+		return this.graphFormat;
 	}
-	public EdgeFormat getEdgeFormat()
-	{
-		return this.edgeFormat;
-	}
-	
+
 	// Graph manipulation Methods
-	public void addVertex(Vertex<V> sourceVertex) {
+	public void addVertex(Vertex<V> sourceVertex, VertexFormat format) {
 		// Update data
 		// create object
 		V vElement = null;
 		Vertex<V> vNew = this.graph.insertVertex(vElement);
 		// set format
-		vNew.set(FormatHelper.FORMAT, this.vertexFormat);
+		if (null == format) {
+			format = new VertexFormat();
+		}
+		vNew.set(FormatHelper.FORMAT, format);
 		// connect via edge if has source (if there is no source, it will be
 		// null)
 		if (null != sourceVertex) {
@@ -81,10 +64,6 @@ public class GraphPanelModel<V, E> extends Observable {
 		// Update UI
 		setChanged();
 		notifyObservers(vNew);
-	}
-
-	public void updateVertex(Vertex<V> vertex) {
-
 	}
 
 	public void deleteVertex(Vertex<V> vertex) {
@@ -98,8 +77,10 @@ public class GraphPanelModel<V, E> extends Observable {
 		notifyObservers(vertex);
 	}
 
+	// End of graph manipulation methods
+
 	// Format updates
-	public void updateVertexFormat(VertexFormat newFormat) {
+	public void updateGraphFormat(GraphFormat newFormat) {
 		// Check and update format
 		if (null == newFormat) {
 			newFormat = this.vertexFormat;
@@ -109,41 +90,22 @@ public class GraphPanelModel<V, E> extends Observable {
 		}
 		this.vertexFormat = newFormat;
 		Iterator<Vertex<V>> itV = this.graph.vertices();
-		while(itV.hasNext())
-		{
+		while (itV.hasNext()) {
 			itV.next().set(FormatHelper.FORMAT, this.vertexFormat);
 		}
-		
+
 		// Update UI
 		setChanged();
 		notifyObservers(VertexFormat.class);
 	}
 
-	public void updateEdgeFormat(EdgeFormat newFormat) {
-		// Check and update format
-		if (null == newFormat) {
-			newFormat = this.edgeFormat;
-			if (null == newFormat) {
-				newFormat = new EdgeFormat();
-			}
-		}
-		this.edgeFormat = newFormat;
-		Iterator<Edge<E>> itE = this.graph.edges();
-		while(itE.hasNext())
-		{
-			itE.next().set(FormatHelper.FORMAT, this.edgeFormat);
-		}
-		
-		// Update UI
-		setChanged();
-		notifyObservers(EdgeFormat.class);
-	}
-
-	// End of graph manipulation methods
+	// End of format updates
 
 	// Simulation methods
 	public void applyAlgorithm(String key) {
-		throw new NotImplementedException();
+		if (key.equals("DUMMY")) {
+			this.graphExamples.dijkstra(this.graph, null);
+		}
 	}
 	// End of simulation methods
 

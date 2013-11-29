@@ -21,17 +21,19 @@ import defs.VertexFormat;
 public class VertexComponent<V> extends JComponent implements Transferable {
 	// Members
 	private Vertex<V> vertex = null;
+	private GraphFormat graphFormat = null;
 
 	// End of members
 
 	// Constructors
-	public VertexComponent(Vertex<V> vertex) {
-		// Grï¿½sse Rechteck (Component)
+	public VertexComponent(Vertex<V> vertex, GraphFormat graphFormat) {
 		this.vertex = vertex;
+		this.graphFormat = graphFormat;
 		if (null == FormatHelper.getFormat(VertexFormat.class, this.vertex)) {
 			// Default-Format
 			this.vertex.set(FormatHelper.FORMAT, new VertexFormat());
 		}
+		// Grösse Component festlegen
 		this.setPreferredSize(new Dimension(VertexFormat
 				.getOUTERCIRCLEDIAMETER(), VertexFormat
 				.getOUTERCIRCLEDIAMETER()));
@@ -233,6 +235,10 @@ public class VertexComponent<V> extends JComponent implements Transferable {
 		Point p = this.getLocation();
 		return new Point(p.x + VertexFormat.getLOCATIONCENTERMODIFIER(), p.y
 				+ VertexFormat.getLOCATIONCENTERMODIFIER());
+	}
+
+	public void setGraphFormat(GraphFormat graphFormat) {
+		this.graphFormat = graphFormat;
 	}
 	// End of other Methods
 }

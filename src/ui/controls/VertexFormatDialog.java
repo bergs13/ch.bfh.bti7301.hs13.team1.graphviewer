@@ -25,65 +25,11 @@ public class VertexFormatDialog extends JDialog {
 		this.format = format;
 
 		// Layout
-		this.setLayout(new GridLayout(6, 2, 6,3));
-		this.setMinimumSize(new Dimension(212,201));
-		this.setMaximumSize(new Dimension(212,201));
+		this.setLayout(new GridLayout(2, 2));
+		this.setMinimumSize(new Dimension(60, 200));
+		this.setMaximumSize(new Dimension(60, 200));
 
 		// Input fields
-		// Unvisited color
-		this.add(new JLabel("Unvisited Color:"));
-		final JButton bUnvisited = new JButton("Change");
-		bUnvisited.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				Color newC = JColorChooser.showDialog(null, "Choose color",
-						format.getUnvisitedColor());
-				format.setUnvisitedColor(newC);
-				bUnvisited.setBackground(newC);
-			};
-		});
-		this.add(bUnvisited);
-
-		// Visited color
-		this.add(new JLabel("Visited Color:"));
-		final JButton bVisited = new JButton("Change");
-		bVisited.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				Color newC = JColorChooser.showDialog(null, "Choose color",
-						format.getVisitedColor());
-				format.setVisitedColor(newC);
-				bVisited.setBackground(newC);
-			};
-		});
-		this.add(bVisited);
-
-		// Active color
-		this.add(new JLabel("Active Color:"));
-		final JButton bActive = new JButton("Change");
-		bActive.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				Color newC = JColorChooser.showDialog(null, "Choose color",
-						format.getActiveColor());
-				format.setActiveColor(newC);
-				bActive.setBackground(newC);
-			};
-		});
-		this.add(bActive);
-
-		// Label visible
-		this.add(new JLabel("Label visible:"));
-		final JComboBox<Boolean> cBLVisible = new JComboBox<Boolean>(
-				new Boolean[] { true, false });
-		cBLVisible.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				format.setTextVisible((boolean) cBLVisible.getSelectedItem());
-			};
-		});
-		this.add(cBLVisible);
-
 		// Label
 		this.add(new JLabel("Label:"));
 		this.add(new JTextField(format.getLabel()));

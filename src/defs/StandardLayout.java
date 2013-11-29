@@ -16,9 +16,7 @@ public class StandardLayout implements GraphLayout {
     private static final Color ACTIVECOLOR = new Color(255, 0, 0);
     private static final Color VISITEDCOLOR = new Color(0, 0, 255);
     private static final Color UNVISITEDCOLOR = new Color(0, 0, 0);
-    private static final int VERTEX_SIZE = 20;
-    private static final float EDGE_WIDTH = 2f;
-    private static final int VERTEX_BORDER_WIDTH= 5;
+    private static final boolean lableVisible = true;
 
     public StandardLayout() {
        
@@ -40,8 +38,8 @@ public class StandardLayout implements GraphLayout {
     }
 
     @Override
-    public boolean getTextVisible() {
-        return true;
+    public boolean getLabelVisible() {
+        return lableVisible;
     }
 
     @Override
@@ -50,18 +48,10 @@ public class StandardLayout implements GraphLayout {
     }
 
     @Override
-    public int getVertexSize() {
-        return VERTEX_SIZE;
+    public Color getMSFColor() {
+        return ACTIVECOLOR;
     }
 
-    @Override
-    public float getEdgeWidth() {
-        return EDGE_WIDTH;
-    }
-
-    @Override
-    public int getBorderWidth() {
-        return VERTEX_BORDER_WIDTH;
-    }
+   
 
 }

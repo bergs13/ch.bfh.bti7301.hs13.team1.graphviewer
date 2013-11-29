@@ -37,38 +37,14 @@ public class GraphFormat {
         this.visitedColor = aLayout.getVisitedColor();
         this.unvisitedColor= aLayout.getUnvisitedColor();
         this.labelVisible = aLayout.getLabelVisible();
-        //this.inMFSColor = aLayout.ge
+        this.includedColor = aLayout.getIncludedEdgeColor();
     }
 
-	private Color activeColor;
-	private Color visitedColor;
-	private Color unvisitedColor;
-	private Color inMSFColor;
-	private boolean labelVisible;
+	
 
-	// size of Vertex
-	public static final int INNERCIRCLEDIAMETER = 30;
-	public static final int OUTERCIRCLEDIAMETER = 40;
-	public static final int LOCATIONCENTERMODIFIER = 20;
 
-	public static final int ARROWTRIANGLEWIDTH = 20;
-	public static final int ARROWTRIANGLEHEIGHT = 30;
-
-	public GraphFormat(GraphLayout aLayout) {
-		setLayout(aLayout);
-	}
-
-	public GraphFormat() {
-		setLayout(new StandardLayout());
-	}
-
-	public final void setLayout(GraphLayout aLayout) {
-		this.activeColor = aLayout.getActiveColor();
-		this.visitedColor = aLayout.getVisitedColor();
-		this.unvisitedColor = aLayout.getUnvisitedColor();
-		this.labelVisible = aLayout.getLabelVisible();
-		// this.inMFSColor = aLayout.ge
-	}
+	
+	
 
 	public Color getActiveColor() {
 		return activeColor;
@@ -94,6 +70,14 @@ public class GraphFormat {
 		this.unvisitedColor = unvisitedColor;
 	}
 
+    public Color getIncludedColor() {
+        return includedColor;
+    }
+
+    public void setIncludedColor(Color includedColor) {
+        this.includedColor = includedColor;
+    }
+        
 	public boolean isLabelVisible() {
 		return labelVisible;
 	}

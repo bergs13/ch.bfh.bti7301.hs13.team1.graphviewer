@@ -418,9 +418,6 @@ public class IncidenceListGraph<V,E> implements Graph<V, E> {
 			Object value = DUMMY;
 			if (val != null) value = val;
 			attrs.put(attr, value);
-			if (attr == FormatHelper.FORMAT){
-				this.addObserver((Observer) val);
-			}
 			this.setChanged();
 			this.notifyObservers();
 		}

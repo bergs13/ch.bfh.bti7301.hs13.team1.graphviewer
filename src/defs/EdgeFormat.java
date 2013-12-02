@@ -4,7 +4,6 @@
  */
 package defs;
 
-import java.awt.Color;
 import java.awt.Point;
 
 /**
@@ -15,7 +14,6 @@ import java.awt.Point;
 public class EdgeFormat {
 
 	private boolean isDirected;
-        private boolean isWeighted;
 	private boolean active;
 	private boolean included;
 	private String label;

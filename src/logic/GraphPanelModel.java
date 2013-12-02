@@ -47,6 +47,8 @@ public class GraphPanelModel<V, E> extends Observable {
 
 	public void setSelectedVertex(Vertex<V> selectedVertex) {
 		this.selectedVertex = selectedVertex;
+		setChanged();
+		notifyObservers("selection");
 	}
 
 	public VertexFormat getSelectedVertexFormat() {
@@ -63,7 +65,7 @@ public class GraphPanelModel<V, E> extends Observable {
 	public void setSelectedVertexFormat(VertexFormat newFormat) {
 		if (null != this.selectedVertex && null != newFormat) {
 			this.selectedVertex.set(FormatHelper.FORMAT, newFormat);
-			
+
 			// Update UI
 			setChanged();
 			notifyObservers(this.selectedVertex);

@@ -1,5 +1,6 @@
 package ui.controls;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -9,6 +10,8 @@ import java.awt.datatransfer.Transferable;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Ellipse2D;
+
+import javax.swing.BorderFactory;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.TransferHandler;
@@ -23,18 +26,31 @@ public class VertexComponent<V> extends JComponent implements Transferable {
 	// Members
 	private Vertex<V> vertex = null;
 	private GraphFormat graphFormat = null;
+	boolean isSelected = false;
 
 	// End of members
 
 	// Constructors
 	public VertexComponent(Vertex<V> vertex, GraphFormat graphFormat) {
+		// set members
 		this.vertex = vertex;
 		this.graphFormat = graphFormat;
-		if (null == FormatHelper.getFormat(VertexFormat.class, this.vertex)) {
+
+		// set vertex specific format
+		VertexFormat format = FormatHelper.getFormat(VertexFormat.class,
+				this.vertex);
+		if (null == format) {
 			// Default-Format
-			this.vertex.set(FormatHelper.FORMAT, new VertexFormat());
+			format = new VertexFormat();
 		}
-		// Grösse Component festlegen
+		// default label if Vertex<String>
+		if ((null == format.getLabel() || format.getLabel().equals(""))
+				&& String.class.isInstance(this.vertex.element())) {
+			format.setLabel((String) this.vertex.element());
+		}
+		this.vertex.set(FormatHelper.FORMAT, format);
+
+		// set component size
 		this.setPreferredSize(new Dimension(GraphFormat.OUTERCIRCLEDIAMETER,
 				GraphFormat.OUTERCIRCLEDIAMETER));
 	}
@@ -72,9 +88,18 @@ public class VertexComponent<V> extends JComponent implements Transferable {
 		g2.fill(inner);
 
 		// Label Vertex
+		g2.setColor(this.graphFormat.getVisitedColor());
 		JLabel label = new JLabel(format.getLabel());
 		// Verschieben zu Punkt
 		label.setLocation(this.getCircleCenterLocation());
+
+		// Selektionsrahmen
+		if (this.isSelected) {
+			this.setBorder(BorderFactory.createDashedBorder(this.graphFormat
+					.getUnvisitedColor()));
+		} else {
+			this.setBorder(null);
+		}
 
 		// Drag & Drop
 		// Add the listener which will export this VertexComponent for
@@ -238,6 +263,14 @@ public class VertexComponent<V> extends JComponent implements Transferable {
 
 	public void setGraphFormat(GraphFormat graphFormat) {
 		this.graphFormat = graphFormat;
+	}
+
+	public boolean isSelected() {
+		return isSelected;
+	}
+
+	public void setSelected(boolean isSelected) {
+		this.isSelected = isSelected;
 	}
 	// End of other Methods
 }

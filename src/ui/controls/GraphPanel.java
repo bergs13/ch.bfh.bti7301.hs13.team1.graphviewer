@@ -14,7 +14,8 @@ import java.awt.dnd.DropTargetEvent;
 import java.awt.dnd.DropTargetListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -62,23 +63,33 @@ public class GraphPanel<V, E> extends JComponent implements Observer {
 		int n = 0;
 		Iterator<Vertex<V>> itV = model.getGraph().vertices();
 		while (itV.hasNext()) {
-			Vertex<V> vertex = itV.next();
-			VertexComponent<V> vComp = new VertexComponent<V>(vertex,
-					model.getGraphFormat());
-			this.vertexVertexComponents.put(vertex, vComp);
+			itV.next();
 			n++;
 		}
-
-		// display vertices in a circle
-		ArrayList<Point> centerPoints = VisualizationCalculator
+		// calculate circular points
+		Point[] centerPoints = VisualizationCalculator
 				.getCircularAlignedPoints(n, GraphFormat.OUTERCIRCLEDIAMETER,
 						GraphFormat.ARROWTRIANGLEHEIGHT * 2);
 		int centerPointIndex = 0;
-		for (VertexComponent<V> vComp : this.vertexVertexComponents.values()) {
-			vComp.setCircleCenterLocation(centerPoints.get(centerPointIndex));
+		// add the vertices as components
+		itV = model.getGraph().vertices();
+		while (itV.hasNext()) {
+			final Vertex<V> v = itV.next();
+			final VertexComponent<V> vComp = new VertexComponent<V>(v,
+					model.getGraphFormat());
+			vComp.setCircleCenterLocation(centerPoints[centerPointIndex]);
+			// component selection
+			vComp.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mousePressed(MouseEvent e) {
+					// overwrites the selection in the model (Vertex)
+					model.setSelectedVertex(v);
+				}
+			});
+			this.vertexVertexComponents.put(v, vComp);
 			centerPointIndex++;
 		}
-
+		// calculate the edges for the components
 		for (Vertex<V> vertex : this.vertexVertexComponents.keySet()) {
 			Iterator<Edge<E>> itE = model.getGraph().incidentEdges(vertex);
 			while (itE.hasNext()) {
@@ -96,23 +107,21 @@ public class GraphPanel<V, E> extends JComponent implements Observer {
 		// No layout, set all the points of the controls manually
 		this.setLayout(null);
 
+		// clear selection when panel is selected
+		this.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent e) {
+				// clears the selection in the model (Vertex)
+				model.setSelectedVertex(null);
+			}
+		});
+
 		// Paint the vertices
 		for (VertexComponent<V> comp : this.vertexVertexComponents.values()) {
 			paintVertexComponent(comp);
 		}
 		// .. and edges
 		repaintEdges();
-
-		// // Selektion
-		// this.addMouseListener(new MouseAdapter() {
-		// @Override
-		// public void mousePressed(MouseEvent e) {
-		// Object source = e.getSource();
-		// if (VertexComponent.class.isInstance(source)) {
-		// selectedVertex = getVertexByComponent((VertexComponent<V>) source);
-		// }
-		// }
-		// });
 
 		// context menu and actions
 		// manipulation
@@ -403,7 +412,20 @@ public class GraphPanel<V, E> extends JComponent implements Observer {
 	@Override
 	public void update(Observable observable, Object objArgs) {
 		// Argumente müssen bestimmte Form haben
-		if (GraphFormat.class.equals(objArgs)) {
+		if (String.class.isInstance(objArgs)) {
+			if ((objArgs).equals("selection")) {
+				// clear old selection
+				clearVertexComponentSelection();
+				if (null != model.getSelectedVertex()) {
+					// set new selection if available
+					if (vertexVertexComponents.containsKey(model
+							.getSelectedVertex())) {
+						selectVertexComponent(vertexVertexComponents.get(model
+								.getSelectedVertex()));
+					}
+				}
+			}
+		} else if (GraphFormat.class.equals(objArgs)) {
 			for (VertexComponent<V> comp : this.vertexVertexComponents.values()) {
 				repaintVertexComponent(comp);
 			}
@@ -487,5 +509,18 @@ public class GraphPanel<V, E> extends JComponent implements Observer {
 		return vertex;
 	}
 
+	private void selectVertexComponent(VertexComponent<V> vComp) {
+		vComp.setSelected(true);
+		repaintVertexComponent(vComp);
+	}
+
+	private void clearVertexComponentSelection() {
+		for (VertexComponent<V> vComp : vertexVertexComponents.values()) {
+			if (vComp.isSelected) {
+				vComp.setSelected(false);
+				repaintVertexComponent(vComp);
+			}
+		}
+	}
 	// End of Helper methods
 }

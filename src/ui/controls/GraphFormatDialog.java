@@ -15,6 +15,10 @@ import defs.GraphFormat;
 @SuppressWarnings("serial")
 public class GraphFormatDialog extends JDialog {
 	GraphFormat format = null;
+	Color unvisitedColor = null;
+	Color visitedColor = null;
+	Color activeColor = null;
+	boolean isLabelVisible = false;
 	// saved when closed?
 	boolean saved = false;
 
@@ -22,23 +26,27 @@ public class GraphFormatDialog extends JDialog {
 		super();
 		this.setModalityType(ModalityType.APPLICATION_MODAL);
 		this.format = format;
-
+		this.unvisitedColor = format.getUnvisitedColor();
+		this.visitedColor = format.getVisitedColor();
+		this.activeColor = format.getActiveColor();
+		this.isLabelVisible = format.isLabelVisible();
 		// Layout
 		this.setLayout(new GridLayout(5, 2));
-		this.setMinimumSize(new Dimension(150, 200));
-		this.setMaximumSize(new Dimension(150, 200));
+		this.setMinimumSize(new Dimension(200, 225));
+		this.setMaximumSize(new Dimension(200, 225));
 
 		// Input fields
 		// Unvisited color
 		this.add(new JLabel("Unvisited Color:"));
 		final JButton bUnvisited = new JButton("Change");
+		bUnvisited.setBackground(this.unvisitedColor);
 		bUnvisited.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				Color newC = JColorChooser.showDialog(null, "Choose color",
-						format.getUnvisitedColor());
-				format.setUnvisitedColor(newC);
-				bUnvisited.setBackground(newC);
+						unvisitedColor);
+				unvisitedColor = newC;
+				bUnvisited.setBackground(unvisitedColor);
 			};
 		});
 		this.add(bUnvisited);
@@ -46,13 +54,14 @@ public class GraphFormatDialog extends JDialog {
 		// Visited color
 		this.add(new JLabel("Visited Color:"));
 		final JButton bVisited = new JButton("Change");
+		bVisited.setBackground(this.visitedColor);
 		bVisited.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				Color newC = JColorChooser.showDialog(null, "Choose color",
-						format.getVisitedColor());
-				format.setVisitedColor(newC);
-				bVisited.setBackground(newC);
+						visitedColor);
+				visitedColor = newC;
+				bVisited.setBackground(visitedColor);
 			};
 		});
 		this.add(bVisited);
@@ -60,13 +69,14 @@ public class GraphFormatDialog extends JDialog {
 		// Active color
 		this.add(new JLabel("Active Color:"));
 		final JButton bActive = new JButton("Change");
+		bActive.setBackground(this.activeColor);
 		bActive.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				Color newC = JColorChooser.showDialog(null, "Choose color",
-						format.getActiveColor());
-				format.setActiveColor(newC);
-				bActive.setBackground(newC);
+						activeColor);
+				activeColor = newC;
+				bActive.setBackground(activeColor);
 			};
 		});
 		this.add(bActive);
@@ -75,10 +85,11 @@ public class GraphFormatDialog extends JDialog {
 		this.add(new JLabel("Label visible:"));
 		final JComboBox<Boolean> cBLVisible = new JComboBox<Boolean>(
 				new Boolean[] { true, false });
+		cBLVisible.setSelectedItem(this.isLabelVisible);
 		cBLVisible.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				format.setLabelVisible((boolean) cBLVisible.getSelectedItem());
+				isLabelVisible = (boolean) cBLVisible.getSelectedItem();
 			};
 		});
 		this.add(cBLVisible);
@@ -89,6 +100,10 @@ public class GraphFormatDialog extends JDialog {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				setVisible(false);
+				format.setUnvisitedColor(unvisitedColor);
+				format.setVisitedColor(visitedColor);
+				format.setActiveColor(activeColor);
+				format.setLabelVisible(isLabelVisible);
 				saved = true;
 				dispose();
 			};

@@ -13,6 +13,7 @@ import defs.VertexFormat;
 @SuppressWarnings("serial")
 public class VertexFormatDialog extends JDialog {
 	VertexFormat format = null;
+	String label = null;
 	// saved when closed?
 	boolean saved = false;
 
@@ -20,16 +21,24 @@ public class VertexFormatDialog extends JDialog {
 		super();
 		this.setModalityType(ModalityType.APPLICATION_MODAL);
 		this.format = format;
+		this.label = format.getLabel();
 
 		// Layout
 		this.setLayout(new GridLayout(2, 2));
-		this.setMinimumSize(new Dimension(60, 200));
-		this.setMaximumSize(new Dimension(60, 200));
+		this.setMinimumSize(new Dimension(200, 90));
+		this.setMaximumSize(new Dimension(200, 90));
 
 		// Input fields
 		// Label
 		this.add(new JLabel("Label:"));
-		this.add(new JTextField(format.getLabel()));
+		final JTextField labelField = new JTextField(this.label);
+		labelField.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				label = labelField.getText();
+			};
+		});
+		this.add(labelField);
 
 		// OK/Cancel Buttons
 		JButton okButton = new JButton("OK");
@@ -37,6 +46,7 @@ public class VertexFormatDialog extends JDialog {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				setVisible(false);
+				format.setLabel(label);
 				saved = true;
 				dispose();
 			};

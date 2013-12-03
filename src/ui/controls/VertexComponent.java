@@ -1,22 +1,25 @@
 package ui.controls;
 
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Ellipse2D;
-
 import javax.swing.BorderFactory;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
+import javax.swing.JMenuItem;
+import javax.swing.JPopupMenu;
 import javax.swing.TransferHandler;
 import logic.extlib.Vertex;
 import logic.DragAndDropTransferHandler;
+import logic.VertexComponentModel;
 import defs.FormatHelper;
 import defs.GraphFormat;
 import defs.VertexFormat;
@@ -24,35 +27,66 @@ import defs.VertexFormat;
 @SuppressWarnings("serial")
 public class VertexComponent<V> extends JComponent implements Transferable {
 	// Members
-	private Vertex<V> vertex = null;
-	private GraphFormat graphFormat = null;
-	boolean isSelected = false;
+	private VertexComponentModel<V> model = null;
+	private JMenuItem menuItemAddVertex = new JMenuItem("Add");
+	private JMenuItem menuItemDelVertex = new JMenuItem("Delete");
+	private JMenuItem menuItemUpdVertexFormat = new JMenuItem("Change format");
+	private JPopupMenu popupMenu = new JPopupMenu();
 
 	// End of members
 
 	// Constructors
-	public VertexComponent(Vertex<V> vertex, GraphFormat graphFormat) {
+	public VertexComponent(final VertexComponentModel<V> model) {
 		// set members
-		this.vertex = vertex;
-		this.graphFormat = graphFormat;
+		this.model = model;
 
 		// set vertex specific format
-		VertexFormat format = FormatHelper.getFormat(VertexFormat.class,
-				this.vertex);
+		Vertex<V> vertex = model.getVertex();
+		VertexFormat format = FormatHelper
+				.getFormat(VertexFormat.class, vertex);
 		if (null == format) {
 			// Default-Format
 			format = new VertexFormat();
 		}
 		// default label if Vertex<String>
 		if ((null == format.getLabel() || format.getLabel().equals(""))
-				&& String.class.isInstance(this.vertex.element())) {
-			format.setLabel((String) this.vertex.element());
+				&& String.class.isInstance(vertex.element())) {
+			format.setLabel((String) vertex.element());
 		}
-		this.vertex.set(FormatHelper.FORMAT, format);
+		vertex.set(FormatHelper.FORMAT, format);
 
 		// set component size
 		this.setPreferredSize(new Dimension(GraphFormat.OUTERCIRCLEDIAMETER,
 				GraphFormat.OUTERCIRCLEDIAMETER));
+
+		// context menu and menu items
+		this.popupMenu.add(this.menuItemAddVertex);
+		this.menuItemAddVertex.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				model.addVertex();
+			}
+		});
+		this.popupMenu.add(this.menuItemDelVertex);
+		this.menuItemDelVertex.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				model.deleteVertex();
+			}
+		});
+		this.popupMenu.add(this.menuItemUpdVertexFormat);
+		this.menuItemUpdVertexFormat.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				VertexFormatDialog vFormatDialog = new VertexFormatDialog(model
+						.getChangedVertexFormat());
+				vFormatDialog.setVisible(true);
+				if (vFormatDialog.getSaved()) {
+					model.setChangedVertexFormat(vFormatDialog.getFormat());
+				}
+			}
+		});
+		this.setComponentPopupMenu(this.popupMenu);
 	}
 
 	// End of constructors
@@ -61,10 +95,12 @@ public class VertexComponent<V> extends JComponent implements Transferable {
 	@Override
 	public void paintComponent(Graphics g) {
 		Graphics2D g2 = (Graphics2D) g; // Cast g to Graphics2D
+		Vertex<V> vertex = model.getVertex();
+		GraphFormat graphFormat = model.getGraphFormat();
 
 		// Definierbare Sachen aus Vertex-Format (Muss vorhanden sein!)
-		VertexFormat format = FormatHelper.getFormat(VertexFormat.class,
-				this.vertex);
+		VertexFormat format = FormatHelper
+				.getFormat(VertexFormat.class, vertex);
 		// // Definierbare Sachen aus Vertex-Format (�berschreiben wenn
 		// // Vertex-Format implementiert)
 		// Color inactiveColor = new Color(0, 0, 255);
@@ -77,25 +113,25 @@ public class VertexComponent<V> extends JComponent implements Transferable {
 		Ellipse2D outer = new Ellipse2D.Double(0, 0,
 				GraphFormat.OUTERCIRCLEDIAMETER,
 				GraphFormat.OUTERCIRCLEDIAMETER);
-		g2.setColor(this.graphFormat.getVertexColor(format));
+		g2.setColor(graphFormat.getVertexColor(format));
 		g2.fill(outer);
 		Ellipse2D inner = new Ellipse2D.Double(outer.getCenterX()
 				- GraphFormat.INNERCIRCLEDIAMETER / 2, outer.getCenterY()
 				- GraphFormat.INNERCIRCLEDIAMETER / 2,
 				GraphFormat.INNERCIRCLEDIAMETER,
 				GraphFormat.INNERCIRCLEDIAMETER);
-		g2.setColor(this.graphFormat.getUnvisitedColor());
+		g2.setColor(graphFormat.getUnvisitedColor());
 		g2.fill(inner);
 
 		// Label Vertex
-		g2.setColor(this.graphFormat.getVisitedColor());
+		g2.setColor(graphFormat.getVisitedColor());
 		JLabel label = new JLabel(format.getLabel());
 		// Verschieben zu Punkt
 		label.setLocation(this.getCircleCenterLocation());
 
 		// Selektionsrahmen
-		if (this.isSelected) {
-			this.setBorder(BorderFactory.createDashedBorder(this.graphFormat
+		if (model.isSelected()) {
+			this.setBorder(BorderFactory.createDashedBorder(graphFormat
 					.getUnvisitedColor()));
 		} else {
 			this.setBorder(null);
@@ -218,11 +254,13 @@ public class VertexComponent<V> extends JComponent implements Transferable {
 	 * </p>
 	 */
 	class DraggableMouseListener extends MouseAdapter {
+		JComponent componentForDrag = null;
+		TransferHandler transferHandlerForDrag = null;
 		@Override()
 		public void mousePressed(MouseEvent e) {
-			JComponent c = (JComponent) e.getSource();
-			TransferHandler handler = c.getTransferHandler();
-			handler.exportAsDrag(c, e, TransferHandler.COPY);
+			componentForDrag = (JComponent) e.getSource();
+			transferHandlerForDrag = componentForDrag.getTransferHandler();
+			transferHandlerForDrag.exportAsDrag(componentForDrag, e, TransferHandler.COPY);
 		}
 	}
 
@@ -261,16 +299,8 @@ public class VertexComponent<V> extends JComponent implements Transferable {
 				+ GraphFormat.LOCATIONCENTERMODIFIER);
 	}
 
-	public void setGraphFormat(GraphFormat graphFormat) {
-		this.graphFormat = graphFormat;
-	}
-
-	public boolean isSelected() {
-		return isSelected;
-	}
-
-	public void setSelected(boolean isSelected) {
-		this.isSelected = isSelected;
+	public VertexComponentModel<V> getVertexComponentModel() {
+		return this.model;
 	}
 	// End of other Methods
 }

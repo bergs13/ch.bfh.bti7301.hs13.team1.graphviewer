@@ -5,7 +5,6 @@
  */
 package logic;
 
-import java.util.ArrayList;
 import java.util.Iterator;
 import logic.extlib.Edge;
 import logic.extlib.Graph;

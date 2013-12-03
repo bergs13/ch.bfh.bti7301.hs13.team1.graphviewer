@@ -29,6 +29,7 @@ import javax.swing.JPopupMenu;
 import defs.EdgeFormat;
 import defs.FormatHelper;
 import defs.GraphFormat;
+import defs.ModelEventConstants;
 import defs.VertexFormat;
 import ui.painters.EdgePainter;
 import logic.extlib.Edge;
@@ -36,6 +37,7 @@ import logic.extlib.IncidenceListGraph;
 import logic.extlib.Vertex;
 import logic.DragAndDropTransferHandler;
 import logic.GraphPanelModel;
+import logic.VertexComponentModel;
 import logic.VisualizationCalculator;
 
 @SuppressWarnings("serial")
@@ -43,10 +45,8 @@ public class GraphPanel<V, E> extends JComponent implements Observer {
 	private GraphPanelModel<V, E> model = null;
 	private final Map<Vertex<V>, VertexComponent<V>> vertexVertexComponents = new HashMap<Vertex<V>, VertexComponent<V>>();
 	private JMenuItem menuItemAddVertex = new JMenuItem("Add");
-	private JMenuItem menuItemDelVertex = new JMenuItem("Delete");
 	private JMenuItem menuItemUpdGraphFormat = new JMenuItem(
 			"Change graph format");
-	private JMenuItem menuItemUpdVertexFormat = new JMenuItem("Change format");
 	private JPopupMenu popupMenu = new JPopupMenu();
 
 	// End of Members
@@ -75,15 +75,21 @@ public class GraphPanel<V, E> extends JComponent implements Observer {
 		itV = model.getGraph().vertices();
 		while (itV.hasNext()) {
 			final Vertex<V> v = itV.next();
-			final VertexComponent<V> vComp = new VertexComponent<V>(v,
+			VertexComponentModel<V> vModel = new VertexComponentModel<>(v,
 					model.getGraphFormat());
+			vModel.addObserver(this);
+			final VertexComponent<V> vComp = new VertexComponent<V>(vModel);
 			vComp.setCircleCenterLocation(centerPoints[centerPointIndex]);
 			// component selection
 			vComp.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mousePressed(MouseEvent e) {
 					// overwrites the selection in the model (Vertex)
-					model.setSelectedVertex(v);
+					model.setSelectedVertex(v); 
+			        if(e.isMetaDown() && !e.isPopupTrigger())  
+			        {  
+			        	vComp.getComponentPopupMenu().show(vComp, e.getX(), e.getY());  
+			        }  
 				}
 			});
 			this.vertexVertexComponents.put(v, vComp);
@@ -123,10 +129,9 @@ public class GraphPanel<V, E> extends JComponent implements Observer {
 		// .. and edges
 		repaintEdges();
 
-		// context menu and actions
-		// manipulation
-		popupMenu.add(menuItemAddVertex);
-		menuItemAddVertex.addActionListener(new ActionListener() {
+		// context menu and menu items
+		this.popupMenu.add(this.menuItemAddVertex);
+		this.menuItemAddVertex.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				VertexAddDialog<V> vAddDialog = new VertexAddDialog<V>(model
@@ -138,16 +143,8 @@ public class GraphPanel<V, E> extends JComponent implements Observer {
 				}
 			}
 		});
-		popupMenu.add(menuItemDelVertex);
-		menuItemDelVertex.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				model.deleteSelectedVertex();
-			}
-		});
-		// format
-		popupMenu.add(menuItemUpdGraphFormat);
-		menuItemUpdGraphFormat.addActionListener(new ActionListener() {
+		this.popupMenu.add(this.menuItemUpdGraphFormat);
+		this.menuItemUpdGraphFormat.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				GraphFormat format = model.getGraphFormat();
@@ -161,19 +158,7 @@ public class GraphPanel<V, E> extends JComponent implements Observer {
 				}
 			}
 		});
-		popupMenu.add(menuItemUpdVertexFormat);
-		menuItemUpdVertexFormat.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				VertexFormatDialog vFormatDialog = new VertexFormatDialog(model
-						.getSelectedVertexFormat());
-				vFormatDialog.setVisible(true);
-				if (vFormatDialog.getSaved()) {
-					model.setSelectedVertexFormat(vFormatDialog.getFormat());
-				}
-			}
-		});
-		this.setComponentPopupMenu(popupMenu);
+		this.setComponentPopupMenu(this.popupMenu);
 	}
 
 	// End of Constructors
@@ -186,8 +171,10 @@ public class GraphPanel<V, E> extends JComponent implements Observer {
 		}
 
 		// GUI update
-		VertexComponent<V> vComp = new VertexComponent<V>(vertex,
+		VertexComponentModel<V> vModel = new VertexComponentModel<>(vertex,
 				model.getGraphFormat());
+		vModel.addObserver(this);
+		VertexComponent<V> vComp = new VertexComponent<V>(vModel);
 		// Find position for new vertex
 		vComp.setCircleCenterLocation(new Point(1 * 75, 1 * 100));
 		// add to list
@@ -413,41 +400,68 @@ public class GraphPanel<V, E> extends JComponent implements Observer {
 	public void update(Observable observable, Object objArgs) {
 		// Argumente müssen bestimmte Form haben
 		if (String.class.isInstance(objArgs)) {
-			if ((objArgs).equals("selection")) {
+
+			String eventConstant = (String) objArgs;
+			if (eventConstant.equals(ModelEventConstants.GRAPHFORMAT)) {
+				for (VertexComponent<V> comp : this.vertexVertexComponents
+						.values()) {
+					repaintVertexComponent(comp);
+				}
+				repaintEdges();
+			} else if (eventConstant.equals(ModelEventConstants.VERTEX)) {
+				Vertex<V> changedV = this.model.getChangedVertex();
+				if (null == changedV) {
+					// Delete
+					// Remove from list and GUI
+					VertexComponent<V> comp = this.vertexVertexComponents
+							.remove(changedV);
+					// Remove the component
+					this.remove(comp);
+					comp = null;
+				} else if (this.vertexVertexComponents.containsKey(changedV)) {
+					VertexComponent<V> vComp = this.vertexVertexComponents
+							.get(changedV);
+					// Update
+					repaintVertexComponent(vComp);
+				} else {
+					// Add
+					addAndPaintVertexComponent(changedV);
+				}
+			} else if (eventConstant
+					.equals(ModelEventConstants.VERTEXSELECTION)) {
 				// clear old selection
 				clearVertexComponentSelection();
-				if (null != model.getSelectedVertex()) {
+				if (null != this.model.getSelectedVertex()) {
 					// set new selection if available
-					if (vertexVertexComponents.containsKey(model
+					if (vertexVertexComponents.containsKey(this.model
 							.getSelectedVertex())) {
-						selectVertexComponent(vertexVertexComponents.get(model
-								.getSelectedVertex()));
+						selectVertexComponent(vertexVertexComponents
+								.get(this.model.getSelectedVertex()));
 					}
 				}
-			}
-		} else if (GraphFormat.class.equals(objArgs)) {
-			for (VertexComponent<V> comp : this.vertexVertexComponents.values()) {
-				repaintVertexComponent(comp);
-			}
-			repaintEdges();
-		} else if (Vertex.class.isInstance(objArgs)) {
-			Vertex<V> vertex = (Vertex<V>) objArgs;
-			if (null == vertex) {
-				// Delete
-				// Remove from list and GUI
-				VertexComponent<V> comp = this.vertexVertexComponents
-						.remove(vertex);
-				// Remove the component
-				this.remove(comp);
-				comp = null;
-			} else if (this.vertexVertexComponents.containsKey(vertex)) {
-				VertexComponent<V> vComp = this.vertexVertexComponents
-						.get(vertex);
-				// Update
-				repaintVertexComponent(vComp);
-			} else {
-				// Add
-				addAndPaintVertexComponent(vertex);
+			} else if (eventConstant
+					.equals(ModelEventConstants.ADDVERTEXTOSELECTED)) {
+				if (null != this.model.getSelectedVertex()) {
+					this.model.addVertex(this.model.getSelectedVertex(),
+							new VertexFormat());
+				}
+			} else if (eventConstant
+					.equals(ModelEventConstants.DELETESELECTEDVERTEX)) {
+				if (null != this.model.getSelectedVertex()) {
+					this.model.deleteSelectedVertex();
+				}
+			} else if (eventConstant
+					.equals(ModelEventConstants.CHANGESELECTEDVERTEXFORMAT)) {
+				if (null != this.model.getSelectedVertex()) {
+					if (this.vertexVertexComponents.containsKey(this.model
+							.getSelectedVertex())) {
+						VertexComponent<V> vComp = this.vertexVertexComponents
+								.get(this.model.getSelectedVertex());
+						model.setSelectedVertexFormat(vComp
+								.getVertexComponentModel()
+								.getChangedVertexFormat());
+					}
+				}
 			}
 		}
 	}
@@ -455,7 +469,6 @@ public class GraphPanel<V, E> extends JComponent implements Observer {
 	// End of observer methods
 
 	// Helper methods
-
 	/**
 	 * calculate the edge length by the source and target vertex (via graph) and
 	 * set the format
@@ -510,14 +523,16 @@ public class GraphPanel<V, E> extends JComponent implements Observer {
 	}
 
 	private void selectVertexComponent(VertexComponent<V> vComp) {
-		vComp.setSelected(true);
+		VertexComponentModel<V> model = vComp.getVertexComponentModel();
+		model.setSelected(true);
 		repaintVertexComponent(vComp);
 	}
 
 	private void clearVertexComponentSelection() {
 		for (VertexComponent<V> vComp : vertexVertexComponents.values()) {
-			if (vComp.isSelected) {
-				vComp.setSelected(false);
+			VertexComponentModel<V> model = vComp.getVertexComponentModel();
+			if (model.isSelected()) {
+				model.setSelected(false);
 				repaintVertexComponent(vComp);
 			}
 		}

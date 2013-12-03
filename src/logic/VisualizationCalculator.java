@@ -1,7 +1,6 @@
 package logic;
 
 import java.awt.Point;
-import java.util.ArrayList;
 import defs.VectorR2;
 
 public class VisualizationCalculator {

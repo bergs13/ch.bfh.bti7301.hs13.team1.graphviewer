@@ -6,9 +6,6 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Observable;
-import java.util.Observer;
-
-import defs.FormatHelper;
 
 /**
  * A implementation of the Graph interface based on incidence lists (at each vertex a list of 

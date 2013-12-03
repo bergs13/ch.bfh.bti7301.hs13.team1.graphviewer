@@ -55,8 +55,12 @@ public class EdgeFormat {
 		return included;
 	}
 
-	public void setInMSF(boolean inMSF) {
-		this.included = inMSF;
+	public void setInMSF() {
+		this.included = true;
+		this.active = false;
+	}
+	public void setNotInMSF(){
+		this.reset();
 	}
 
 	public String getLabel() {

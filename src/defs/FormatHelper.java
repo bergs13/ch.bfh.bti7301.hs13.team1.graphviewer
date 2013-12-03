@@ -17,4 +17,33 @@ public class FormatHelper {
 		}
 		return returnValue;
 	}
+
+	public static void updateFormat(Decorable decorable) {
+
+		if (decorable.has(FORMAT)) {
+
+		}
+
+		if (decorable.has(PublicConstants.VISITED)
+				|| decorable.has(PublicConstants.MSF)) {
+			if (decorable.get(FORMAT).getClass().isInstance(VertexFormat.class)) {
+				VertexFormat vformat = (VertexFormat) decorable.get(FORMAT);
+				vformat.setVisited();
+			}
+			if (decorable.get(FORMAT).getClass().isInstance(EdgeFormat.class)) {
+				EdgeFormat eformat = (EdgeFormat) decorable.get(FORMAT);
+				eformat.setInMSF();
+			}
+		} else {
+			if (decorable.get(FORMAT).getClass().isInstance(VertexFormat.class)) {
+				VertexFormat vformat = (VertexFormat) decorable.get(FORMAT);
+				vformat.setUnvisited();
+				;
+			}
+			if (decorable.get(FORMAT).getClass().isInstance(EdgeFormat.class)) {
+				EdgeFormat eformat = (EdgeFormat) decorable.get(FORMAT);
+				eformat.setNotInMSF();
+			}
+		}
+	}
 }

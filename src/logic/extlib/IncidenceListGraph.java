@@ -415,6 +415,7 @@ public class IncidenceListGraph<V,E> implements Graph<V, E> {
 			Object value = DUMMY;
 			if (val != null) value = val;
 			attrs.put(attr, value);
+			FormatHelper.updateFormat(this);
 			this.setChanged();
 			this.notifyObservers();
 		}
@@ -423,6 +424,7 @@ public class IncidenceListGraph<V,E> implements Graph<V, E> {
 		public Object destroy(Object attr) {
 			Object ret = attrs.get(attr);
 			attrs.remove(attr);
+			FormatHelper.updateFormat(this);
 			this.setChanged();
 			this.notifyObservers();
 			return ret;

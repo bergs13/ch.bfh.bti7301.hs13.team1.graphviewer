@@ -24,8 +24,8 @@ public class FormatHelper {
 
 		}
 
-		if (decorable.has(PublicConstants.VISITED)
-				|| decorable.has(PublicConstants.MSF)) {
+		if (decorable.has(DecorableConstants.VISITED)
+				|| decorable.has(DecorableConstants.MSF)) {
 			if (decorable.get(FORMAT).getClass().isInstance(VertexFormat.class)) {
 				VertexFormat vformat = (VertexFormat) decorable.get(FORMAT);
 				vformat.setVisited();

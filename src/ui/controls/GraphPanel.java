@@ -85,11 +85,11 @@ public class GraphPanel<V, E> extends JComponent implements Observer {
 				@Override
 				public void mousePressed(MouseEvent e) {
 					// overwrites the selection in the model (Vertex)
-					model.setSelectedVertex(v); 
-			        if(e.isMetaDown() && !e.isPopupTrigger())  
-			        {  
-			        	vComp.getComponentPopupMenu().show(vComp, e.getX(), e.getY());  
-			        }  
+					model.setSelectedVertex(v);
+					if (e.isMetaDown() && !e.isPopupTrigger()) {
+						vComp.getComponentPopupMenu().show(vComp, e.getX(),
+								e.getY());
+					}
 				}
 			});
 			this.vertexVertexComponents.put(v, vComp);
@@ -410,23 +410,27 @@ public class GraphPanel<V, E> extends JComponent implements Observer {
 				repaintEdges();
 			} else if (eventConstant.equals(ModelEventConstants.VERTEX)) {
 				Vertex<V> changedV = this.model.getChangedVertex();
-				if (null == changedV) {
-					// Delete
-					// Remove from list and GUI
-					VertexComponent<V> comp = this.vertexVertexComponents
-							.remove(changedV);
-					// Remove the component
-					this.remove(comp);
-					comp = null;
-				} else if (this.vertexVertexComponents.containsKey(changedV)) {
-					VertexComponent<V> vComp = this.vertexVertexComponents
-							.get(changedV);
-					// Update
-					repaintVertexComponent(vComp);
-				} else {
-					// Add
-					addAndPaintVertexComponent(changedV);
+				if (null != changedV) {
+					if (this.vertexVertexComponents.containsKey(changedV)) {
+						VertexComponent<V> vComp = this.vertexVertexComponents
+								.get(changedV);
+						// Update
+						repaintVertexComponent(vComp);
+					} else {
+						// Add
+						addAndPaintVertexComponent(changedV);
+					}
 				}
+			} else if (eventConstant.equals(ModelEventConstants.VERTEXDELETED)) {
+				Vertex<V> changedV = this.model.getChangedVertex();
+				// Delete
+				// Remove from list
+				VertexComponent<V> comp = this.vertexVertexComponents.remove(changedV);
+				changedV = null;
+				// Remove from gui
+				this.remove(comp);
+				comp = null;
+				repaintEdges();
 			} else if (eventConstant
 					.equals(ModelEventConstants.VERTEXSELECTION)) {
 				// clear old selection

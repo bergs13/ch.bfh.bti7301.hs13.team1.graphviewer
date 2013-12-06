@@ -4,6 +4,7 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
+import java.awt.Rectangle;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.awt.event.ActionEvent;
@@ -20,8 +21,10 @@ import javax.swing.TransferHandler;
 import logic.extlib.Vertex;
 import logic.DragAndDropTransferHandler;
 import logic.VertexComponentModel;
+import logic.VisualizationCalculator;
 import defs.FormatHelper;
 import defs.GraphFormat;
+import defs.VectorR2;
 import defs.VertexFormat;
 
 @SuppressWarnings("serial")
@@ -37,17 +40,16 @@ public class VertexComponent<V> extends JComponent implements Transferable {
 
 	// Constructors
 	public VertexComponent(final VertexComponentModel<V> model) {
+		if (null == model) {
+			throw new IllegalArgumentException(
+					"no model set for vertex component");
+		}
 		// set members
 		this.model = model;
 
 		// set vertex specific format
 		Vertex<V> vertex = model.getVertex();
-		VertexFormat format = FormatHelper
-				.getFormat(VertexFormat.class, vertex);
-		if (null == format) {
-			// Default-Format
-			format = new VertexFormat();
-		}
+		VertexFormat format = model.getFormat();
 		// default label if Vertex<String>
 		if ((null == format.getLabel() || format.getLabel().equals(""))
 				&& String.class.isInstance(vertex.element())) {
@@ -79,7 +81,7 @@ public class VertexComponent<V> extends JComponent implements Transferable {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				VertexFormatDialog vFormatDialog = new VertexFormatDialog(model
-						.getChangedVertexFormat());
+						.getFormat());
 				vFormatDialog.setVisible(true);
 				if (vFormatDialog.getSaved()) {
 					model.setChangedVertexFormat(vFormatDialog.getFormat());
@@ -101,13 +103,6 @@ public class VertexComponent<V> extends JComponent implements Transferable {
 		// Definierbare Sachen aus Vertex-Format (Muss vorhanden sein!)
 		VertexFormat format = FormatHelper
 				.getFormat(VertexFormat.class, vertex);
-		// // Definierbare Sachen aus Vertex-Format (�berschreiben wenn
-		// // Vertex-Format implementiert)
-		// Color inactiveColor = new Color(0, 0, 255);
-		// Color activeColor = new Color(255, 0, 0);
-		// boolean active = true;
-		// boolean textVisible = true;
-		// String displayText = "V";
 
 		// Vertex mit innerem und �usserem Kreis
 		Ellipse2D outer = new Ellipse2D.Double(0, 0,
@@ -123,11 +118,18 @@ public class VertexComponent<V> extends JComponent implements Transferable {
 		g2.setColor(graphFormat.getUnvisitedColor());
 		g2.fill(inner);
 
-		// Label Vertex
-		g2.setColor(graphFormat.getVisitedColor());
-		JLabel label = new JLabel(format.getLabel());
-		// Verschieben zu Punkt
-		label.setLocation(this.getCircleCenterLocation());
+		// Draw the label for the vertex
+		if (graphFormat.isLabelVisible()) {
+			g2.setColor(graphFormat.getVisitedColor());
+			String label =format.getLabel();
+			if(null ==label)
+			{
+				label = "";
+			}
+			g2.drawString(label,
+					(int) Math.round(outer.getX()),
+					(int) Math.round(outer.getY()+ outer.getHeight()));
+		}
 
 		// Selektionsrahmen
 		if (model.isSelected()) {
@@ -256,11 +258,13 @@ public class VertexComponent<V> extends JComponent implements Transferable {
 	class DraggableMouseListener extends MouseAdapter {
 		JComponent componentForDrag = null;
 		TransferHandler transferHandlerForDrag = null;
+
 		@Override()
 		public void mousePressed(MouseEvent e) {
 			componentForDrag = (JComponent) e.getSource();
 			transferHandlerForDrag = componentForDrag.getTransferHandler();
-			transferHandlerForDrag.exportAsDrag(componentForDrag, e, TransferHandler.COPY);
+			transferHandlerForDrag.exportAsDrag(componentForDrag, e,
+					TransferHandler.COPY);
 		}
 	}
 

@@ -8,6 +8,9 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+
 import defs.VertexFormat;
 
 @SuppressWarnings("serial")
@@ -22,6 +25,9 @@ public class VertexFormatDialog extends JDialog {
 		this.setModalityType(ModalityType.APPLICATION_MODAL);
 		this.format = format;
 		this.label = format.getLabel();
+		if (null == this.label) {
+			this.label = "";
+		}
 
 		// Layout
 		this.setLayout(new GridLayout(2, 2));
@@ -32,11 +38,22 @@ public class VertexFormatDialog extends JDialog {
 		// Label
 		this.add(new JLabel("Label:"));
 		final JTextField labelField = new JTextField(this.label);
-		labelField.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
+		// Listen for changes in the text
+		labelField.getDocument().addDocumentListener(new DocumentListener() {
+			public void changedUpdate(DocumentEvent e) {
+				// text was changed
 				label = labelField.getText();
-			};
+			}
+
+			public void removeUpdate(DocumentEvent e) {
+				// text was deleted
+				label = labelField.getText();
+			}
+
+			public void insertUpdate(DocumentEvent e) {
+				// text was inserted
+				label = labelField.getText();
+			}
 		});
 		this.add(labelField);
 

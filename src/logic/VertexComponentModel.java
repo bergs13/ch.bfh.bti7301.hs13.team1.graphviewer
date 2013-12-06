@@ -2,6 +2,7 @@ package logic;
 
 import java.util.Observable;
 import logic.extlib.Vertex;
+import defs.FormatHelper;
 import defs.GraphFormat;
 import defs.ModelEventConstants;
 import defs.VertexFormat;
@@ -24,6 +25,7 @@ public class VertexComponentModel<V> extends Observable {
 
 		this.vertex = vertex;
 		this.graphFormat = graphFormat;
+		this.changedVertexFormat = getFormat();
 	}
 
 	// End of constructors
@@ -54,7 +56,14 @@ public class VertexComponentModel<V> extends Observable {
 		setChanged();
 		notifyObservers(ModelEventConstants.DELETESELECTEDVERTEX);
 	}
-
+	public VertexFormat getFormat() {
+		VertexFormat f = FormatHelper.getFormat(VertexFormat.class, this.vertex);
+		if (null == f) {
+			// Default-Format
+			f = new VertexFormat();
+		}
+		return f;
+	}
 	public VertexFormat getChangedVertexFormat() {
 		return this.changedVertexFormat;
 	}
@@ -64,5 +73,6 @@ public class VertexComponentModel<V> extends Observable {
 		setChanged();
 		notifyObservers(ModelEventConstants.CHANGESELECTEDVERTEXFORMAT);
 	}
+
 	// End of methods
 }

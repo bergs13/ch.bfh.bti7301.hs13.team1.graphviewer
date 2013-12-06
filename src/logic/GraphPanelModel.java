@@ -101,12 +101,11 @@ public class GraphPanelModel<V, E> extends Observable {
 			// Update data
 			// Remove Vertex
 			this.graph.removeVertex(this.selectedVertex);
-			this.selectedVertex = null;
-
+			
 			// Update UI
-			changedVertex = null;
+			changedVertex = this.selectedVertex;
 			setChanged();
-			notifyObservers(ModelEventConstants.VERTEX);
+			notifyObservers(ModelEventConstants.VERTEXDELETED);
 		}
 	}
 

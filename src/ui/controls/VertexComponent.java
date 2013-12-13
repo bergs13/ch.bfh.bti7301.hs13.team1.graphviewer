@@ -1,13 +1,9 @@
 package ui.controls;
 
-import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
-import java.awt.Rectangle;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.awt.event.ActionEvent;
@@ -15,14 +11,10 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Ellipse2D;
-import java.awt.geom.Rectangle2D;
-
 import javax.swing.BorderFactory;
 import javax.swing.JComponent;
-import javax.swing.JLabel;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
-import javax.swing.SwingUtilities;
 import javax.swing.TransferHandler;
 import logic.extlib.Vertex;
 import logic.DragAndDropTransferHandler;
@@ -30,7 +22,6 @@ import logic.VertexComponentModel;
 import logic.VisualizationCalculator;
 import defs.FormatHelper;
 import defs.GraphFormat;
-import defs.VectorR2;
 import defs.VertexFormat;
 
 @SuppressWarnings("serial")

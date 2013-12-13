@@ -1,14 +1,11 @@
 package ui.painters;
 
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Polygon;
 import java.awt.RenderingHints;
 import java.awt.geom.Line2D;
-import javax.swing.BorderFactory;
-import javax.swing.JLabel;
 import logic.VisualizationCalculator;
 import defs.EdgeFormat;
 import defs.GraphFormat;

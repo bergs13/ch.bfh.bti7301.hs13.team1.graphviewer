@@ -7,7 +7,6 @@ package ui;
 import logic.GraphPanelModel;
 import logic.extlib.IncidenceListGraph;
 import ui.controls.GraphPanel;
-import ui.controls.InformationPanel;
 
 /**
  * 

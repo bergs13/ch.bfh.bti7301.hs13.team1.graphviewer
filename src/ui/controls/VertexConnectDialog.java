@@ -9,20 +9,25 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
+
+import defs.CustomComboBoxItem;
+import defs.FormatHelper;
+import defs.VertexFormat;
+import logic.extlib.IncidenceListGraph;
 import logic.extlib.Vertex;
 
 @SuppressWarnings("serial")
-public class VertexConnectDialog<V> extends JDialog {
+public class VertexConnectDialog<V, E> extends JDialog {
 	Vertex<V> sourceVertex = null;
 	Vertex<V> targetVertex = null;
 	// saved when closed?
 	boolean saved = false;
 
-	public VertexConnectDialog(Iterator<Vertex<V>> itV) {
-		this(itV, false);
+	public VertexConnectDialog(IncidenceListGraph<V, E> graph) {
+		this(graph, false);
 	}
 
-	public VertexConnectDialog(Iterator<Vertex<V>> itV,
+	public VertexConnectDialog(IncidenceListGraph<V, E> graph,
 			boolean sourceVertexGiven) {
 		super();
 		this.setModalityType(ModalityType.APPLICATION_MODAL);
@@ -34,19 +39,33 @@ public class VertexConnectDialog<V> extends JDialog {
 		this.setMaximumSize(new Dimension(200, height));
 
 		// Input fields
+		Vertex<V> key = null;
+		VertexFormat formatForValue;
+		String value;
+		Iterator<Vertex<V>> itV;
 		if (!sourceVertexGiven) {
 			// Source vertex
 			this.add(new JLabel("Source vertex:"));
-			final JComboBox<Vertex<V>> cBSV = new JComboBox<Vertex<V>>();
+
+			final JComboBox<CustomComboBoxItem> cBSV = new JComboBox<CustomComboBoxItem>();
+			itV = graph.vertices();
 			while (itV.hasNext()) {
-				cBSV.addItem(itV.next());
+				key = itV.next();
+				formatForValue = FormatHelper
+						.getFormat(VertexFormat.class, key);
+				value = "";
+				if (null != formatForValue && null != formatForValue.getLabel()) {
+					value = formatForValue.getLabel();
+				}
+				cBSV.addItem(new CustomComboBoxItem(key, value));
 			}
 			// Default selection
-			sourceVertex = (Vertex<V>) cBSV.getSelectedItem();
+			sourceVertex = key;
 			cBSV.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent arg0) {
-					sourceVertex = (Vertex<V>) cBSV.getSelectedItem();
+					sourceVertex = (Vertex<V>) ((CustomComboBoxItem) cBSV
+							.getSelectedItem()).getKey();
 				};
 			});
 			this.add(cBSV);
@@ -54,16 +73,25 @@ public class VertexConnectDialog<V> extends JDialog {
 
 		// Target vertex
 		this.add(new JLabel("Target vertex:"));
-		final JComboBox<Vertex<V>> cBTV = new JComboBox<Vertex<V>>();
+		final JComboBox<CustomComboBoxItem> cBTV = new JComboBox<CustomComboBoxItem>();
+		key = null;
+		itV = graph.vertices();
 		while (itV.hasNext()) {
-			cBTV.addItem(itV.next());
+			key = itV.next();
+			formatForValue = FormatHelper.getFormat(VertexFormat.class, key);
+			value = "";
+			if (null != formatForValue && null != formatForValue.getLabel()) {
+				value = formatForValue.getLabel();
+			}
+			cBTV.addItem(new CustomComboBoxItem(key, value));
 		}
 		// Default selection
-		targetVertex = (Vertex<V>) cBTV.getSelectedItem();
+		targetVertex = key;
 		cBTV.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				targetVertex = (Vertex<V>) cBTV.getSelectedItem();
+				targetVertex = (Vertex<V>) ((CustomComboBoxItem) cBTV
+						.getSelectedItem()).getKey();
 			};
 		});
 		this.add(cBTV);

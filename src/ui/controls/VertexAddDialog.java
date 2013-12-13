@@ -12,7 +12,9 @@ import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-
+import defs.CustomComboBoxItem;
+import defs.FormatHelper;
+import defs.VertexFormat;
 import logic.extlib.Vertex;
 
 @SuppressWarnings("serial")
@@ -40,16 +42,27 @@ public class VertexAddDialog<V> extends JDialog {
 		// Source vertex
 		if (!sourceVertexGiven) {
 			this.add(new JLabel("Source vertex:"));
-			final JComboBox<Vertex<V>> cBV = new JComboBox<Vertex<V>>();
+			final JComboBox<CustomComboBoxItem> cBV = new JComboBox<CustomComboBoxItem>();
+			Vertex<V> key = null;
+			VertexFormat formatForValue;
+			String value;
 			while (itV.hasNext()) {
-				cBV.addItem(itV.next());
+				key = itV.next();
+				formatForValue = FormatHelper
+						.getFormat(VertexFormat.class, key);
+				value = "";
+				if (null != formatForValue && null != formatForValue.getLabel()) {
+					value = formatForValue.getLabel();
+				}
+				cBV.addItem(new CustomComboBoxItem(key, value));
 			}
 			// Default selection
-			sourceVertex = (Vertex<V>) cBV.getSelectedItem();
+			sourceVertex = key;
 			cBV.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent arg0) {
-					sourceVertex = (Vertex<V>) cBV.getSelectedItem();
+					sourceVertex = (Vertex<V>) ((CustomComboBoxItem) cBV
+							.getSelectedItem()).getKey();
 				};
 			});
 			this.add(cBV);

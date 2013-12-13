@@ -2,7 +2,6 @@ package logic;
 
 import java.util.Observable;
 import logic.extlib.Vertex;
-import defs.DecorableConstants;
 import defs.FormatHelper;
 import defs.GraphFormat;
 import defs.ModelEventConstants;

@@ -146,8 +146,8 @@ public class GraphPanel<V, E> extends JComponent implements Observer {
 		this.menuItemConnectVertices.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				VertexConnectDialog<V> vConnectDialog = new VertexConnectDialog<V>(
-						model.getGraph().vertices());
+				VertexConnectDialog<V, E> vConnectDialog = new VertexConnectDialog<V, E>(
+						model.getGraph());
 				vConnectDialog.setVisible(true);
 				if (vConnectDialog.getSaved()) {
 					model.connectVertices(vConnectDialog.getSourceVertex(),
@@ -502,8 +502,8 @@ public class GraphPanel<V, E> extends JComponent implements Observer {
 			} else if (eventConstant
 					.equals(ModelEventConstants.CONNECTVERTEXTOSELECTED)) {
 				if (null != this.model.getSelectedVertex()) {
-					VertexConnectDialog<V> vConnectDialog = new VertexConnectDialog<V>(
-							model.getGraph().vertices(), true);
+					VertexConnectDialog<V, E> vConnectDialog = new VertexConnectDialog<V, E>(
+							model.getGraph(), true);
 					vConnectDialog.setVisible(true);
 					if (vConnectDialog.getSaved()) {
 						model.connectVertices(this.model.getSelectedVertex(),

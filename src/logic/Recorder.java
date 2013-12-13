@@ -5,10 +5,9 @@
  */
 package logic;
 
-import java.util.Iterator;
-import logic.extlib.Edge;
+import java.util.Stack;
 import logic.extlib.Graph;
-import logic.extlib.Vertex;
+import logic.extlib.IncidenceListGraph;
 
 /**
  *
@@ -19,29 +18,28 @@ import logic.extlib.Vertex;
 public class Recorder<V, E> {
 
     //Members
-    private final Graph<V, E> graph;
-   // private ArrayList<Memento> graphs;
+    private GraphDataProcessor processor;
+    private final Stack graphstack= new Stack();
     //End of Members
     
     //Constructors
-    public Recorder(Graph g) {
-        graph = g;
-        
-
+    public Recorder() {
+        processor = new GraphDataProcessor();
     }
     //End of constructors
     
-    public void breakPoint(Object element) {
-
-        Iterator<Vertex<V>> vertexIterator = graph.vertices();
-        while (vertexIterator.hasNext()) {
-
-        }
-        Iterator<Edge<E>> edgeIterator = graph.edges();
-
-        while (edgeIterator.hasNext()) {
-
-        }
-
+    public void add(Graph graph) {
+        String storedgraph = ""; //processor.exportGraph(graph);
+        graphstack.push(storedgraph);
     }
+    public IncidenceListGraph remove(){
+        if (!graphstack.empty()){
+        IncidenceListGraph graph = new IncidenceListGraph(true);//processor.importGraph(graphstack.pop());
+        return graph;
+        }
+        else {
+        return null;
+        }
+    } 
+  
 }

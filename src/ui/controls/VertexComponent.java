@@ -84,7 +84,7 @@ public class VertexComponent<V> extends JComponent implements Transferable {
 						.getFormat());
 				vFormatDialog.setVisible(true);
 				if (vFormatDialog.getSaved()) {
-					model.setChangedVertexFormat(vFormatDialog.getFormat());
+					model.updateFormat(vFormatDialog.getFormat());
 				}
 			}
 		});

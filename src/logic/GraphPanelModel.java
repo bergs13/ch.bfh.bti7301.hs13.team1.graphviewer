@@ -62,13 +62,8 @@ public class GraphPanelModel<V, E> extends Observable {
 
 	public void setSelectedVertexFormat(VertexFormat newFormat) {
 		if (null != this.selectedVertex && null != newFormat) {
-			// Update Format
-			this.selectedVertex.set(FormatHelper.FORMAT, newFormat);
-
-			// Update UI
-			changedVertex = this.selectedVertex;
-			setChanged();
-			notifyObservers(ModelEventConstants.VERTEX);
+			// Update Format (Decorable implementation notifies the gui
+			this.selectedVertex.set(FormatHelper.FORMAT, newFormat);	
 		}
 	}
 
@@ -93,7 +88,7 @@ public class GraphPanelModel<V, E> extends Observable {
 		// Update UI
 		changedVertex = vNew;
 		setChanged();
-		notifyObservers(ModelEventConstants.VERTEX);
+		notifyObservers(ModelEventConstants.VERTEXADDED);
 	}
 
 	public void deleteSelectedVertex() {

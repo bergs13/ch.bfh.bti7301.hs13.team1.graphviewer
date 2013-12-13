@@ -418,7 +418,7 @@ public class IncidenceListGraph<V,E> implements Graph<V, E> {
 			attrs.put(attr, value);
 			FormatHelper.updateFormat(this);
 			this.setChanged();
-			this.notifyObservers();
+			this.notifyObservers(this);
 		}
 
 		@Override
@@ -427,18 +427,17 @@ public class IncidenceListGraph<V,E> implements Graph<V, E> {
 			attrs.remove(attr);
 			FormatHelper.updateFormat(this);
 			this.setChanged();
-			this.notifyObservers();
+			this.notifyObservers(this);
 			return ret;
-			
 		}
 
 		@Override
 		public void clearAll() {
 			attrs.clear();
+			//Set event decorable null if all are affected
+			Decorable all = null;
 			this.setChanged();
-			this.notifyObservers();
+			this.notifyObservers(all);
 		}
-
 	}
-
 } 

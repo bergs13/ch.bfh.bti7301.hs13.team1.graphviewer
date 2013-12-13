@@ -12,7 +12,6 @@ public class VertexComponentModel<V> extends Observable {
 	private Vertex<V> vertex = null;
 	private GraphFormat graphFormat = null;
 	boolean isSelected = false;
-	VertexFormat changedVertexFormat = null;
 
 	// End of members
 
@@ -25,7 +24,6 @@ public class VertexComponentModel<V> extends Observable {
 
 		this.vertex = vertex;
 		this.graphFormat = graphFormat;
-		this.changedVertexFormat = getFormat();
 	}
 
 	// End of constructors
@@ -56,23 +54,19 @@ public class VertexComponentModel<V> extends Observable {
 		setChanged();
 		notifyObservers(ModelEventConstants.DELETESELECTEDVERTEX);
 	}
+
 	public VertexFormat getFormat() {
-		VertexFormat f = FormatHelper.getFormat(VertexFormat.class, this.vertex);
+		VertexFormat f = FormatHelper
+				.getFormat(VertexFormat.class, this.vertex);
 		if (null == f) {
 			// Default-Format
 			f = new VertexFormat();
 		}
 		return f;
 	}
-	public VertexFormat getChangedVertexFormat() {
-		return this.changedVertexFormat;
+	public void updateFormat(VertexFormat newFormat) {
+		//observable implementation notifies the gui
+		this.vertex.set(FormatHelper.FORMAT, newFormat);
 	}
-
-	public void setChangedVertexFormat(VertexFormat newFormat) {
-		this.changedVertexFormat = newFormat;
-		setChanged();
-		notifyObservers(ModelEventConstants.CHANGESELECTEDVERTEXFORMAT);
-	}
-
 	// End of methods
 }

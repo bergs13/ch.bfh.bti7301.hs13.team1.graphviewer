@@ -32,6 +32,7 @@ import defs.GraphFormat;
 import defs.ModelEventConstants;
 import defs.VertexFormat;
 import ui.painters.EdgePainter;
+import logic.extlib.Decorable;
 import logic.extlib.Edge;
 import logic.extlib.IncidenceListGraph;
 import logic.extlib.Vertex;
@@ -57,20 +58,33 @@ public class GraphPanel<V, E> extends JComponent implements Observer {
 			throw new IllegalArgumentException("no model set for graph panel");
 		}
 		this.model = model;
-		this.model.addObserver(this);
 
-		// Count vertices/circles for alignment (n)
+		// Add all observables handled here to this observer (the model and all
+		// vertices/edges
+		this.model.addObserver(this);
+		Observable observableDecorable = null;
+		// vertices
 		int n = 0;
 		Iterator<Vertex<V>> itV = model.getGraph().vertices();
 		while (itV.hasNext()) {
-			itV.next();
+			observableDecorable = (Observable) (Decorable) itV.next();
+			observableDecorable.addObserver(this);
+			// Count vertices/circles for alignment (n)
 			n++;
 		}
+		// edges
+		Iterator<Edge<E>> itE = model.getGraph().edges();
+		while (itE.hasNext()) {
+			observableDecorable = (Observable) (Decorable) itE.next();
+			observableDecorable.addObserver(this);
+		}
+
 		// calculate circular points
 		Point[] centerPoints = VisualizationCalculator
 				.getCircularAlignedPoints(n, GraphFormat.OUTERCIRCLEDIAMETER,
 						GraphFormat.ARROWTRIANGLEHEIGHT * 2);
 		int centerPointIndex = 0;
+
 		// add the vertices as components
 		itV = model.getGraph().vertices();
 		while (itV.hasNext()) {
@@ -97,7 +111,7 @@ public class GraphPanel<V, E> extends JComponent implements Observer {
 		}
 		// calculate the edges for the components
 		for (Vertex<V> vertex : this.vertexVertexComponents.keySet()) {
-			Iterator<Edge<E>> itE = model.getGraph().incidentEdges(vertex);
+			itE = model.getGraph().incidentEdges(vertex);
 			while (itE.hasNext()) {
 				reCalculateAndSetEdgeFormatPoints(vertex, itE.next());
 			}
@@ -399,38 +413,54 @@ public class GraphPanel<V, E> extends JComponent implements Observer {
 	@Override
 	public void update(Observable observable, Object objArgs) {
 		// Argumente müssen bestimmte Form haben
-		if (String.class.isInstance(objArgs)) {
+		if (Observable.class.isInstance(objArgs)) {
+			if (null == objArgs) {
+				// repaint all observables
+			}
+			if (null != objArgs) {
+				// repaint observable
+				if (Vertex.class.isInstance(objArgs)) {
+					Vertex<V> vToRepaint = (Vertex<V>) objArgs;
+					if (this.vertexVertexComponents.containsKey(vToRepaint)) {
+						repaintVertexComponent(this.vertexVertexComponents
+								.get(vToRepaint));
+					}
+				} else {
+					repaintEdges();
+				}
+			}
+		} else if (String.class.isInstance(objArgs)) {
 
 			String eventConstant = (String) objArgs;
 			if (eventConstant.equals(ModelEventConstants.GRAPHFORMAT)) {
+				// repaint all vertices and edges
 				for (VertexComponent<V> comp : this.vertexVertexComponents
 						.values()) {
 					repaintVertexComponent(comp);
 				}
 				repaintEdges();
-			} else if (eventConstant.equals(ModelEventConstants.VERTEX)) {
+			} else if (eventConstant.equals(ModelEventConstants.VERTEXADDED)) {
 				Vertex<V> changedV = this.model.getChangedVertex();
 				if (null != changedV) {
-					if (this.vertexVertexComponents.containsKey(changedV)) {
-						VertexComponent<V> vComp = this.vertexVertexComponents
-								.get(changedV);
-						// Update
-						repaintVertexComponent(vComp);
-					} else {
+					if (!this.vertexVertexComponents.containsKey(changedV)) {
 						// Add
 						addAndPaintVertexComponent(changedV);
 					}
 				}
 			} else if (eventConstant.equals(ModelEventConstants.VERTEXDELETED)) {
 				Vertex<V> changedV = this.model.getChangedVertex();
-				// Delete
-				// Remove from list
-				VertexComponent<V> comp = this.vertexVertexComponents.remove(changedV);
-				changedV = null;
-				// Remove from gui
-				this.remove(comp);
-				comp = null;
-				repaintEdges();
+				if (null != changedV
+						&& this.vertexVertexComponents.containsKey(changedV)) {
+					// Delete
+					// Remove from list
+					VertexComponent<V> comp = this.vertexVertexComponents
+							.remove(changedV);
+					changedV = null;
+					// Remove from gui
+					this.remove(comp);
+					comp = null;
+					repaintEdges();
+				}
 			} else if (eventConstant
 					.equals(ModelEventConstants.VERTEXSELECTION)) {
 				// clear old selection
@@ -453,18 +483,6 @@ public class GraphPanel<V, E> extends JComponent implements Observer {
 					.equals(ModelEventConstants.DELETESELECTEDVERTEX)) {
 				if (null != this.model.getSelectedVertex()) {
 					this.model.deleteSelectedVertex();
-				}
-			} else if (eventConstant
-					.equals(ModelEventConstants.CHANGESELECTEDVERTEXFORMAT)) {
-				if (null != this.model.getSelectedVertex()) {
-					if (this.vertexVertexComponents.containsKey(this.model
-							.getSelectedVertex())) {
-						VertexComponent<V> vComp = this.vertexVertexComponents
-								.get(this.model.getSelectedVertex());
-						model.setSelectedVertexFormat(vComp
-								.getVertexComponentModel()
-								.getChangedVertexFormat());
-					}
 				}
 			}
 		}

@@ -5,9 +5,7 @@ import java.awt.dnd.DragSourceDragEvent;
 import java.awt.dnd.DragSourceMotionListener;
 import javax.swing.JComponent;
 import javax.swing.TransferHandler;
-
 import ui.controls.VertexComponent;
-
 /**
  * <p>
  * Used by both the draggable class and the target for negotiating data.
@@ -22,6 +20,8 @@ import ui.controls.VertexComponent;
 @SuppressWarnings("serial")
 public class DragAndDropTransferHandler extends TransferHandler implements
 		DragSourceMotionListener {
+	Transferable transferable = null;
+	
 	public DragAndDropTransferHandler() {
 		super();
 	}
@@ -37,13 +37,13 @@ public class DragAndDropTransferHandler extends TransferHandler implements
 	 */
 	@Override()
 	public Transferable createTransferable(JComponent c) {
+		transferable = null;
 		// Only components who implement Transferable
 		if (c instanceof Transferable) {
-			Transferable tip = (Transferable) c;
-			return tip;
+			transferable =(Transferable) c;
 		}
 		// Not found
-		return null;
+		return transferable;
 	}
 
 	public void dragMouseMoved(DragSourceDragEvent dsde) {

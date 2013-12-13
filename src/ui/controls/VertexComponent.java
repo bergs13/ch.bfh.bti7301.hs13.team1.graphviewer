@@ -1,6 +1,9 @@
 package ui.controls;
 
+import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
@@ -12,11 +15,14 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Ellipse2D;
+import java.awt.geom.Rectangle2D;
+
 import javax.swing.BorderFactory;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
+import javax.swing.SwingUtilities;
 import javax.swing.TransferHandler;
 import logic.extlib.Vertex;
 import logic.DragAndDropTransferHandler;
@@ -32,9 +38,16 @@ public class VertexComponent<V> extends JComponent implements Transferable {
 	// Members
 	private VertexComponentModel<V> model = null;
 	private JMenuItem menuItemAddVertex = new JMenuItem("Add");
+	private JMenuItem menuItemConnectVertices = new JMenuItem(
+			"Connect with other vertex");
 	private JMenuItem menuItemDelVertex = new JMenuItem("Delete");
 	private JMenuItem menuItemUpdVertexFormat = new JMenuItem("Change format");
 	private JPopupMenu popupMenu = new JPopupMenu();
+	// Drag & Drop
+	DataFlavor[] transferDataFlavors = null;
+	DataFlavor transferDataFlavor = null;
+
+	// End of Drag & Drop
 
 	// End of members
 
@@ -67,6 +80,13 @@ public class VertexComponent<V> extends JComponent implements Transferable {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				model.addVertex();
+			}
+		});
+		this.popupMenu.add(this.menuItemConnectVertices);
+		this.menuItemConnectVertices.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				model.connectVertices();
 			}
 		});
 		this.popupMenu.add(this.menuItemDelVertex);
@@ -121,14 +141,18 @@ public class VertexComponent<V> extends JComponent implements Transferable {
 		// Draw the label for the vertex
 		if (graphFormat.isLabelVisible()) {
 			g2.setColor(graphFormat.getVisitedColor());
-			String label =format.getLabel();
-			if(null ==label)
-			{
+			String label = format.getLabel();
+			if (null == label) {
 				label = "";
 			}
-			g2.drawString(label,
-					(int) Math.round(outer.getX()),
-					(int) Math.round(outer.getY()+ outer.getHeight()));
+			g2.drawString(
+					label,
+					(int) Math.round(inner.getCenterX()
+							- VisualizationCalculator.getStringWidth(g2,
+									g2.getFont(), label) / 2),
+					(int) Math.round(inner.getCenterY()
+							+ VisualizationCalculator.getStringHeight(g2,
+									g2.getFont(), label) / 4));
 		}
 
 		// Selektionsrahmen
@@ -173,9 +197,9 @@ public class VertexComponent<V> extends JComponent implements Transferable {
 	 * @return
 	 */
 	public Object getTransferData(DataFlavor flavor) {
-		DataFlavor thisFlavor = this.getTransferDataFlavors()[0];
+		transferDataFlavor = this.getTransferDataFlavors()[0];
 		// For now, assume wants this class... see loadDnD
-		if (thisFlavor != null && flavor.equals(thisFlavor)) {
+		if (transferDataFlavor != null && flavor.equals(transferDataFlavor)) {
 			return VertexComponent.this;
 		}
 		return null;
@@ -196,16 +220,15 @@ public class VertexComponent<V> extends JComponent implements Transferable {
 	 * @return
 	 */
 	public DataFlavor[] getTransferDataFlavors() {
-		DataFlavor[] flavors = { null };
+		transferDataFlavors = new DataFlavor[1];
 		try {
-			flavors[0] = VertexComponent
+			transferDataFlavors[0] = VertexComponent
 					.getDragAndDropVertexComponentDataFlavor();
 		} catch (Exception ex) {
 			System.err.println("Problem lazy loading: " + ex.getMessage());
 			ex.printStackTrace(System.err);
-			return null;
 		}
-		return flavors;
+		return transferDataFlavors;
 	}
 
 	/**
@@ -221,8 +244,7 @@ public class VertexComponent<V> extends JComponent implements Transferable {
 	 * @return True if DataFlavor is supported, otherwise false.
 	 */
 	public boolean isDataFlavorSupported(DataFlavor flavor) {
-		DataFlavor[] thisFlavors = getTransferDataFlavors();
-		for (DataFlavor tF : thisFlavors) {
+		for (DataFlavor tF : getTransferDataFlavors()) {
 			if (null != tF && tF.equals(flavor)) {
 				return true;
 			}
@@ -291,16 +313,13 @@ public class VertexComponent<V> extends JComponent implements Transferable {
 	}
 
 	public void setCircleCenterLocation(Point p) {
-		// Standard setLocation - Constant value for the circleCenter
-		this.setLocation(new Point(p.x - GraphFormat.LOCATIONCENTERMODIFIER,
-				p.y - GraphFormat.LOCATIONCENTERMODIFIER));
+		VertexFormat f = this.model.getFormat();
+		f.setCenterPoint(p.x, p.y);
+		this.model.updateFormat(f);
 	}
 
 	public Point getCircleCenterLocation() {
-		// Standard getLocation + Constant value for the circleCenter
-		Point p = this.getLocation();
-		return new Point(p.x + GraphFormat.LOCATIONCENTERMODIFIER, p.y
-				+ GraphFormat.LOCATIONCENTERMODIFIER);
+		return this.model.getFormat().getCenterPoint();
 	}
 
 	public VertexComponentModel<V> getVertexComponentModel() {

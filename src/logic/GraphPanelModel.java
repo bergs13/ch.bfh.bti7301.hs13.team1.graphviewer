@@ -1,5 +1,6 @@
 package logic;
 
+import java.awt.Point;
 import java.util.Observable;
 import defs.FormatHelper;
 import defs.GraphFormat;
@@ -61,14 +62,22 @@ public class GraphPanelModel<V, E> extends Observable {
 	}
 
 	public void setSelectedVertexFormat(VertexFormat newFormat) {
-		if (null != this.selectedVertex && null != newFormat) {
-			// Update Format (Decorable implementation notifies the gui
-			this.selectedVertex.set(FormatHelper.FORMAT, newFormat);	
+		// Check variables
+		if (null == this.selectedVertex || null == newFormat) {
+			return;
 		}
+
+		// Update Format (Decorable implementation notifies the gui
+		this.selectedVertex.set(FormatHelper.FORMAT, newFormat);
 	}
 
 	// Graph manipulation Methods
 	public void addVertex(Vertex<V> sourceVertex, VertexFormat format) {
+		// Check variables
+		if (null == sourceVertex) {
+			return;
+		}
+
 		// Update data
 		// create object
 		V vElement = null;
@@ -77,13 +86,21 @@ public class GraphPanelModel<V, E> extends Observable {
 		if (null == format) {
 			format = new VertexFormat();
 		}
+		// Place the new vertex under the source vertex
+		VertexFormat sourceFormat = FormatHelper.getFormat(VertexFormat.class,
+				sourceVertex);
+		if (null != sourceFormat) {
+			Point sourceCenter = sourceFormat.getCenterPoint();
+			if (null != sourceCenter) {
+				format.setCenterPoint(sourceCenter.x, sourceCenter.y + 2
+						* GraphFormat.OUTERCIRCLEDIAMETER);
+			}
+		}
 		vNew.set(FormatHelper.FORMAT, format);
 		// connect via edge if has source (if there is no source, it will be
 		// null)
-		if (null != sourceVertex) {
-			E eElement = null;
-			this.graph.insertEdge(sourceVertex, vNew, eElement);
-		}
+		E eElement = null;
+		this.graph.insertEdge(sourceVertex, vNew, eElement);
 
 		// Update UI
 		changedVertex = vNew;
@@ -91,17 +108,36 @@ public class GraphPanelModel<V, E> extends Observable {
 		notifyObservers(ModelEventConstants.VERTEXADDED);
 	}
 
-	public void deleteSelectedVertex() {
-		if (null != this.selectedVertex) {
-			// Update data
-			// Remove Vertex
-			this.graph.removeVertex(this.selectedVertex);
-			
-			// Update UI
-			changedVertex = this.selectedVertex;
-			setChanged();
-			notifyObservers(ModelEventConstants.VERTEXDELETED);
+	public void connectVertices(Vertex<V> sourceVertex, Vertex<V> targetVertex) {
+		// Check variables
+		if (null == sourceVertex || null == targetVertex) {
+			return;
 		}
+
+		// connect via new Edge
+		E eElement = null;
+		this.graph.insertEdge(sourceVertex, targetVertex, eElement);
+
+		// Update UI
+		changedVertex = sourceVertex; // For the edge recalculations
+		setChanged();
+		notifyObservers(ModelEventConstants.VERTEXCONNECTED);
+	}
+
+	public void deleteSelectedVertex() {
+		// Check variables
+		if (null == this.selectedVertex) {
+			return;
+		}
+
+		// Update data
+		// Remove Vertex
+		this.graph.removeVertex(this.selectedVertex);
+
+		// Update UI
+		changedVertex = this.selectedVertex;
+		setChanged();
+		notifyObservers(ModelEventConstants.VERTEXDELETED);
 	}
 
 	// End of graph manipulation methods

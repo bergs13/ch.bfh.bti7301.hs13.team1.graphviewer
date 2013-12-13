@@ -68,20 +68,24 @@ public class EdgePainter {
 			Polygon arrowPolygon = new Polygon(arrowX, arrowY, arrowN);
 			g2.fill(arrowPolygon);
 		}
-		// Gewicht wenn gewichtet
-		if (weighted) {
-			// Gewicht Label an Punkt anzeigen
-			JLabel label = new JLabel(edgeFormat.getLabel());
-			label.setPreferredSize(new Dimension(100, 100));
+		// Gewicht anzeigen, wenn gewichtet
+		if (weighted && graphFormat.isLabelVisible()) {
+			g2.setColor(graphFormat.getVisitedColor());
+			String label = edgeFormat.getLabel();
+			if (null == label) {
+				label = "";
+			}
+
 			// Punkt f�r Gewichtanzeige
 			Point labelPointOnStraightLine = VisualizationCalculator
 					.getPointOnStraightLine(toPoint, fromPoint,
 							VisualizationCalculator.getLineWidth(fromPoint,
 									toPoint) / 2);
 
-			// Verschieben zu Punkt
-			label.setLocation(labelPointOnStraightLine);
-			label.setBorder(BorderFactory.createLineBorder(Color.red));
+			// Gewicht String an Punkt anzeigen
+			g2.drawString(label,
+					(int) Math.round(labelPointOnStraightLine.getX()),
+					(int) Math.round(labelPointOnStraightLine.getY()));
 		}
 	}
 	// End of methods

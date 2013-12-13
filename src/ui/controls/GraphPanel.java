@@ -46,6 +46,8 @@ public class GraphPanel<V, E> extends JComponent implements Observer {
 	private GraphPanelModel<V, E> model = null;
 	private final Map<Vertex<V>, VertexComponent<V>> vertexVertexComponents = new HashMap<Vertex<V>, VertexComponent<V>>();
 	private JMenuItem menuItemAddVertex = new JMenuItem("Add");
+	private JMenuItem menuItemConnectVertices = new JMenuItem(
+			"Connect vertices");
 	private JMenuItem menuItemUpdGraphFormat = new JMenuItem(
 			"Change graph format");
 	private JPopupMenu popupMenu = new JPopupMenu();
@@ -88,25 +90,7 @@ public class GraphPanel<V, E> extends JComponent implements Observer {
 		// add the vertices as components
 		itV = model.getGraph().vertices();
 		while (itV.hasNext()) {
-			final Vertex<V> v = itV.next();
-			VertexComponentModel<V> vModel = new VertexComponentModel<>(v,
-					model.getGraphFormat());
-			vModel.addObserver(this);
-			final VertexComponent<V> vComp = new VertexComponent<V>(vModel);
-			vComp.setCircleCenterLocation(centerPoints[centerPointIndex]);
-			// component selection
-			vComp.addMouseListener(new MouseAdapter() {
-				@Override
-				public void mousePressed(MouseEvent e) {
-					// overwrites the selection in the model (Vertex)
-					model.setSelectedVertex(v);
-					if (e.isMetaDown() && !e.isPopupTrigger()) {
-						vComp.getComponentPopupMenu().show(vComp, e.getX(),
-								e.getY());
-					}
-				}
-			});
-			this.vertexVertexComponents.put(v, vComp);
+			addVertexComponent(itV.next(), centerPoints[centerPointIndex]);
 			centerPointIndex++;
 		}
 		// calculate the edges for the components
@@ -152,8 +136,22 @@ public class GraphPanel<V, E> extends JComponent implements Observer {
 						.getGraph().vertices());
 				vAddDialog.setVisible(true);
 				if (vAddDialog.getSaved()) {
-					model.addVertex(vAddDialog.getSourceVertex(),
-							new VertexFormat());
+					VertexFormat f = new VertexFormat();
+					f.setLabel(vAddDialog.getLabel());
+					model.addVertex(vAddDialog.getSourceVertex(), f);
+				}
+			}
+		});
+		this.popupMenu.add(this.menuItemConnectVertices);
+		this.menuItemConnectVertices.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				VertexConnectDialog<V> vConnectDialog = new VertexConnectDialog<V>(
+						model.getGraph().vertices());
+				vConnectDialog.setVisible(true);
+				if (vConnectDialog.getSaved()) {
+					model.connectVertices(vConnectDialog.getSourceVertex(),
+							vConnectDialog.getTargetVertex());
 				}
 			}
 		});
@@ -179,20 +177,13 @@ public class GraphPanel<V, E> extends JComponent implements Observer {
 
 	// Painting methods
 	// vertices
-	private void addAndPaintVertexComponent(Vertex<V> vertex) {
+	private void addAndPaintVertexComponent(Vertex<V> vertex, Point centerPoint) {
 		if (null == vertex) {
 			return;
 		}
-
-		// GUI update
-		VertexComponentModel<V> vModel = new VertexComponentModel<>(vertex,
-				model.getGraphFormat());
-		vModel.addObserver(this);
-		VertexComponent<V> vComp = new VertexComponent<V>(vModel);
-		// Find position for new vertex
-		vComp.setCircleCenterLocation(new Point(1 * 75, 1 * 100));
-		// add to list
-		this.vertexVertexComponents.put(vertex, vComp);
+		// add
+		VertexComponent<V> vComp = addVertexComponent(vertex, new Point(
+				centerPoint));
 		// paint
 		paintVertexComponent(vComp);
 		// calculate and paint the edges of the new vertex comp
@@ -206,8 +197,9 @@ public class GraphPanel<V, E> extends JComponent implements Observer {
 
 	private void paintVertexComponent(VertexComponent<V> comp) {
 		Dimension size = comp.getPreferredSize();
-		Point p = comp.getLocation();
-		comp.setBounds(p.x, p.y, size.width, size.height);
+		Point p = comp.getCircleCenterLocation();
+		comp.setBounds(p.x - GraphFormat.LOCATIONCENTERMODIFIER, p.y
+				- GraphFormat.LOCATIONCENTERMODIFIER, size.width, size.height);
 		this.add(comp);
 		comp.validate();
 		comp.repaint();
@@ -283,18 +275,23 @@ public class GraphPanel<V, E> extends JComponent implements Observer {
 	 * </p>
 	 */
 	private static DataFlavor vertexComponentDataFlavor = null;
+	private VertexComponent<V> droppedVertexComponent = null;
+	Point dropPoint = new Point();
 
 	public void handleObjectDrop(Object transferableObj,
 			DropTargetDropEvent dtde) {
 		if (VertexComponent.class.isInstance(transferableObj)) {
-			@SuppressWarnings("unchecked")
-			VertexComponent<V> vComp = (VertexComponent<V>) transferableObj;
-			if (null != vComp && null != dtde) {
+			droppedVertexComponent = (VertexComponent<V>) transferableObj;
+			if (null != droppedVertexComponent && null != dtde) {
 				// refresh graphpanel (vertex gedroppt)
 				// Get the the point of the VertexComponent
 				// for the drop option (the cursor on the drop)
-				vComp.setCircleCenterLocation(dtde.getLocation());
-				repaintDroppedAndAdjacent(vComp);
+				dropPoint.setLocation(dtde.getLocation().x
+						- GraphFormat.LOCATIONCENTERMODIFIER,
+						dtde.getLocation().y
+								- GraphFormat.LOCATIONCENTERMODIFIER);
+				droppedVertexComponent.setCircleCenterLocation(dropPoint);
+				repaintDroppedAndAdjacent(droppedVertexComponent);
 			}
 		}
 	}
@@ -443,9 +440,26 @@ public class GraphPanel<V, E> extends JComponent implements Observer {
 				Vertex<V> changedV = this.model.getChangedVertex();
 				if (null != changedV) {
 					if (!this.vertexVertexComponents.containsKey(changedV)) {
+						VertexFormat f = FormatHelper.getFormat(
+								VertexFormat.class, changedV);
+						if (null == f) {
+							f = new VertexFormat();
+						}
 						// Add
-						addAndPaintVertexComponent(changedV);
+						addAndPaintVertexComponent(changedV, f.getCenterPoint());
 					}
+				}
+			} else if (eventConstant
+					.equals(ModelEventConstants.VERTEXCONNECTED)) {
+				if (null != model.getChangedVertex()) {
+					Iterator<Edge<E>> itE = model.getGraph().incidentEdges(
+							model.getChangedVertex());
+					while (itE.hasNext()) {
+						reCalculateAndSetEdgeFormatPoints(
+								model.getChangedVertex(), itE.next());
+					}
+					// repaint the edges (applying new edgeformat)
+					repaintEdges();
 				}
 			} else if (eventConstant.equals(ModelEventConstants.VERTEXDELETED)) {
 				Vertex<V> changedV = this.model.getChangedVertex();
@@ -476,8 +490,25 @@ public class GraphPanel<V, E> extends JComponent implements Observer {
 			} else if (eventConstant
 					.equals(ModelEventConstants.ADDVERTEXTOSELECTED)) {
 				if (null != this.model.getSelectedVertex()) {
-					this.model.addVertex(this.model.getSelectedVertex(),
-							new VertexFormat());
+					VertexAddDialog<V> vAddDialog = new VertexAddDialog<V>(
+							model.getGraph().vertices(), true);
+					vAddDialog.setVisible(true);
+					if (vAddDialog.getSaved()) {
+						VertexFormat f = new VertexFormat();
+						f.setLabel(vAddDialog.getLabel());
+						model.addVertex(this.model.getSelectedVertex(), f);
+					}
+				}
+			} else if (eventConstant
+					.equals(ModelEventConstants.CONNECTVERTEXTOSELECTED)) {
+				if (null != this.model.getSelectedVertex()) {
+					VertexConnectDialog<V> vConnectDialog = new VertexConnectDialog<V>(
+							model.getGraph().vertices(), true);
+					vConnectDialog.setVisible(true);
+					if (vConnectDialog.getSaved()) {
+						model.connectVertices(this.model.getSelectedVertex(),
+								vConnectDialog.getTargetVertex());
+					}
 				}
 			} else if (eventConstant
 					.equals(ModelEventConstants.DELETESELECTEDVERTEX)) {
@@ -491,6 +522,29 @@ public class GraphPanel<V, E> extends JComponent implements Observer {
 	// End of observer methods
 
 	// Helper methods
+	private VertexComponent<V> addVertexComponent(final Vertex<V> v,
+			Point circleCenterLocation) {
+		VertexComponentModel<V> vModel = new VertexComponentModel<>(v,
+				model.getGraphFormat());
+		vModel.addObserver(this);
+		final VertexComponent<V> vComp = new VertexComponent<V>(vModel);
+		vComp.setCircleCenterLocation(circleCenterLocation);
+		// component selection
+		vComp.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent e) {
+				// overwrites the selection in the model (Vertex)
+				model.setSelectedVertex(v);
+				if (e.isMetaDown() && !e.isPopupTrigger()) {
+					vComp.getComponentPopupMenu().show(vComp, e.getX(),
+							e.getY());
+				}
+			}
+		});
+		this.vertexVertexComponents.put(v, vComp);
+		return vComp;
+	}
+
 	/**
 	 * calculate the edge length by the source and target vertex (via graph) and
 	 * set the format

@@ -2,6 +2,7 @@ package logic;
 
 import java.util.Observable;
 import logic.extlib.Vertex;
+import defs.DecorableConstants;
 import defs.FormatHelper;
 import defs.GraphFormat;
 import defs.ModelEventConstants;
@@ -50,6 +51,11 @@ public class VertexComponentModel<V> extends Observable {
 		notifyObservers(ModelEventConstants.ADDVERTEXTOSELECTED);
 	}
 
+	public void connectVertices() {
+		setChanged();
+		notifyObservers(ModelEventConstants.CONNECTVERTEXTOSELECTED);
+	}
+
 	public void deleteVertex() {
 		setChanged();
 		notifyObservers(ModelEventConstants.DELETESELECTEDVERTEX);
@@ -64,8 +70,9 @@ public class VertexComponentModel<V> extends Observable {
 		}
 		return f;
 	}
+
 	public void updateFormat(VertexFormat newFormat) {
-		//observable implementation notifies the gui
+		// observable implementation notifies the gui
 		this.vertex.set(FormatHelper.FORMAT, newFormat);
 	}
 	// End of methods

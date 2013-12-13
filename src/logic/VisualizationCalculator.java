@@ -1,5 +1,8 @@
 package logic;
 
+import java.awt.Font;
+import java.awt.FontMetrics;
+import java.awt.Graphics2D;
 import java.awt.Point;
 import defs.VectorR2;
 
@@ -136,5 +139,19 @@ public class VisualizationCalculator {
 			pointsAdded++;
 		}
 		return points;
+	}
+
+	public static double getStringWidth(Graphics2D g2, Font f, String s) {
+		// Find the size of string s in the font of the Graphics context "page"
+		FontMetrics fm = g2.getFontMetrics(f);
+		java.awt.geom.Rectangle2D rect = fm.getStringBounds(s, g2);
+		return rect.getWidth();
+	}
+
+	public static double getStringHeight(Graphics2D g2, Font f, String s) {
+		// Find the size of string s in the font of the Graphics context "page"
+		FontMetrics fm = g2.getFontMetrics(f);
+		java.awt.geom.Rectangle2D rect = fm.getStringBounds(s, g2);
+		return rect.getHeight();
 	}
 }

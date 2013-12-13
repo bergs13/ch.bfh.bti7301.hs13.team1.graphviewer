@@ -15,7 +15,7 @@ public class VertexFormat {
 
     // Members
    
-    private Point centerPoint;
+    private Point centerPoint = new Point();
     private String label;
     private boolean active;
     private boolean visited;   

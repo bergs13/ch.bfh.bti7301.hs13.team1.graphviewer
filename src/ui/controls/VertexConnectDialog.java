@@ -9,24 +9,21 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
-import javax.swing.JTextField;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
-
 import logic.extlib.Vertex;
 
 @SuppressWarnings("serial")
-public class VertexAddDialog<V> extends JDialog {
+public class VertexConnectDialog<V> extends JDialog {
 	Vertex<V> sourceVertex = null;
-	String label = "";
+	Vertex<V> targetVertex = null;
 	// saved when closed?
 	boolean saved = false;
 
-	public VertexAddDialog(Iterator<Vertex<V>> itV) {
+	public VertexConnectDialog(Iterator<Vertex<V>> itV) {
 		this(itV, false);
 	}
 
-	public VertexAddDialog(Iterator<Vertex<V>> itV, boolean sourceVertexGiven) {
+	public VertexConnectDialog(Iterator<Vertex<V>> itV,
+			boolean sourceVertexGiven) {
 		super();
 		this.setModalityType(ModalityType.APPLICATION_MODAL);
 
@@ -37,45 +34,39 @@ public class VertexAddDialog<V> extends JDialog {
 		this.setMaximumSize(new Dimension(200, height));
 
 		// Input fields
-		// Source vertex
 		if (!sourceVertexGiven) {
+			// Source vertex
 			this.add(new JLabel("Source vertex:"));
-			final JComboBox<Vertex<V>> cBV = new JComboBox<Vertex<V>>();
+			final JComboBox<Vertex<V>> cBSV = new JComboBox<Vertex<V>>();
 			while (itV.hasNext()) {
-				cBV.addItem(itV.next());
+				cBSV.addItem(itV.next());
 			}
 			// Default selection
-			sourceVertex = (Vertex<V>) cBV.getSelectedItem();
-			cBV.addActionListener(new ActionListener() {
+			sourceVertex = (Vertex<V>) cBSV.getSelectedItem();
+			cBSV.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent arg0) {
-					sourceVertex = (Vertex<V>) cBV.getSelectedItem();
+					sourceVertex = (Vertex<V>) cBSV.getSelectedItem();
 				};
 			});
-			this.add(cBV);
+			this.add(cBSV);
 		}
 
-		// Label
-		this.add(new JLabel("Label:"));
-		final JTextField labelField = new JTextField(this.label);
-		// Listen for changes in the text
-		labelField.getDocument().addDocumentListener(new DocumentListener() {
-			public void changedUpdate(DocumentEvent e) {
-				// text was changed
-				label = labelField.getText();
-			}
-
-			public void removeUpdate(DocumentEvent e) {
-				// text was deleted
-				label = labelField.getText();
-			}
-
-			public void insertUpdate(DocumentEvent e) {
-				// text was inserted
-				label = labelField.getText();
-			}
+		// Target vertex
+		this.add(new JLabel("Target vertex:"));
+		final JComboBox<Vertex<V>> cBTV = new JComboBox<Vertex<V>>();
+		while (itV.hasNext()) {
+			cBTV.addItem(itV.next());
+		}
+		// Default selection
+		targetVertex = (Vertex<V>) cBTV.getSelectedItem();
+		cBTV.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				targetVertex = (Vertex<V>) cBTV.getSelectedItem();
+			};
 		});
-		this.add(labelField);
+		this.add(cBTV);
 
 		// OK/Cancel Buttons
 		JButton okButton = new JButton("OK");
@@ -107,7 +98,7 @@ public class VertexAddDialog<V> extends JDialog {
 		return this.sourceVertex;
 	}
 
-	public String getLabel() {
-		return this.label;
+	public Vertex<V> getTargetVertex() {
+		return this.targetVertex;
 	}
 }

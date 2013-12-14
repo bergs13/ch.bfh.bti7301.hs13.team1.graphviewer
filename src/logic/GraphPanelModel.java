@@ -31,6 +31,9 @@ public class GraphPanelModel<V, E> extends Observable {
 		} else {
 			this.graph = new IncidenceListGraph<V, E>(true);
 		}
+		if (this.graph.isDirected()) {
+			this.graphFormat.setDirected(true);
+		}
 	}
 
 	// End of Constructors
@@ -152,7 +155,6 @@ public class GraphPanelModel<V, E> extends Observable {
 			}
 		}
 		this.graphFormat = newFormat;
-
 		// Update UI
 		setChanged();
 		notifyObservers(ModelEventConstants.GRAPHFORMAT);

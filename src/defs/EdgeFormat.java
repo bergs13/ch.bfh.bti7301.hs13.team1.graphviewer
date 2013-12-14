@@ -12,16 +12,15 @@ import java.awt.Point;
  * 
  */
 public class EdgeFormat {
-
-	private boolean isDirected;
 	private boolean active;
 	private boolean included;
 	private String label;
 	private Point fromPoint = new Point();
 	private Point toPoint = new Point();
-	
+	private boolean isWeighted;
+
 	public EdgeFormat() {
-		
+
 	}
 
 	/**
@@ -35,14 +34,14 @@ public class EdgeFormat {
 
 	// Start Getters and Setters
 
-	public boolean isIsDirected() {
-		return isDirected;
+	public boolean isWeighted() {
+		return isWeighted;
 	}
 
-	public void setIsDirected(boolean isDirected) {
-		this.isDirected = isDirected;
+	public void setIsWeighted(boolean weighted) {
+		this.isWeighted = weighted;
 	}
-
+	
 	public boolean isActive() {
 		return active;
 	}
@@ -59,7 +58,8 @@ public class EdgeFormat {
 		this.included = true;
 		this.active = false;
 	}
-	public void setNotInMSF(){
+
+	public void setNotInMSF() {
 		this.reset();
 	}
 
@@ -86,6 +86,6 @@ public class EdgeFormat {
 	public void setToPoint(int x, int y) {
 		this.toPoint.setLocation(x, y);
 	}
-	
+
 	// End Getters and Setters
 }

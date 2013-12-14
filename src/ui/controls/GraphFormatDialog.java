@@ -19,6 +19,7 @@ public class GraphFormatDialog extends JDialog {
 	Color visitedColor = null;
 	Color activeColor = null;
 	boolean isLabelVisible = false;
+	boolean isDirected = false;
 	// saved when closed?
 	boolean saved = false;
 
@@ -30,10 +31,11 @@ public class GraphFormatDialog extends JDialog {
 		this.visitedColor = format.getVisitedColor();
 		this.activeColor = format.getActiveColor();
 		this.isLabelVisible = format.isLabelVisible();
+		this.isDirected = format.isDirected();
 		// Layout
-		this.setLayout(new GridLayout(5, 2));
-		this.setMinimumSize(new Dimension(200, 225));
-		this.setMaximumSize(new Dimension(200, 225));
+		this.setLayout(new GridLayout(6, 2));
+		this.setMinimumSize(new Dimension(200, 270));
+		this.setMaximumSize(new Dimension(200, 270));
 
 		// Input fields
 		// Unvisited color
@@ -94,6 +96,19 @@ public class GraphFormatDialog extends JDialog {
 		});
 		this.add(cBLVisible);
 
+		// Directed
+		this.add(new JLabel("Directed?:"));
+		final JComboBox<Boolean> cBDirected = new JComboBox<Boolean>(
+				new Boolean[] { true, false });
+		cBDirected.setSelectedItem(this.isDirected);
+		cBDirected.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				isDirected = (boolean) cBDirected.getSelectedItem();
+			};
+		});
+		this.add(cBDirected);
+
 		// OK/Cancel Buttons
 		JButton okButton = new JButton("OK");
 		okButton.addActionListener(new ActionListener() {
@@ -104,6 +119,7 @@ public class GraphFormatDialog extends JDialog {
 				format.setVisitedColor(visitedColor);
 				format.setActiveColor(activeColor);
 				format.setLabelVisible(isLabelVisible);
+				format.setDirected(isDirected);
 				saved = true;
 				dispose();
 			};

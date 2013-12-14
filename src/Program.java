@@ -1,3 +1,4 @@
+import defs.DecorableConstants;
 import defs.EdgeFormat;
 import defs.FormatHelper;
 import defs.VertexFormat;
@@ -70,7 +71,7 @@ public class Program {
 			if (i % 2 == 0) {
 				Edge<String> ei1 = gr.insertEdge(vi, vi1, "E " + i + 1);
 				EdgeFormat eF1 = new EdgeFormat();
-				eF1.setIsDirected(true);
+				ei1.set(DecorableConstants.WEIGHT, i * 10.5);
 				ei1.set(FormatHelper.FORMAT, eF1);
 			} else {
 				Edge<String> eBC = gr.insertEdge(vi, vi1, "E " + i + 1);

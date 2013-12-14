@@ -10,8 +10,7 @@ public class FormatHelper {
 		F returnValue = null;
 		if (decorable.has(FORMAT)) {
 			Object objectValue = decorable.get(FORMAT);
-			if (null != objectValue
-					&& fClass.isInstance(objectValue)) {
+			if (null != objectValue && fClass.isInstance(objectValue)) {
 				returnValue = (F) objectValue;
 			}
 		}
@@ -19,12 +18,18 @@ public class FormatHelper {
 	}
 
 	public static void updateFormat(Decorable decorable) {
-
-		if (decorable.has(FORMAT)) {
-
+		if (decorable.has(DecorableConstants.WEIGHT)) 
+		{
+			EdgeFormat f = FormatHelper.getFormat(EdgeFormat.class, decorable);
+			if (null != f) {
+				f.setIsWeighted(true);
+				Object weight = decorable.get(DecorableConstants.WEIGHT);
+				if (null != weight && Double.class.isInstance(weight)) {
+					f.setLabel("" + (Double) weight);
+				}
+			}
 		}
-
-		if (decorable.has(DecorableConstants.VISITED)
+		else if (decorable.has(DecorableConstants.VISITED)
 				|| decorable.has(DecorableConstants.MSF)) {
 			if (decorable.get(FORMAT).getClass().isInstance(VertexFormat.class)) {
 				VertexFormat vformat = (VertexFormat) decorable.get(FORMAT);

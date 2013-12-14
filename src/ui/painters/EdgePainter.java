@@ -31,7 +31,6 @@ public class EdgePainter {
 		}
 
 		// Graph format (Für alle Edges gleich)
-		boolean weighted = graphFormat.isWeighed();
 		boolean directed = graphFormat.isDirected();
 		Color activeColor = graphFormat.getActiveColor();
 		Color inactiveColor = graphFormat.getUnincludedColor();
@@ -39,6 +38,8 @@ public class EdgePainter {
 		Point fromPoint = edgeFormat.getFromPoint();
 		Point toPoint = edgeFormat.getToPoint();
 		boolean active = edgeFormat.isActive();
+		boolean weighted = edgeFormat.isWeighted();
+		String weight = edgeFormat.getLabel();
 
 		g2.setColor(active ? activeColor : inactiveColor);
 

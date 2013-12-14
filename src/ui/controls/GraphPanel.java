@@ -326,6 +326,9 @@ public class GraphPanel<V, E> extends JComponent implements Observer {
 	static class GraphPanelDropTargetListener<V, E> implements
 			DropTargetListener {
 		private final GraphPanel<V, E> graphPanel;
+		DataFlavor vertexComponentDataFlavor = null;
+		Object transferableObject = null;
+		Transferable transferable = null;
 		/*
 		 * ,* <p> Two cursors with which we are primarily interested while
 		 * dragging: </p> <ul> <li>Cursor for droppable condition</li>
@@ -373,33 +376,31 @@ public class GraphPanel<V, E> extends JComponent implements Observer {
 
 			// Just going to grab the expected DataFlavor to make sure
 			// we know what is being dropped
-			DataFlavor vertexComponentDataFlavor = null;
-
-			Object transferableObj = null;
-			Transferable transferable = null;
-
+			this.vertexComponentDataFlavor = null;
+			this.transferableObject = null;
+			this.transferable = null;
 			try {
 				// Grab expected flavor
 				vertexComponentDataFlavor = GraphPanel
 						.getVertexComponentDataFlavor();
 
-				transferable = dtde.getTransferable();
+				this.transferable = dtde.getTransferable();
 
 				// What does the Transferable support
-				if (transferable
+				if (this.transferable
 						.isDataFlavorSupported(vertexComponentDataFlavor)) {
-					transferableObj = dtde.getTransferable().getTransferData(
-							vertexComponentDataFlavor);
+					this.transferableObject = dtde.getTransferable()
+							.getTransferData(vertexComponentDataFlavor);
 				}
 
 			} catch (Exception ex) { /* nope, not the place */
 			}
 
 			// If didn't find an item, bail
-			if (transferableObj == null) {
+			if (this.transferableObject == null) {
 				return;
 			}
-			this.graphPanel.handleObjectDrop(transferableObj, dtde);
+			this.graphPanel.handleObjectDrop(this.transferableObject, dtde);
 		}
 	}
 

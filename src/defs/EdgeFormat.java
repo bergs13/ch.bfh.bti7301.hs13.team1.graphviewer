@@ -20,7 +20,6 @@ public class EdgeFormat {
 	private boolean isWeighted;
 
 	public EdgeFormat() {
-
 	}
 
 	/**
@@ -41,7 +40,7 @@ public class EdgeFormat {
 	public void setIsWeighted(boolean weighted) {
 		this.isWeighted = weighted;
 	}
-	
+
 	public boolean isActive() {
 		return active;
 	}

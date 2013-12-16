@@ -18,6 +18,11 @@ public class FormatHelper {
 	}
 
 	public static void updateFormat(Decorable decorable) {
+		if(null == decorable)
+		{
+			return;
+		}
+		
 		if (decorable.has(DecorableConstants.WEIGHT)) 
 		{
 			EdgeFormat f = FormatHelper.getFormat(EdgeFormat.class, decorable);

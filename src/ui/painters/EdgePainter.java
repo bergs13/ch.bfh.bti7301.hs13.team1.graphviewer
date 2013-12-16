@@ -39,7 +39,6 @@ public class EdgePainter {
 		Point toPoint = edgeFormat.getToPoint();
 		boolean active = edgeFormat.isActive();
 		boolean weighted = edgeFormat.isWeighted();
-		String weight = edgeFormat.getLabel();
 
 		g2.setColor(active ? activeColor : inactiveColor);
 

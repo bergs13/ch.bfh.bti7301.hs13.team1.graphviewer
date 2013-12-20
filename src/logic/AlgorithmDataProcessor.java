@@ -30,12 +30,12 @@ public class AlgorithmDataProcessor {
         graphListIndex = 0;
     }
     
-    public void set(){
-        String graphString = "no implemented"; //=GDProcessor.importGraph(null);
+    public void set(Graph graph){
+        String graphString = "no implemented"; //=GDProcessor.exportGraph(graph);
         graphList.add(graphString);
         graphListIndex++;
     }
-    
+    //returns the previous graph
     public Graph backward(){
         //GDProcessor.importGraph(null);
         Graph graph = null;//waitin for GraphDataPrcessor
@@ -43,20 +43,25 @@ public class AlgorithmDataProcessor {
         //Graph graph = GDProcessor.importGraph(graphString);
         return graph;
     }
+    
+    //returns the next graph
     public Graph forward(){
         Graph graph = null;
         String graphString = graphList.get(++graphListIndex);
         //Graph graph = GDProcessor.importGraph(graphString);
         return graph; 
     }
+    
+    //returns the first step
     public Graph first(){
         Graph graph = null;//waitin for GraphDataPrcessor
         graphListIndex = 0;
         String graphString = graphList.get(graphListIndex);
         //Graph graph = GDProcessor.importGraph(graphString);
         return graph; 
-        
     }
+    
+    //returns the last step
     public Graph last(){
         Graph graph = null;//waitin for GraphDataPrcessor
         graphListIndex = graphList.size()-1;

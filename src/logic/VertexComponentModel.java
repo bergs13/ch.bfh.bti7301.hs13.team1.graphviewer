@@ -33,6 +33,10 @@ public class VertexComponentModel<V> extends Observable {
 		return vertex;
 	}
 
+	public void updateGraphFormat(GraphFormat graphFormat)
+	{
+		this.graphFormat = graphFormat;
+	}
 	public GraphFormat getGraphFormat() {
 		return graphFormat;
 	}

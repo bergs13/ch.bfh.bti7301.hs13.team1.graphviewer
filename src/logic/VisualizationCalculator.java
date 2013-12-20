@@ -6,7 +6,8 @@ import java.awt.Graphics2D;
 import java.awt.Point;
 import defs.VectorR2;
 
-public class VisualizationCalculator {
+public class VisualizationCalculator 
+{
 	public static double getLineWidth(Point from, Point to) {
 		return VectorR2.getVectorByStraightLine(from, to).getAbsoluteValue();
 	}

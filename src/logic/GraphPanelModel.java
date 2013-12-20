@@ -2,6 +2,8 @@ package logic;
 
 import java.awt.Point;
 import java.util.Observable;
+
+import defs.AlgorithmConstants;
 import defs.FormatHelper;
 import defs.GraphFormat;
 import defs.ModelEventConstants;
@@ -163,8 +165,8 @@ public class GraphPanelModel<V, E> extends Observable {
 	// End of format updates
 
 	// Simulation methods
-	public void applyAlgorithm(String key) {
-		if (key.equals("DUMMY")) {
+	public void applyAlgorithm(String algorithmKey) {
+		if (algorithmKey.equals(AlgorithmConstants.DIJKSTRA)) {
 			this.graphExamples.dijkstra(this.graph, null);
 		}
 	}

@@ -1,6 +1,5 @@
 package ui.painters;
 
-import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Polygon;
@@ -30,43 +29,33 @@ public class EdgePainter {
 			return;
 		}
 
-		// Graph format (Für alle Edges gleich)
-		boolean directed = graphFormat.isDirected();
-		Color activeColor = graphFormat.getActiveColor();
-		Color inactiveColor = graphFormat.getUnincludedColor();
-		// Edge-Format
-		Point fromPoint = edgeFormat.getFromPoint();
-		Point toPoint = edgeFormat.getToPoint();
-		boolean active = edgeFormat.isActive();
-		boolean weighted = edgeFormat.isWeighted();
-
-		g2.setColor(active ? activeColor : inactiveColor);
+		g2.setColor(edgeFormat.isActive() ? graphFormat.getActiveColor()
+				: graphFormat.getUnincludedColor());
 
 		// Linie immer
-		Line2D line = new Line2D.Double(fromPoint.x, fromPoint.y, toPoint.x,
-				toPoint.y);
-		g2.draw(line);
+		g2.draw(new Line2D.Double(edgeFormat.getFromPoint().x, edgeFormat
+				.getFromPoint().y, edgeFormat.getToPoint().x, edgeFormat
+				.getToPoint().y));
 
 		// Optionale Shapes
 		// Pfeil als Dreieck wenn gerichtet
-		if (directed) {
+		if (graphFormat.isDirected()) {
 			// Seitliche Ecken
 			Point[] leftAndRightPoints = VisualizationCalculator
-					.getPointsOnNormalVectorsOfStraightLine(toPoint, fromPoint,
+					.getPointsOnNormalVectorsOfStraightLine(
+							edgeFormat.getToPoint(), edgeFormat.getFromPoint(),
 							GraphFormat.ARROWTRIANGLEHEIGHT,
 							GraphFormat.ARROWTRIANGLEWIDTH / 2);
 
 			// Daten fï¿½r Pfeil bekannt, Pfeil zeichnen
-			int[] arrowX = new int[] { toPoint.x, leftAndRightPoints[0].x,
-					leftAndRightPoints[1].x };
-			int[] arrowY = new int[] { toPoint.y, leftAndRightPoints[0].y,
-					leftAndRightPoints[1].y };
-			int arrowN = 3;
-			Polygon arrowPolygon = new Polygon(arrowX, arrowY, arrowN);
-			g2.fill(arrowPolygon);
+			g2.fill(new Polygon(new int[] { edgeFormat.getToPoint().x,
+					leftAndRightPoints[0].x, leftAndRightPoints[1].x },
+					new int[] { edgeFormat.getToPoint().y,
+							leftAndRightPoints[0].y, leftAndRightPoints[1].y },
+					3));
 		}
 		// Gewicht anzeigen, wenn gewichtet
-		if (weighted && graphFormat.isLabelVisible()) {
+		if (edgeFormat.isWeighted() && graphFormat.isLabelVisible()) {
 			g2.setColor(graphFormat.getVisitedColor());
 			String label = edgeFormat.getLabel();
 			if (null == label) {
@@ -75,9 +64,12 @@ public class EdgePainter {
 
 			// Punkt fï¿½r Gewichtanzeige
 			Point labelPointOnStraightLine = VisualizationCalculator
-					.getPointOnStraightLine(toPoint, fromPoint,
-							VisualizationCalculator.getLineWidth(fromPoint,
-									toPoint) / 2);
+					.getPointOnStraightLine(
+							edgeFormat.getToPoint(),
+							edgeFormat.getFromPoint(),
+							VisualizationCalculator.getLineWidth(
+									edgeFormat.getFromPoint(),
+									edgeFormat.getToPoint()) / 2);
 
 			// Gewicht String an Punkt anzeigen
 			g2.drawString(label,

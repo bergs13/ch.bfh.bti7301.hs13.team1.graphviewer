@@ -4,8 +4,7 @@
  */
 package ui;
 
-import logic.GraphPanelModel;
-import logic.extlib.IncidenceListGraph;
+import logic.MainGUIModel;
 import ui.controls.GraphPanel;
 
 /**
@@ -20,9 +19,9 @@ public class MainGUI<V, E> extends javax.swing.JFrame {
 	/**
 	 * Creates new form MainGUI
 	 */
-	public MainGUI(IncidenceListGraph<V, E> g) {
+	public MainGUI(MainGUIModel<V,E> model) {
 		initComponents();
-		graphPanel = new GraphPanel<V, E>(new GraphPanelModel<V, E>(g));
+		graphPanel = new GraphPanel<V, E>(model.getGraphPanelModel());
 		graphPanel.setBorder(javax.swing.BorderFactory
 				.createLineBorder(new java.awt.Color(0, 0, 0)));
 

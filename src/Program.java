@@ -2,6 +2,7 @@ import defs.DecorableConstants;
 import defs.EdgeFormat;
 import defs.FormatHelper;
 import defs.VertexFormat;
+import logic.MainGUIModel;
 import logic.extlib.Edge;
 import logic.extlib.IncidenceListGraph;
 import logic.extlib.Vertex;
@@ -84,7 +85,7 @@ public class Program {
 		java.awt.EventQueue.invokeLater(new Runnable() {
 			public void run() {
 
-				new MainGUI<String, String>(gr).setVisible(true);
+				new MainGUI<String, String>(new MainGUIModel<String,String>(gr)).setVisible(true);
 			}
 		});
 	}

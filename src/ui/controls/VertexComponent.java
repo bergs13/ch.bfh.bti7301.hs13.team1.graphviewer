@@ -48,6 +48,7 @@ public class VertexComponent<V> extends JComponent implements Transferable {
 			throw new IllegalArgumentException(
 					"no model set for vertex component");
 		}
+				
 		// set members
 		this.model = model;
 

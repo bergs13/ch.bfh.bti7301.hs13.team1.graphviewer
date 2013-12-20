@@ -43,6 +43,7 @@ import logic.VisualizationCalculator;
 
 @SuppressWarnings("serial")
 public class GraphPanel<V, E> extends JComponent implements Observer {
+	//Members
 	private GraphPanelModel<V, E> model = null;
 	private final Map<Vertex<V>, VertexComponent<V>> vertexVertexComponents = new HashMap<Vertex<V>, VertexComponent<V>>();
 	private JMenuItem menuItemAddVertex = new JMenuItem("Add");
@@ -50,8 +51,7 @@ public class GraphPanel<V, E> extends JComponent implements Observer {
 			"Connect vertices");
 	private JMenuItem menuItemUpdGraphFormat = new JMenuItem(
 			"Change graph format");
-	private JPopupMenu popupMenu = new JPopupMenu();
-
+	private JPopupMenu popupMenu = new JPopupMenu();	
 	// End of Members
 
 	// Constructors
@@ -59,6 +59,7 @@ public class GraphPanel<V, E> extends JComponent implements Observer {
 		if (null == model) {
 			throw new IllegalArgumentException("no model set for graph panel");
 		}
+				
 		this.model = model;
 		//gui is observer of model
 		this.model.addObserver(this);
@@ -186,15 +187,16 @@ public class GraphPanel<V, E> extends JComponent implements Observer {
 
 	@Override
 	public void paintComponent(Graphics g) {
-		System.out.println("graphpanel repaint");
 		// paint panel
 		super.paintComponent(g);
 
 		// paint own stuff
 		// paint vertex components
+		Dimension size;
+		Point p;
 		for (VertexComponent<V> comp : this.vertexVertexComponents.values()) {
-			Dimension size = comp.getPreferredSize();
-			Point p = comp.getCircleCenterLocation();
+			size = comp.getPreferredSize();
+			p = comp.getCircleCenterLocation();
 			comp.setBounds(p.x - GraphFormat.LOCATIONCENTERMODIFIER, p.y
 					- GraphFormat.LOCATIONCENTERMODIFIER, size.width,
 					size.height);

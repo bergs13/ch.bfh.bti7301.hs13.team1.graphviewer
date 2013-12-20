@@ -493,7 +493,7 @@ public class GraphPanel<V, E> extends JComponent implements Observer {
 			@Override
 			public void mousePressed(MouseEvent e) {
 				if (model.getSelectedVertex() == null
-						|| model.getSelectedVertex().equals(v)) {
+						|| !model.getSelectedVertex().equals(v)) {
 					// overwrites the selection in the model (Vertex)
 					model.setSelectedVertex(v);
 				}

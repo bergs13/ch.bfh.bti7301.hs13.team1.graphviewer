@@ -8,7 +8,6 @@ package logic;
 
 import java.util.ArrayList;
 import logic.extlib.Graph;
-import logic.extlib.IncidenceListGraph;
 
 /**
  *

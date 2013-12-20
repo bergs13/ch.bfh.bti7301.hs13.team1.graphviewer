@@ -18,41 +18,51 @@ public class FormatHelper {
 	}
 
 	public static void updateFormat(Decorable decorable) {
-		if(null == decorable)
-		{
+		if (null == decorable) {
 			return;
 		}
-		
-		if (decorable.has(DecorableConstants.WEIGHT)) 
-		{
-			EdgeFormat f = FormatHelper.getFormat(EdgeFormat.class, decorable);
-			if (null != f) {
-				f.setIsWeighted(true);
-				Object weight = decorable.get(DecorableConstants.WEIGHT);
-				if (null != weight && Double.class.isInstance(weight)) {
-					f.setLabel("" + (Double) weight);
+
+		Object format = null;
+		if (decorable.has(FORMAT)) {
+			format = decorable.get(FORMAT);
+		}
+		if (decorable.has(DecorableConstants.WEIGHT)) {
+			if (null != format) {
+				if (format.getClass().isInstance(EdgeFormat.class)) {
+					EdgeFormat f = (EdgeFormat) format;
+					if (null != f) {
+						f.setIsWeighted(true);
+						Object weight = decorable
+								.get(DecorableConstants.WEIGHT);
+						if (null != weight && Double.class.isInstance(weight)) {
+							f.setLabel("" + (Double) weight);
+						}
+					}
 				}
 			}
 		}
-		else if (decorable.has(DecorableConstants.VISITED)
+		if (decorable.has(DecorableConstants.VISITED)
 				|| decorable.has(DecorableConstants.MSF)) {
-			if (decorable.get(FORMAT).getClass().isInstance(VertexFormat.class)) {
-				VertexFormat vformat = (VertexFormat) decorable.get(FORMAT);
-				vformat.setVisited();
-			}
-			if (decorable.get(FORMAT).getClass().isInstance(EdgeFormat.class)) {
-				EdgeFormat eformat = (EdgeFormat) decorable.get(FORMAT);
-				eformat.setInMSF();
+			if (null != format) {
+				if (format.getClass().isInstance(VertexFormat.class)) {
+					VertexFormat vformat = (VertexFormat) format;
+					vformat.setVisited();
+				}
+				if (format.getClass().isInstance(EdgeFormat.class)) {
+					EdgeFormat eformat = (EdgeFormat) format;
+					eformat.setInMSF();
+				}
 			}
 		} else {
-			if (decorable.get(FORMAT).getClass().isInstance(VertexFormat.class)) {
-				VertexFormat vformat = (VertexFormat) decorable.get(FORMAT);
-				vformat.setUnvisited();
-				;
-			}
-			if (decorable.get(FORMAT).getClass().isInstance(EdgeFormat.class)) {
-				EdgeFormat eformat = (EdgeFormat) decorable.get(FORMAT);
-				eformat.setNotInMSF();
+			if (null != format) {
+				if (format.getClass().isInstance(VertexFormat.class)) {
+					VertexFormat vformat = (VertexFormat) format;
+					vformat.setUnvisited();
+				}
+				if (format.getClass().isInstance(EdgeFormat.class)) {
+					EdgeFormat eformat = (EdgeFormat) format;
+					eformat.setNotInMSF();
+				}
 			}
 		}
 	}

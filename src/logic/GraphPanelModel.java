@@ -2,8 +2,7 @@ package logic;
 
 import java.awt.Point;
 import java.util.Observable;
-
-import defs.AlgorithmConstants;
+import defs.GUICommandConstants;
 import defs.FormatHelper;
 import defs.GraphFormat;
 import defs.ModelEventConstants;
@@ -16,29 +15,43 @@ public class GraphPanelModel<V, E> extends Observable {
 	// Members
 	private IncidenceListGraph<V, E> graph;
 	private GraphExamples<V, E> graphExamples;
-	private GraphFormat graphFormat;
 	Vertex<V> selectedVertex = null;
 	Vertex<V> changedVertex = null;
+	private GraphDataProcessor<V, E> graphDataProcessor = new GraphDataProcessor<V, E>();
 
 	// End of Members
 
 	// Constructors
 	public GraphPanelModel(IncidenceListGraph<V, E> g) {
 		this.graphExamples = new GraphExamples<V, E>();
-		this.graphFormat = new GraphFormat();
 
 		// input graph?
 		if (null != g) {
-			this.graph = g;
+			setExternalGraph(g);
 		} else {
-			this.graph = new IncidenceListGraph<V, E>(true);
+			setNewGraph();
 		}
-		if (this.graph.isDirected()) {
-			this.graphFormat.setDirected(true);
-		}
+
 	}
 
 	// End of Constructors
+
+	private void setNewGraph() {
+		GraphFormat format = new GraphFormat();
+		this.graph = new IncidenceListGraph<V, E>(format.isDirected());
+		this.graph.set(FormatHelper.FORMAT, format);
+	}
+
+	private void setExternalGraph(IncidenceListGraph<V, E> g) {
+		this.graph = g;
+		GraphFormat format = FormatHelper.getFormat(GraphFormat.class,
+				this.graph);
+		if (null == format) {
+			format = new GraphFormat();
+		}
+		format.setDirected(this.graph.isDirected());
+		this.graph.set(FormatHelper.FORMAT, format);
+	}
 
 	// Methods
 	public IncidenceListGraph<V, E> getGraph() {
@@ -46,7 +59,11 @@ public class GraphPanelModel<V, E> extends Observable {
 	}
 
 	public GraphFormat getGraphFormat() {
-		return this.graphFormat;
+		GraphFormat f = FormatHelper.getFormat(GraphFormat.class, this.graph);
+		if (null == f) {
+			f = new GraphFormat();
+		}
+		return f;
 	}
 
 	public Vertex<V> getSelectedVertex() {
@@ -64,16 +81,6 @@ public class GraphPanelModel<V, E> extends Observable {
 
 	public Vertex<V> getChangedVertex() {
 		return this.changedVertex;
-	}
-
-	public void setSelectedVertexFormat(VertexFormat newFormat) {
-		// Check variables
-		if (null == this.selectedVertex || null == newFormat) {
-			return;
-		}
-
-		// Update Format (Decorable implementation notifies the gui
-		this.selectedVertex.set(FormatHelper.FORMAT, newFormat);
 	}
 
 	// Graph manipulation Methods
@@ -145,32 +152,43 @@ public class GraphPanelModel<V, E> extends Observable {
 		notifyObservers(ModelEventConstants.VERTEXDELETED);
 	}
 
-	// End of graph manipulation methods
-
-	// Format updates
-	public void updateGraphFormat(GraphFormat newFormat) {
-		// Check and update format
+	public void updateFormat(GraphFormat newFormat) {
 		if (null == newFormat) {
-			newFormat = this.graphFormat;
+			newFormat = FormatHelper.getFormat(GraphFormat.class, this.graph);
 			if (null == newFormat) {
 				newFormat = new GraphFormat();
 			}
 		}
-		this.graphFormat = newFormat;
-		// Update UI
-		setChanged();
-		notifyObservers(ModelEventConstants.GRAPHFORMAT);
+		// observable implementation notifies the gui
+		this.graph.set(FormatHelper.FORMAT, newFormat);
 	}
 
-	// End of format updates
+	// End of graph manipulation methods
 
-	// Simulation methods
-	public void applyAlgorithm(String algorithmKey) {
-		if (algorithmKey.equals(AlgorithmConstants.DIJKSTRA)) {
+	// Main GUI handlers
+	public void handleMainGUICommand(String gUICommandConstant, Object param) {
+		// apply algorithms
+		if (gUICommandConstant.equals(GUICommandConstants.DIJKSTRA)) {
 			this.graphExamples.dijkstra(this.graph, null);
 		}
+		// load/save/clear graph
+		else if (gUICommandConstant.equals(GUICommandConstants.NEWGRAPH)) {
+			setNewGraph();
+		} else if (gUICommandConstant.equals(GUICommandConstants.LOADGRAPH)) {
+			if (String.class.isInstance(param)) {
+				IncidenceListGraph<V, E> g = graphDataProcessor
+						.importGraph((String) param);
+				if (null != g) {
+					setExternalGraph(g);
+				}
+			}
+		} else if (gUICommandConstant.equals(GUICommandConstants.SAVEGRAPH)) {
+			if (String.class.isInstance(param)) {
+				graphDataProcessor.exportGraph(this.graph, (String) param);
+			}
+		}
 	}
-	// End of simulation methods
+	// Main GUI handlers
 
 	// End of Methods
 

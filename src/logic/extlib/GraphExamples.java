@@ -15,7 +15,7 @@ public class GraphExamples<V, E> {
 	static final Object WEIGHT = DecorableConstants.WEIGHT;
 	static final Object MSF = DecorableConstants.MSF;
 
-	final int kruskal(Graph<V, E> g) {
+	public final int kruskal(Graph<V, E> g) {
 		if (g.isDirected())
 			throw new RuntimeException("We need an undirected graph!");
 		// Returns the number of connected components

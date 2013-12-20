@@ -27,10 +27,10 @@ public class GraphImporterExporter {
         // Add filer to file chooser
         fc.setFileFilter(filter);
         // Show the open dialog
-        int rückgabewert = fc.showOpenDialog(null);
+        int rueckgabewert = fc.showOpenDialog(null);
 
         //Abfrage, ob auf Öffnen geklickt wurde
-        if (rückgabewert == JFileChooser.APPROVE_OPTION) {
+        if (rueckgabewert == JFileChooser.APPROVE_OPTION) {
             //System.out.println(fc.getSelectedFile().getName()); //Ausgabe des Dateinamens
             //reader()  todo
         }
@@ -45,9 +45,9 @@ public class GraphImporterExporter {
         JFileChooser saveFile = new JFileChooser(path);
         saveFile.setDialogType(JFileChooser.SAVE_DIALOG);
 
-        int rückgabewert = saveFile.showSaveDialog(null);
+        int rueckgabewert = saveFile.showSaveDialog(null);
 
-        if (rückgabewert == JFileChooser.APPROVE_OPTION) {
+        if (rueckgabewert == JFileChooser.APPROVE_OPTION) {
             //System.out.println(); //Save file
             //writer()  todo
         }

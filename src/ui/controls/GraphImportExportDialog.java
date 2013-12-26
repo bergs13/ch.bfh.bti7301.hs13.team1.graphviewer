@@ -2,17 +2,19 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package demo;
+package ui.controls;
 
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import logic.GraphDataProcessor;
+import logic.extlib.IncidenceListGraph;
 
 /**
  *
  * @author Christian
  */
-public class GraphImporterExporter {
+public class GraphImportExportDialog {
 
     public static void chooseFile(String path) {
 
@@ -37,19 +39,21 @@ public class GraphImporterExporter {
 
     }
 
-    public static void saveFile(String path) {
-
-        if (path == null) {
-            path = "c:/";
-        }
-        JFileChooser saveFile = new JFileChooser(path);
+    public static void saveFile() {
+        
+        //save dialog
+        JFileChooser saveFile = new JFileChooser();
         saveFile.setDialogType(JFileChooser.SAVE_DIALOG);
 
         int rueckgabewert = saveFile.showSaveDialog(null);
 
         if (rueckgabewert == JFileChooser.APPROVE_OPTION) {
-            //System.out.println(); //Save file
-            //writer()  todo
+            //System.out.println(); //Save file            
+            IncidenceListGraph<String, String> testGraph = new IncidenceListGraph<String, String>(true);
+            
+            GraphDataProcessor g = new GraphDataProcessor();
+            g.exportGraph(testGraph,null);
+            
         }
     }
 }

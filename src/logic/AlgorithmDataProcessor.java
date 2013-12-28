@@ -1,13 +1,7 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package logic;
 
 import java.util.ArrayList;
-import logic.extlib.Graph;
+import logic.extlib.IncidenceListGraph;
 
 /**
  *
@@ -24,48 +18,58 @@ public class AlgorithmDataProcessor {
         graphList = new ArrayList<>();
         
     }
-    public void startRecord(){
+    //Start recording
+    public void resetGraphList(){
         graphList.clear();
         graphListIndex = 0;
     }
     
-    public void set(Graph graph){
-        String graphString = "no implemented"; //=GDProcessor.exportGraph(graph);
+    public void set(IncidenceListGraph graph){
+        String graphString = GDProcessor.constructStringFromGraph(graph);
         graphList.add(graphString);
-        graphListIndex++;
     }
-    //returns the previous graph
-    public Graph backward(){
-        //GDProcessor.importGraph(null);
-        Graph graph = null;//waitin for GraphDataPrcessor
+    
+    //returns the previous step
+    public IncidenceListGraph backward(){
+        if (graphListIndex == 0){
+            //Warning start of list
+        }
         String graphString = graphList.get(--graphListIndex);
-        //Graph graph = GDProcessor.importGraph(graphString);
+        IncidenceListGraph graph = GDProcessor.reconstructGraphFromString(graphString);
         return graph;
     }
     
-    //returns the next graph
-    public Graph forward(){
-        Graph graph = null;
+    //returns the next step
+    public IncidenceListGraph forward(){
+        if (graphListIndex == graphList.size()-1){
+            //warning end of list
+        }
         String graphString = graphList.get(++graphListIndex);
-        //Graph graph = GDProcessor.importGraph(graphString);
+        IncidenceListGraph graph = GDProcessor.reconstructGraphFromString(graphString);
         return graph; 
     }
     
     //returns the first step
-    public Graph first(){
-        Graph graph = null;//waitin for GraphDataPrcessor
+    public IncidenceListGraph first(){
         graphListIndex = 0;
         String graphString = graphList.get(graphListIndex);
-        //Graph graph = GDProcessor.importGraph(graphString);
+        IncidenceListGraph graph = GDProcessor.reconstructGraphFromString(graphString);
         return graph; 
     }
     
     //returns the last step
-    public Graph last(){
-        Graph graph = null;//waitin for GraphDataPrcessor
+    public IncidenceListGraph last(){
+        
         graphListIndex = graphList.size()-1;
         String graphString = graphList.get(graphListIndex);
-        //Graph graph = GDProcessor.importGraph(graphString);
+        IncidenceListGraph graph = GDProcessor.reconstructGraphFromString(graphString);
         return graph;
+    }
+    public ArrayList getGraphList(){
+       return graphList;
+    }
+    public void setGraphList(ArrayList GraphlistToImport){
+        this.resetGraphList();
+        graphList.addAll(GraphlistToImport);
     }
 }

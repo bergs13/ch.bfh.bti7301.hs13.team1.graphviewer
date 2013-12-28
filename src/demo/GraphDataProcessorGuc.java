@@ -1,13 +1,14 @@
-package logic;
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package demo;
+
 
 import defs.EdgeFormat;
 import defs.FormatHelper;
 import defs.GraphFormat;
 import defs.VertexFormat;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.StringWriter;
-import java.io.Writer;
 import java.util.Iterator;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -18,44 +19,21 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import logic.extlib.Edge;
-import logic.extlib.IncidenceListGraph;
+import logic.extlib.Graph;
 import logic.extlib.Vertex;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-public class GraphDataProcessor<V, E> {
-    // Constructors
-
-    public GraphDataProcessor() {
+/**
+ *
+ * @author Christian
+ */
+public class GraphDataProcessorGuc<V, E> {
+    
+     public GraphDataProcessorGuc() {
     }
 
-    // End of Constructors
-    // Methods
-    // Public Methods
-    public void exportGraph(IncidenceListGraph<V, E> g, String filePath) {
-        // Get the String for the export
-        String stringToExport = constructStringFromGraph(g);
-
-        // Export the string into the file specified
-        FileWriter fw = null;
-
-        try {
-            fw = new FileWriter(filePath);
-            fw.write(stringToExport);  // text ist ein String
-        } catch (IOException ex) {
-            System.out.println(ex);
-        } finally {
-            if (fw != null) {
-                try {
-                    fw.close();
-                } catch (Exception ex) {
-                }
-            }
-        }
-    }
-
-    public String constructStringFromGraph(IncidenceListGraph<V, E> g) {
-
+    public void exportGraph(Graph g)  {
         try {
             DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
@@ -64,10 +42,11 @@ public class GraphDataProcessor<V, E> {
             Document doc = docBuilder.newDocument();
             Element rootElement = doc.createElement("graph");
             doc.appendChild(rootElement);
-
+            
             //Global graph attributes
             GraphFormat gf = null;
-
+  
+            
             //Vertices
             Iterator<Vertex<V>> it = g.vertices();
 
@@ -96,7 +75,7 @@ public class GraphDataProcessor<V, E> {
                 Element position = doc.createElement("position");
                 Element x = doc.createElement("x");
                 Element y = doc.createElement("y");
-
+                
                 //x, y coordinates
                 String posX = "-";
                 String posY = "-";
@@ -104,46 +83,48 @@ public class GraphDataProcessor<V, E> {
                     posX = Double.toString(f.getCenterPoint().getX());
                     posY = Double.toString(f.getCenterPoint().getY());
                 }
-
+                                
                 x.appendChild(doc.createTextNode(posX));
                 y.appendChild(doc.createTextNode(posY));
                 position.appendChild(x);
                 position.appendChild(y);
                 vertex.appendChild(position);
-
+                
                 //Visited?
                 Element visited = doc.createElement("visited");
                 String vis = "no";
-
-                if (f != null && f.isVisited() == true) {
-                    vis = "yes";
+                
+                if(f != null && f.isVisited() == true){
+                    vis = "yes";                    
                 }
                 visited.appendChild(doc.createTextNode(vis));
                 vertex.appendChild(visited);
-
+                
                 //Active?
                 Element active = doc.createElement("active");
                 String act = "no";
-
-                if (f != null && f.isActive() == true) {
+                
+                if(f != null && f.isActive() == true){
                     act = "yes";
                 }
                 active.appendChild(doc.createTextNode(act));
                 vertex.appendChild(active);
-            }
+ 
 
+            }
+            
             //Edges
-            Iterator<Edge<E>> it2 = g.edges();
+            Iterator<Edge <E>> it2 = g.edges();
 
             while (it2.hasNext()) {
-                Edge<E> e = null;
+                Edge <E> e = null;
                 EdgeFormat ef = null;
 
                 e = it2.next();
                 ef = FormatHelper.getFormat(EdgeFormat.class, e);
 
                 Element edge = doc.createElement("edge");
-
+                
                 rootElement.appendChild(edge);
                 edge.setAttribute("name", e.element().toString());
 
@@ -156,7 +137,7 @@ public class GraphDataProcessor<V, E> {
                 }
                 label.appendChild(doc.createTextNode(strLabel));
                 edge.appendChild(label);
-
+                
                 //fromPoint
                 Element fromPoint = doc.createElement("fromPoint");
                 Element xFromPoint = doc.createElement("x");
@@ -166,72 +147,89 @@ public class GraphDataProcessor<V, E> {
                 if (ef != null && ef.getFromPoint() != null) {
                     fPosX = Double.toString(ef.getFromPoint().getX());
                     fPosY = Double.toString(ef.getFromPoint().getY());
-                }
+                }            
                 xFromPoint.appendChild(doc.createTextNode(fPosX));
                 yFromPoint.appendChild(doc.createTextNode(fPosY));
                 fromPoint.appendChild(xFromPoint);
                 fromPoint.appendChild(yFromPoint);
-
+                
                 //toPoint
                 Element toPoint = doc.createElement("toPoint");
                 Element xToPoint = doc.createElement("x");
                 Element yToPoint = doc.createElement("y");
-
+                
                 String tPosX = "-";
                 String tPosY = "-";
                 if (ef != null && ef.getToPoint() != null) {
                     tPosX = Double.toString(ef.getToPoint().getX());
                     tPosY = Double.toString(ef.getToPoint().getY());
-                }
+                }            
                 xToPoint.appendChild(doc.createTextNode(tPosX));
                 yToPoint.appendChild(doc.createTextNode(tPosY));
                 toPoint.appendChild(xToPoint);
                 toPoint.appendChild(yToPoint);
-
+                
                 //isWeighted?
                 Element weighted = doc.createElement("weighted");
                 String strWeighted = "no";
-
-                if (ef != null && ef.isWeighted() == true) {
-                    strWeighted = "yes";
+                
+                if(ef != null && ef.isWeighted() == true){
+                    strWeighted = "yes";                    
                 }
                 weighted.appendChild(doc.createTextNode(strWeighted));
                 edge.appendChild(weighted);
+                
             }
 
-            // Transform XML object to string
+
+            // write the content into xml file
             TransformerFactory transformerFactory = TransformerFactory.newInstance();
             Transformer transformer = transformerFactory.newTransformer();
             DOMSource source = new DOMSource(doc);
+            //StreamResult result = new StreamResult(new File(System.out));
 
-            StringWriter writer = new StringWriter();
-            StreamResult result = new StreamResult(writer);
+            // Output to console for testing
+            StreamResult result = new StreamResult(System.out);
+
             transformer.transform(source, result);
-            String output = writer.toString();
 
-            //return string
-            return output;
+            //System.out.println("File saved!");
 
         } catch (ParserConfigurationException pce) {
             pce.printStackTrace();
         } catch (TransformerException tfe) {
             tfe.printStackTrace();
         }
-
-        return "";
     }
 
-    public IncidenceListGraph<V, E> importGraph(String filePath) {
-        // Get the String from the file
-        String s = "";
-        // Reconstruct the graph
-        return reconstructGraphFromString(s);
+    private String getGraphFormat(Graph g) {
+
+        String activeColor = null;
+        String visitedColor = null;
+
+        GraphFormat gFormat = null;
+
+        return gFormat.getActiveColor().toString();
+
+
     }
 
-    public IncidenceListGraph<V, E> reconstructGraphFromString(String s) {
-        IncidenceListGraph<V, E> g = new IncidenceListGraph<>(false);
-        return g;
+    public void importGraph(String filePath) {
     }
-    // End of Public Methods
-    // End of Methods
+//
+////Vertices
+//		Iterator<Vertex<String>> it =  g.vertices();
+//		Vertex<String> v = null;
+//		VertexFormat f = null;
+//		while(it.hasNext())
+//		{
+//			v = it.next();
+//			f = FormatHelper.getFormat(v.getClass(), v);
+//			
+//		}
+//		//Edges
+//		g.incidentEdges(v);
 }
+    
+    
+

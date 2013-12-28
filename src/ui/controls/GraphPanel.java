@@ -110,8 +110,10 @@ public class GraphPanel<V, E> extends JComponent implements Observer {
 		this.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
-				// clears the selection in the model (Vertex)
-				model.setSelectedVertex(null);
+				if (null != model.getSelectedVertex()) {
+					// clears the selection in the model (Vertex)
+					model.setSelectedVertex(null);
+				}
 			}
 		});
 
@@ -184,11 +186,17 @@ public class GraphPanel<V, E> extends JComponent implements Observer {
 
 	// Painting methods
 	private void repaintContent() {
+		System.out.println("manual repaint");
 		this.repaint();
 	}
 
 	@Override
 	public void paintComponent(Graphics g) {
+		System.out.println("panel paint");
+
+		// clear all
+		this.removeAll();
+
 		// paint panel
 		super.paintComponent(g);
 
@@ -202,6 +210,8 @@ public class GraphPanel<V, E> extends JComponent implements Observer {
 			comp.setBounds(p.x - GraphFormat.LOCATIONCENTERMODIFIER, p.y
 					- GraphFormat.LOCATIONCENTERMODIFIER, size.width,
 					size.height);
+			comp.getVertexComponentModel().updateGraphFormat(
+					model.getGraphFormat());
 			this.add(comp);
 		}
 		// paint edges
@@ -244,10 +254,8 @@ public class GraphPanel<V, E> extends JComponent implements Observer {
 				// refresh graphpanel (vertex gedroppt)
 				// Get the the point of the VertexComponent
 				// for the drop option (the cursor on the drop)
-				dropPoint.setLocation(dtde.getLocation().x
-						- GraphFormat.LOCATIONCENTERMODIFIER,
-						dtde.getLocation().y
-								- GraphFormat.LOCATIONCENTERMODIFIER);
+				dropPoint.setLocation(dtde.getLocation().x,
+						dtde.getLocation().y);
 				droppedVertexComponent.setCircleCenterLocation(dropPoint);
 				// Change the format of incident edges
 				Vertex<V> vertex = this
@@ -484,8 +492,11 @@ public class GraphPanel<V, E> extends JComponent implements Observer {
 		vComp.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
-				// overwrites the selection in the model (Vertex)
-				model.setSelectedVertex(v);
+				if (model.getSelectedVertex() == null
+						|| !model.getSelectedVertex().equals(v)) {
+					// overwrites the selection in the model (Vertex)
+					model.setSelectedVertex(v);
+				}
 				if (e.isMetaDown() && !e.isPopupTrigger()) {
 					vComp.getComponentPopupMenu().show(vComp, e.getX(),
 							e.getY());

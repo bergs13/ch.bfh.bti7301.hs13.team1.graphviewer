@@ -1,14 +1,18 @@
 package logic;
 
+import com.sun.org.apache.xml.internal.serialize.OutputFormat;
+import com.sun.org.apache.xml.internal.serialize.XMLSerializer;
 import defs.EdgeFormat;
 import defs.FormatHelper;
 import defs.GraphFormat;
 import defs.VertexFormat;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.StringWriter;
-import java.io.Writer;
+import java.io.*;
+import java.text.Format;
 import java.util.Iterator;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.sound.midi.SysexMessage;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -22,10 +26,13 @@ import logic.extlib.IncidenceListGraph;
 import logic.extlib.Vertex;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 
 public class GraphDataProcessor<V, E> {
-    // Constructors
 
+    // Constructors
     public GraphDataProcessor() {
     }
 
@@ -67,8 +74,13 @@ public class GraphDataProcessor<V, E> {
 
             //Global graph attributes
             GraphFormat gf = null;
+            //todo
+
 
             //Vertices
+            Element vertices = doc.createElement("vertices");
+            rootElement.appendChild(vertices);
+
             Iterator<Vertex<V>> it = g.vertices();
 
             while (it.hasNext()) {
@@ -79,10 +91,19 @@ public class GraphDataProcessor<V, E> {
                 f = FormatHelper.getFormat(VertexFormat.class, v);
 
                 Element vertex = doc.createElement("vertex");
-                rootElement.appendChild(vertex);
-                vertex.setAttribute("name", v.element().toString());
+                vertices.appendChild(vertex);
+                //vertex.setAttribute("name", v.element().toString());
 
                 //Attributes
+                //Name
+                Element name = doc.createElement("name");
+                String strName = "-";
+                if (v.element() != null) {
+                    strName = v.element().toString();
+                }
+                name.appendChild(doc.createTextNode(strName));
+                vertex.appendChild(name);
+
                 //Label
                 Element label = doc.createElement("label");
                 String strLabel = "-";
@@ -133,6 +154,9 @@ public class GraphDataProcessor<V, E> {
             }
 
             //Edges
+            Element edges = doc.createElement("edges");
+            rootElement.appendChild(edges);
+
             Iterator<Edge<E>> it2 = g.edges();
 
             while (it2.hasNext()) {
@@ -143,11 +167,20 @@ public class GraphDataProcessor<V, E> {
                 ef = FormatHelper.getFormat(EdgeFormat.class, e);
 
                 Element edge = doc.createElement("edge");
+                edges.appendChild(edge);
 
-                rootElement.appendChild(edge);
-                edge.setAttribute("name", e.element().toString());
+                //edge.setAttribute("name", e.element().toString());
 
                 //Attributes
+                //Name
+                Element name = doc.createElement("name");
+                String strName = "-";
+                if (e.element() != null) {
+                    strName = e.element().toString();
+                }
+                name.appendChild(doc.createTextNode(strName));
+                edge.appendChild(name);
+
                 //Label
                 Element label = doc.createElement("label");
                 String strLabel = "-";
@@ -209,6 +242,10 @@ public class GraphDataProcessor<V, E> {
             transformer.transform(source, result);
             String output = writer.toString();
 
+//          XMLSerializer serializer = new XMLSerializer(System.out, new OutputFormat(doc,"UTF-8", true));
+//          serializer.serialize(doc);
+
+
             //return string
             return output;
 
@@ -225,13 +262,94 @@ public class GraphDataProcessor<V, E> {
         // Get the String from the file
         String s = "";
         // Reconstruct the graph
-        return reconstructGraphFromString(s);
+        return reconstructGraphFromString(filePath);
     }
 
     public IncidenceListGraph<V, E> reconstructGraphFromString(String s) {
-        IncidenceListGraph<V, E> g = new IncidenceListGraph<>(false);
-        return g;
+
+        IncidenceListGraph<V, E> g = new IncidenceListGraph<V, E>(false);
+
+        try {
+
+            //Create xml-object  
+            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder builder = factory.newDocumentBuilder();
+            Document doc = builder.parse(s);
+
+            //Graph attributes
+            //todo
+
+
+            //Vertices
+            NodeList listOfVertices = doc.getElementsByTagName("vertex");
+            int totalPersons = listOfVertices.getLength();
+
+            Vertex<String> vi = null;
+
+            for (int i = 0; i < totalPersons; i++) {
+
+                Node vertexNode = listOfVertices.item(i);
+                if (vertexNode.getNodeType() == Node.ELEMENT_NODE) {
+
+                    Element vertexElement = (Element) vertexNode;
+
+                    //name
+                    NodeList nameList = vertexElement.getElementsByTagName("name");
+                    Element nameElement = (Element) nameList.item(0);
+                    System.out.println(nameElement.getTextContent());
+
+                    //vi = g.insertVertex(nameElement.getTextContent());
+                    // Format Vertex i
+//                    VertexFormat vFi = new VertexFormat();
+//                    vi.set(FormatHelper.FORMAT, vFi);
+//                  
+                    //label
+                    NodeList labelList = vertexElement.getElementsByTagName("label");
+                    Element labelElement = (Element) labelList.item(0);
+
+                    //x-Position
+                    NodeList xPositionList = vertexElement.getElementsByTagName("x");
+                    Element xElement = (Element) xPositionList.item(0);
+                    //Element yElement = (Element) positionList.item(1);
+                    System.out.println(xElement.getTextContent());
+
+                    //y-Position
+                    NodeList yPositionList = vertexElement.getElementsByTagName("x");
+                    Element yElement = (Element) yPositionList.item(0);
+                    System.out.println(yElement.getTextContent());
+
+                    //Visited
+                    NodeList visitedList = vertexElement.getElementsByTagName("visited");
+                    Element visitedElement = (Element) visitedList.item(0);
+                    System.out.println(visitedElement.getTextContent());
+
+                    //Active
+                    NodeList activeList = vertexElement.getElementsByTagName("active");
+                    Element activeElement = (Element) activeList.item(0);
+                    System.out.println(activeElement.getTextContent());
+
+                }
+
+            }
+
+
+
+            //Edges
+
+
+            return g;
+
+
+
+
+        } catch (SAXException ex) {
+            Logger.getLogger(GraphDataProcessor.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(GraphDataProcessor.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ParserConfigurationException ex) {
+            Logger.getLogger(GraphDataProcessor.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return null;
     }
-    // End of Public Methods
-    // End of Methods
 }

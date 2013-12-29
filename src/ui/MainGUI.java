@@ -4,6 +4,7 @@
  */
 package ui;
 
+import java.awt.event.ActionEvent;
 import logic.MainGUIModel;
 import ui.controls.GraphPanel;
 
@@ -100,230 +101,129 @@ public class MainGUI<V, E> extends javax.swing.JFrame {
 	 */
 	// <editor-fold defaultstate="collapsed"
 	// <editor-fold defaultstate="collapsed"
-	// desc="Generated Code">//GEN-BEGIN:initComponents
-	private void initComponents() {
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    private void initComponents() {
 
-		jPanel1 = new javax.swing.JPanel();
-		jButton3 = new javax.swing.JButton();
-		jButton2 = new javax.swing.JButton();
-		forwardButton = new javax.swing.JButton();
-		directedRadioButton = new javax.swing.JRadioButton();
-		jRadioButton1 = new javax.swing.JRadioButton();
-		editCheckBox = new javax.swing.JCheckBox();
-		informationPanel1 = new ui.controls.InformationPanel();
-		jMenuBar1 = new javax.swing.JMenuBar();
-		jMenu1 = new javax.swing.JMenu();
-		jMenuItem1 = new javax.swing.JMenuItem();
-		jMenu3 = new javax.swing.JMenu();
-		newGraphMenuItem = new javax.swing.JMenuItem();
-		jMenuItem5 = new javax.swing.JMenuItem();
-		jMenuItem6 = new javax.swing.JMenuItem();
-		jMenu2 = new javax.swing.JMenu();
-		jMenuItem3 = new javax.swing.JMenuItem();
-		jMenuItem4 = new javax.swing.JMenuItem();
+        jPanel1 = new javax.swing.JPanel();
+        runButton = new javax.swing.JButton();
+        backwardButton = new javax.swing.JButton();
+        forwardButton = new javax.swing.JButton();
+        directedRadioButton = new javax.swing.JRadioButton();
+        jRadioButton1 = new javax.swing.JRadioButton();
+        editCheckBox = new javax.swing.JCheckBox();
+        informationPanel1 = new ui.controls.InformationPanel();
+        mainMenuBar = new javax.swing.JMenuBar();
+        Menu1 = new javax.swing.JMenu();
+        exitMenuItem = new javax.swing.JMenuItem();
+        GraphMenu = new javax.swing.JMenu();
+        newGraphMenuItem = new javax.swing.JMenuItem();
+        loadGraphjMenuItem = new javax.swing.JMenuItem();
+        saveGraphMenuItem = new javax.swing.JMenuItem();
+        algorithmMenu = new javax.swing.JMenu();
+        dijkstraMenuItem = new javax.swing.JMenuItem();
+        kruskalMenuItem = new javax.swing.JMenuItem();
 
-		setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-		jButton3.setText("Run");
-		jButton3.addActionListener(new java.awt.event.ActionListener() {
-			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				jButton3ActionPerformed(evt);
-			}
-		});
+        runButton.setText("Run");
 
-		jButton2.setText("Backward");
-		jButton2.addActionListener(new java.awt.event.ActionListener() {
-			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				jButton2ActionPerformed(evt);
-			}
-		});
+        backwardButton.setText("Backward");
 
-		forwardButton.setText("Forward");
+        forwardButton.setText("Forward");
 
-		directedRadioButton.setText("directed");
+        directedRadioButton.setText("directed");
 
-		jRadioButton1.setText("weighted");
+        jRadioButton1.setText("weighted");
 
-		editCheckBox.setText("Edit");
+        editCheckBox.setText("Edit");
 
-		javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(
-				jPanel1);
-		jPanel1.setLayout(jPanel1Layout);
-		jPanel1Layout
-				.setHorizontalGroup(jPanel1Layout
-						.createParallelGroup(
-								javax.swing.GroupLayout.Alignment.LEADING)
-						.addGroup(
-								jPanel1Layout
-										.createSequentialGroup()
-										.addComponent(editCheckBox)
-										.addPreferredGap(
-												javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-										.addComponent(directedRadioButton)
-										.addPreferredGap(
-												javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-										.addComponent(jRadioButton1)
-										.addPreferredGap(
-												javax.swing.LayoutStyle.ComponentPlacement.RELATED,
-												341, Short.MAX_VALUE)
-										.addComponent(forwardButton)
-										.addPreferredGap(
-												javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-										.addComponent(jButton2)
-										.addPreferredGap(
-												javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-										.addComponent(jButton3)
-										.addContainerGap()));
-		jPanel1Layout
-				.setVerticalGroup(jPanel1Layout
-						.createParallelGroup(
-								javax.swing.GroupLayout.Alignment.LEADING)
-						.addGroup(
-								jPanel1Layout
-										.createSequentialGroup()
-										.addGroup(
-												jPanel1Layout
-														.createParallelGroup(
-																javax.swing.GroupLayout.Alignment.BASELINE)
-														.addComponent(jButton3)
-														.addComponent(jButton2)
-														.addComponent(
-																forwardButton)
-														.addComponent(
-																jRadioButton1)
-														.addComponent(
-																directedRadioButton)
-														.addComponent(
-																editCheckBox))
-										.addContainerGap(25, Short.MAX_VALUE)));
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addComponent(editCheckBox)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(directedRadioButton)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jRadioButton1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 341, Short.MAX_VALUE)
+                .addComponent(forwardButton)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(backwardButton)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(runButton)
+                .addContainerGap())
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(runButton)
+                    .addComponent(backwardButton)
+                    .addComponent(forwardButton)
+                    .addComponent(jRadioButton1)
+                    .addComponent(directedRadioButton)
+                    .addComponent(editCheckBox))
+                .addContainerGap(25, Short.MAX_VALUE))
+        );
 
-		jMenu1.setText("Datei");
+        Menu1.setText("Datei");
 
-		jMenuItem1.setText("Beenden");
-		jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
-			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				jMenuItem1ActionPerformed(evt);
-			}
-		});
-		jMenu1.add(jMenuItem1);
+        exitMenuItem.setText("Beenden");
+        Menu1.add(exitMenuItem);
 
-		jMenuBar1.add(jMenu1);
+        mainMenuBar.add(Menu1);
 
-		jMenu3.setText("Graph");
+        GraphMenu.setText("Graph");
 
-		newGraphMenuItem.setText("New Graph");
-		newGraphMenuItem.addActionListener(new java.awt.event.ActionListener() {
-			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				newGraphMenuItemActionPerformed(evt);
-			}
-		});
-		jMenu3.add(newGraphMenuItem);
+        newGraphMenuItem.setText("New Graph");
+        GraphMenu.add(newGraphMenuItem);
 
-		jMenuItem5.setText("Load Graph");
-		jMenuItem5.addActionListener(new java.awt.event.ActionListener() {
-			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				jMenuItem5ActionPerformed(evt);
-			}
-		});
-		jMenu3.add(jMenuItem5);
+        loadGraphjMenuItem.setText("Load Graph");
+        GraphMenu.add(loadGraphjMenuItem);
 
-		jMenuItem6.setText("Save Graph");
-		jMenuItem6.addActionListener(new java.awt.event.ActionListener() {
-			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				jMenuItem6ActionPerformed(evt);
-			}
-		});
-		jMenu3.add(jMenuItem6);
+        saveGraphMenuItem.setText("Save Graph");
+        GraphMenu.add(saveGraphMenuItem);
 
-		jMenuBar1.add(jMenu3);
+        mainMenuBar.add(GraphMenu);
 
-		jMenu2.setText("Algorithm");
+        algorithmMenu.setText("Algorithm");
 
-		jMenuItem3.setText("Dijkstra");
-		jMenu2.add(jMenuItem3);
+        dijkstraMenuItem.setText("Dijkstra");
+        algorithmMenu.add(dijkstraMenuItem);
 
-		jMenuItem4.setText("Kruskal");
-		jMenuItem4.addActionListener(new java.awt.event.ActionListener() {
-			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				jMenuItem4ActionPerformed(evt);
-			}
-		});
-		jMenu2.add(jMenuItem4);
+        kruskalMenuItem.setText("Kruskal");
+        algorithmMenu.add(kruskalMenuItem);
 
-		jMenuBar1.add(jMenu2);
+        mainMenuBar.add(algorithmMenu);
 
-		setJMenuBar(jMenuBar1);
+        setJMenuBar(mainMenuBar);
 
-		javax.swing.GroupLayout layout = new javax.swing.GroupLayout(
-				getContentPane());
-		getContentPane().setLayout(layout);
-		layout.setHorizontalGroup(layout
-				.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-				.addGroup(
-						layout.createSequentialGroup()
-								.addComponent(jPanel1,
-										javax.swing.GroupLayout.PREFERRED_SIZE,
-										javax.swing.GroupLayout.DEFAULT_SIZE,
-										javax.swing.GroupLayout.PREFERRED_SIZE)
-								.addContainerGap(
-										javax.swing.GroupLayout.DEFAULT_SIZE,
-										Short.MAX_VALUE))
-				.addGroup(
-						layout.createSequentialGroup()
-								.addGap(0, 0, Short.MAX_VALUE)
-								.addComponent(informationPanel1,
-										javax.swing.GroupLayout.PREFERRED_SIZE,
-										javax.swing.GroupLayout.DEFAULT_SIZE,
-										javax.swing.GroupLayout.PREFERRED_SIZE)));
-		layout.setVerticalGroup(layout
-				.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-				.addGroup(
-						layout.createSequentialGroup()
-								.addComponent(jPanel1,
-										javax.swing.GroupLayout.PREFERRED_SIZE,
-										javax.swing.GroupLayout.DEFAULT_SIZE,
-										javax.swing.GroupLayout.PREFERRED_SIZE)
-								.addPreferredGap(
-										javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-								.addComponent(informationPanel1,
-										javax.swing.GroupLayout.PREFERRED_SIZE,
-										javax.swing.GroupLayout.DEFAULT_SIZE,
-										javax.swing.GroupLayout.PREFERRED_SIZE)
-								.addContainerGap(
-										javax.swing.GroupLayout.DEFAULT_SIZE,
-										Short.MAX_VALUE)));
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(informationPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(informationPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
 
-		pack();
-	}// </editor-fold>//GEN-END:initComponents
+        pack();
+    }// </editor-fold>//GEN-END:initComponents
 
-	private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jMenuItem1ActionPerformed
-		// TODO add your handling code here:
-
-	}// GEN-LAST:event_jMenuItem1ActionPerformed
-
-	private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jButton2ActionPerformed
-		// TODO add your handling code here:
-	}// GEN-LAST:event_jButton2ActionPerformed
-
-	private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jButton3ActionPerformed
-		// TODO add your handling code here:
-	}// GEN-LAST:event_jButton3ActionPerformed
-
-	private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jMenuItem4ActionPerformed
-		// TODO add your handling code here:
-	}// GEN-LAST:event_jMenuItem4ActionPerformed
-
-	private void jMenuItem5ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jMenuItem5ActionPerformed
-		// TODO add your handling code here:
-	}// GEN-LAST:event_jMenuItem5ActionPerformed
-
-	private void jMenuItem6ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jMenuItem6ActionPerformed
-		// TODO add your handling code here:
-	}// GEN-LAST:event_jMenuItem6ActionPerformed
-
-	private void newGraphMenuItemActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_newGraphMenuItemActionPerformed
-		// TODO add your handling code here:
-	}// GEN-LAST:event_newGraphMenuItemActionPerformed
+	
 
 	/**
 	 * @param args
@@ -368,25 +268,25 @@ public class MainGUI<V, E> extends javax.swing.JFrame {
 	// }
 	// });
 	// }
-	// Variables declaration - do not modify//GEN-BEGIN:variables
-	private javax.swing.JRadioButton directedRadioButton;
-	private javax.swing.JCheckBox editCheckBox;
-	private javax.swing.JButton forwardButton;
-	private ui.controls.InformationPanel informationPanel1;
-	private javax.swing.JButton jButton2;
-	private javax.swing.JButton jButton3;
-	private javax.swing.JMenu jMenu1;
-	private javax.swing.JMenu jMenu2;
-	private javax.swing.JMenu jMenu3;
-	private javax.swing.JMenuBar jMenuBar1;
-	private javax.swing.JMenuItem jMenuItem1;
-	private javax.swing.JMenuItem jMenuItem3;
-	private javax.swing.JMenuItem jMenuItem4;
-	private javax.swing.JMenuItem jMenuItem5;
-	private javax.swing.JMenuItem jMenuItem6;
-	private javax.swing.JPanel jPanel1;
-	private javax.swing.JRadioButton jRadioButton1;
-	private javax.swing.JMenuItem newGraphMenuItem;
-	// End of variables declaration//GEN-END:variables
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JMenu GraphMenu;
+    private javax.swing.JMenu Menu1;
+    private javax.swing.JMenu algorithmMenu;
+    private javax.swing.JButton backwardButton;
+    private javax.swing.JMenuItem dijkstraMenuItem;
+    private javax.swing.JRadioButton directedRadioButton;
+    private javax.swing.JCheckBox editCheckBox;
+    private javax.swing.JMenuItem exitMenuItem;
+    private javax.swing.JButton forwardButton;
+    private ui.controls.InformationPanel informationPanel1;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JRadioButton jRadioButton1;
+    private javax.swing.JMenuItem kruskalMenuItem;
+    private javax.swing.JMenuItem loadGraphjMenuItem;
+    private javax.swing.JMenuBar mainMenuBar;
+    private javax.swing.JMenuItem newGraphMenuItem;
+    private javax.swing.JButton runButton;
+    private javax.swing.JMenuItem saveGraphMenuItem;
+    // End of variables declaration//GEN-END:variables
 
 }

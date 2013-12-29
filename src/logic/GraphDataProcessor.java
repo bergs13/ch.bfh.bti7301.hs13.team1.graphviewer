@@ -22,6 +22,7 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import logic.extlib.Edge;
+import logic.extlib.IGLDecorable;
 import logic.extlib.IncidenceListGraph;
 import logic.extlib.Vertex;
 import org.w3c.dom.Document;
@@ -75,6 +76,7 @@ public class GraphDataProcessor<V, E> {
             //Global graph attributes
             GraphFormat gf = null;
             //todo
+            
 
 
             //Vertices
@@ -267,7 +269,7 @@ public class GraphDataProcessor<V, E> {
 
     public IncidenceListGraph<V, E> reconstructGraphFromString(String s) {
 
-        IncidenceListGraph<V, E> g = new IncidenceListGraph<V, E>(false);
+        IncidenceListGraph<V, E> g = new IncidenceListGraph<>(false);
 
         try {
 
@@ -278,15 +280,16 @@ public class GraphDataProcessor<V, E> {
 
             //Graph attributes
             //todo
+            
 
 
             //Vertices
             NodeList listOfVertices = doc.getElementsByTagName("vertex");
-            int totalPersons = listOfVertices.getLength();
+            int totalVertices = listOfVertices.getLength();
 
             Vertex<String> vi = null;
 
-            for (int i = 0; i < totalPersons; i++) {
+            for (int i = 0; i < totalVertices; i++) {
 
                 Node vertexNode = listOfVertices.item(i);
                 if (vertexNode.getNodeType() == Node.ELEMENT_NODE) {
@@ -298,11 +301,6 @@ public class GraphDataProcessor<V, E> {
                     Element nameElement = (Element) nameList.item(0);
                     System.out.println(nameElement.getTextContent());
 
-                    //vi = g.insertVertex(nameElement.getTextContent());
-                    // Format Vertex i
-//                    VertexFormat vFi = new VertexFormat();
-//                    vi.set(FormatHelper.FORMAT, vFi);
-//                  
                     //label
                     NodeList labelList = vertexElement.getElementsByTagName("label");
                     Element labelElement = (Element) labelList.item(0);
@@ -314,7 +312,7 @@ public class GraphDataProcessor<V, E> {
                     System.out.println(xElement.getTextContent());
 
                     //y-Position
-                    NodeList yPositionList = vertexElement.getElementsByTagName("x");
+                    NodeList yPositionList = vertexElement.getElementsByTagName("y");
                     Element yElement = (Element) yPositionList.item(0);
                     System.out.println(yElement.getTextContent());
 
@@ -332,10 +330,52 @@ public class GraphDataProcessor<V, E> {
 
             }
 
-
-
             //Edges
+            NodeList listOfEdges = doc.getElementsByTagName("edges");
+            int totalEdges = listOfEdges.getLength();
 
+            Edge<String> ei = null;
+
+            for (int i = 0; i < totalEdges; i++) {
+
+                Node edgeNode = listOfEdges.item(i);
+                if (edgeNode.getNodeType() == Node.ELEMENT_NODE) {
+
+                    Element edgeElement = (Element) edgeNode;
+
+                    //name
+                    NodeList nameList = edgeElement.getElementsByTagName("name");
+                    Element nameElement = (Element) nameList.item(0);
+                    System.out.println(nameElement.getTextContent());
+
+                    //label
+                    NodeList labelList = edgeElement.getElementsByTagName("label");
+                    Element labelElement = (Element) labelList.item(0);
+
+                    //fromPoint
+                    NodeList fromPointList = edgeElement.getElementsByTagName("fromPoint");
+                    if (fromPointList.getLength() > 0) {
+                        NodeList fromPoints = fromPointList.item(0).getChildNodes();
+                        Element xFromPointElement = (Element) fromPoints.item(0);   //x-Position
+                        Element yFromPointElement = (Element) fromPoints.item(1);   //y-Position
+                        System.out.println(xFromPointElement.getTextContent());
+                        System.out.println(yFromPointElement.getTextContent());
+                    }
+
+                    //toPoint
+                    NodeList toPointList = edgeElement.getElementsByTagName("toPoint");
+                    if (toPointList.getLength() > 0) {
+                        NodeList toPoints = toPointList.item(0).getChildNodes();
+                        Element xToPointElement = (Element) toPoints.item(0);   //x-Position
+                        Element yToPointElement = (Element) toPoints.item(1);   //y-Position
+                    }
+
+                    //weighted
+                    NodeList weightedList = edgeElement.getElementsByTagName("weighted");
+                    Element weightedElement = (Element) weightedList.item(0);
+
+                }
+            }
 
             return g;
 

@@ -11,6 +11,7 @@ import logic.GraphDataProcessor;
 import logic.extlib.IncidenceListGraph;
 
 
+
 public class GraphImportExportDialog {
 
     public static void chooseFile() {
@@ -49,7 +50,6 @@ public class GraphImportExportDialog {
             
             //Wie aktueller Graph ermitteln??:
             IncidenceListGraph<String, String> graph = new IncidenceListGraph(true);
-                       
             
             String path = saveFile.getSelectedFile().getPath();
 

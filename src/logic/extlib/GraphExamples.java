@@ -19,7 +19,7 @@ public class GraphExamples<V, E> {
         private Recorder recorder;
         
         public void setRecorder(AlgorithmDataProcessor processor){
-            recorder = new Recorder(processor);
+            this.recorder = new Recorder(processor);
         }
         
 	public final int kruskal(Graph<V, E> g) {

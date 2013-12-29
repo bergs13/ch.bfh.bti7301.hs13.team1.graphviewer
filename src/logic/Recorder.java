@@ -26,6 +26,8 @@ public class Recorder<V, E> {
         
     }
     //End of constructors
+    
+    //methods
     public void breakPoint(Graph graph){
         if (null == processor){
             throw new RuntimeException("processor not instantiated");

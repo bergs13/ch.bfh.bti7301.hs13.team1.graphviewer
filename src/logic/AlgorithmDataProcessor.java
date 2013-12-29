@@ -1,6 +1,7 @@
 package logic;
 
 import java.util.ArrayList;
+import javax.swing.JOptionPane;
 import logic.extlib.IncidenceListGraph;
 
 /**
@@ -25,7 +26,7 @@ public class AlgorithmDataProcessor {
         graphList.clear();
         graphListIndex = 0;
     }
-
+    //save a grap to the GrapList as a string
     public void set(IncidenceListGraph graph) {
         try{
            String graphString = GDProcessor.constructStringFromGraph(graph);
@@ -40,21 +41,27 @@ public class AlgorithmDataProcessor {
     //returns the previous step
     public IncidenceListGraph backward() {
         if (graphListIndex == 0) {
-            //Warning start of list
+           JOptionPane.showMessageDialog(null,"Das ist der Startzustand.","Anfang", JOptionPane.PLAIN_MESSAGE);
+           return first();
         }
+        else{
         String graphString = graphList.get(--graphListIndex);
         IncidenceListGraph graph = GDProcessor.reconstructGraphFromString(graphString);
         return graph;
+        }
     }
 
     //returns the next step
     public IncidenceListGraph forward() {
         if (graphListIndex == graphList.size() - 1) {
-            //warning end of list
+            JOptionPane.showMessageDialog(null, "Das ist der Endzustand.","Ende", JOptionPane.PLAIN_MESSAGE);
+            return last();
         }
+        else{
         String graphString = graphList.get(++graphListIndex);
         IncidenceListGraph graph = GDProcessor.reconstructGraphFromString(graphString);
         return graph;
+        }
     }
 
     //returns the first step

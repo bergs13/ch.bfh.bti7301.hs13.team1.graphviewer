@@ -105,214 +105,186 @@ public class MainGUI<V, E> extends javax.swing.JFrame {
 	// <editor-fold defaultstate="collapsed"
 	// <editor-fold defaultstate="collapsed"
 	// <editor-fold defaultstate="collapsed"
-	// desc="Generated Code">//GEN-BEGIN:initComponents
-	private void initComponents() {
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    private void initComponents() {
 
-		jPanel1 = new javax.swing.JPanel();
-		runButton = new javax.swing.JButton();
-		backwardButton = new javax.swing.JButton();
-		forwardButton = new javax.swing.JButton();
-		directedRadioButton = new javax.swing.JRadioButton();
-		jRadioButton1 = new javax.swing.JRadioButton();
-		editCheckBox = new javax.swing.JCheckBox();
-		informationPanel1 = new ui.controls.InformationPanel();
-		mainMenuBar = new javax.swing.JMenuBar();
-		Menu1 = new javax.swing.JMenu();
-		exitMenuItem = new javax.swing.JMenuItem();
-		GraphMenu = new javax.swing.JMenu();
-		newGraphMenuItem = new javax.swing.JMenuItem();
-		loadGraphjMenuItem = new javax.swing.JMenuItem();
-		saveGraphMenuItem = new javax.swing.JMenuItem();
-		algorithmMenu = new javax.swing.JMenu();
-		dijkstraMenuItem = new javax.swing.JMenuItem();
-		kruskalMenuItem = new javax.swing.JMenuItem();
+        jPanel1 = new javax.swing.JPanel();
+        runButton = new javax.swing.JButton();
+        backwardButton = new javax.swing.JButton();
+        forwardButton = new javax.swing.JButton();
+        directedRadioButton = new javax.swing.JRadioButton();
+        jRadioButton1 = new javax.swing.JRadioButton();
+        editCheckBox = new javax.swing.JCheckBox();
+        informationPanel1 = new ui.controls.InformationPanel();
+        mainMenuBar = new javax.swing.JMenuBar();
+        Menu1 = new javax.swing.JMenu();
+        exitMenuItem = new javax.swing.JMenuItem();
+        GraphMenu = new javax.swing.JMenu();
+        newGraphMenuItem = new javax.swing.JMenuItem();
+        loadGraphjMenuItem = new javax.swing.JMenuItem();
+        saveGraphMenuItem = new javax.swing.JMenuItem();
+        algorithmMenu = new javax.swing.JMenu();
+        dijkstraMenuItem = new javax.swing.JMenuItem();
+        kruskalMenuItem = new javax.swing.JMenuItem();
+        CustomAlgorithmMenuItem = new javax.swing.JMenuItem();
 
-		setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-		runButton.setText("Run");
-		runButton.addActionListener(new java.awt.event.ActionListener() {
-			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				runButtonActionPerformed(evt);
-			}
-		});
+        runButton.setText("Run");
+        runButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                runButtonActionPerformed(evt);
+            }
+        });
 
-		backwardButton.setText("Backward");
-		backwardButton.addActionListener(new java.awt.event.ActionListener() {
-			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				backwardButtonActionPerformed(evt);
-			}
-		});
+        backwardButton.setText("Backward");
+        backwardButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                backwardButtonActionPerformed(evt);
+            }
+        });
 
-		forwardButton.setText("Forward");
-		forwardButton.addActionListener(new java.awt.event.ActionListener() {
-			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				forwardButtonActionPerformed(evt);
-			}
-		});
+        forwardButton.setText("Forward");
+        forwardButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                forwardButtonActionPerformed(evt);
+            }
+        });
 
-		directedRadioButton.setText("directed");
+        directedRadioButton.setText("directed");
 
-		jRadioButton1.setText("weighted");
+        jRadioButton1.setText("weighted");
 
-		editCheckBox.setText("Edit");
+        editCheckBox.setText("Edit");
 
-		javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(
-				jPanel1);
-		jPanel1.setLayout(jPanel1Layout);
-		jPanel1Layout
-				.setHorizontalGroup(jPanel1Layout
-						.createParallelGroup(
-								javax.swing.GroupLayout.Alignment.LEADING)
-						.addGroup(
-								jPanel1Layout
-										.createSequentialGroup()
-										.addComponent(editCheckBox)
-										.addPreferredGap(
-												javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-										.addComponent(directedRadioButton)
-										.addPreferredGap(
-												javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-										.addComponent(jRadioButton1)
-										.addPreferredGap(
-												javax.swing.LayoutStyle.ComponentPlacement.RELATED,
-												341, Short.MAX_VALUE)
-										.addComponent(forwardButton)
-										.addPreferredGap(
-												javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-										.addComponent(backwardButton)
-										.addPreferredGap(
-												javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-										.addComponent(runButton)
-										.addContainerGap()));
-		jPanel1Layout
-				.setVerticalGroup(jPanel1Layout
-						.createParallelGroup(
-								javax.swing.GroupLayout.Alignment.LEADING)
-						.addGroup(
-								jPanel1Layout
-										.createSequentialGroup()
-										.addGroup(
-												jPanel1Layout
-														.createParallelGroup(
-																javax.swing.GroupLayout.Alignment.BASELINE)
-														.addComponent(runButton)
-														.addComponent(
-																backwardButton)
-														.addComponent(
-																forwardButton)
-														.addComponent(
-																jRadioButton1)
-														.addComponent(
-																directedRadioButton)
-														.addComponent(
-																editCheckBox))
-										.addContainerGap(25, Short.MAX_VALUE)));
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addComponent(editCheckBox)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(directedRadioButton)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jRadioButton1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 341, Short.MAX_VALUE)
+                .addComponent(forwardButton)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(backwardButton)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(runButton)
+                .addContainerGap())
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(runButton)
+                    .addComponent(backwardButton)
+                    .addComponent(forwardButton)
+                    .addComponent(jRadioButton1)
+                    .addComponent(directedRadioButton)
+                    .addComponent(editCheckBox))
+                .addContainerGap(25, Short.MAX_VALUE))
+        );
 
-		Menu1.setText("Datei");
+        Menu1.setText("Datei");
 
-		exitMenuItem.setText("Beenden");
-		exitMenuItem.addActionListener(new java.awt.event.ActionListener() {
-			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				exitMenuItemActionPerformed(evt);
-			}
-		});
-		Menu1.add(exitMenuItem);
+        exitMenuItem.setText("Beenden");
+        exitMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                exitMenuItemActionPerformed(evt);
+            }
+        });
+        Menu1.add(exitMenuItem);
 
-		mainMenuBar.add(Menu1);
+        mainMenuBar.add(Menu1);
 
-		GraphMenu.setText("Graph");
+        GraphMenu.setText("Graph");
 
-		newGraphMenuItem.setText("New Graph");
-		newGraphMenuItem.addActionListener(new java.awt.event.ActionListener() {
-			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				newGraphMenuItemActionPerformed(evt);
-			}
-		});
-		GraphMenu.add(newGraphMenuItem);
+        newGraphMenuItem.setText("New Graph");
+        newGraphMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                newGraphMenuItemActionPerformed(evt);
+            }
+        });
+        GraphMenu.add(newGraphMenuItem);
 
-		loadGraphjMenuItem.setText("Load Graph");
-		loadGraphjMenuItem
-				.addActionListener(new java.awt.event.ActionListener() {
-					public void actionPerformed(java.awt.event.ActionEvent evt) {
-						loadGraphjMenuItemActionPerformed(evt);
-					}
-				});
-		GraphMenu.add(loadGraphjMenuItem);
+        loadGraphjMenuItem.setText("Load Graph");
+        loadGraphjMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                loadGraphjMenuItemActionPerformed(evt);
+            }
+        });
+        GraphMenu.add(loadGraphjMenuItem);
 
-		saveGraphMenuItem.setText("Save Graph");
-		saveGraphMenuItem
-				.addActionListener(new java.awt.event.ActionListener() {
-					public void actionPerformed(java.awt.event.ActionEvent evt) {
-						saveGraphMenuItemActionPerformed(evt);
-					}
-				});
-		GraphMenu.add(saveGraphMenuItem);
+        saveGraphMenuItem.setText("Save Graph");
+        saveGraphMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                saveGraphMenuItemActionPerformed(evt);
+            }
+        });
+        GraphMenu.add(saveGraphMenuItem);
 
-		mainMenuBar.add(GraphMenu);
+        mainMenuBar.add(GraphMenu);
 
-		algorithmMenu.setText("Algorithm");
+        algorithmMenu.setText("Algorithm");
 
-		dijkstraMenuItem.setText("Dijkstra");
-		dijkstraMenuItem.addActionListener(new java.awt.event.ActionListener() {
-			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				dijkstraMenuItemActionPerformed(evt);
-			}
-		});
-		algorithmMenu.add(dijkstraMenuItem);
+        dijkstraMenuItem.setText("Dijkstra");
+        dijkstraMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                dijkstraMenuItemActionPerformed(evt);
+            }
+        });
+        algorithmMenu.add(dijkstraMenuItem);
 
-		kruskalMenuItem.setText("Kruskal");
-		kruskalMenuItem.addActionListener(new java.awt.event.ActionListener() {
-			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				kruskalMenuItemActionPerformed(evt);
-			}
-		});
-		algorithmMenu.add(kruskalMenuItem);
+        kruskalMenuItem.setText("Kruskal");
+        kruskalMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                kruskalMenuItemActionPerformed(evt);
+            }
+        });
+        algorithmMenu.add(kruskalMenuItem);
 
-		mainMenuBar.add(algorithmMenu);
+        CustomAlgorithmMenuItem.setText("Custom Algorithm");
+        CustomAlgorithmMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                CustomAlgorithmMenuItemActionPerformed(evt);
+            }
+        });
+        algorithmMenu.add(CustomAlgorithmMenuItem);
 
-		setJMenuBar(mainMenuBar);
+        mainMenuBar.add(algorithmMenu);
 
-		javax.swing.GroupLayout layout = new javax.swing.GroupLayout(
-				getContentPane());
-		getContentPane().setLayout(layout);
-		layout.setHorizontalGroup(layout
-				.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-				.addGroup(
-						layout.createSequentialGroup()
-								.addComponent(jPanel1,
-										javax.swing.GroupLayout.PREFERRED_SIZE,
-										javax.swing.GroupLayout.DEFAULT_SIZE,
-										javax.swing.GroupLayout.PREFERRED_SIZE)
-								.addContainerGap(
-										javax.swing.GroupLayout.DEFAULT_SIZE,
-										Short.MAX_VALUE))
-				.addGroup(
-						layout.createSequentialGroup()
-								.addGap(0, 0, Short.MAX_VALUE)
-								.addComponent(informationPanel1,
-										javax.swing.GroupLayout.PREFERRED_SIZE,
-										javax.swing.GroupLayout.DEFAULT_SIZE,
-										javax.swing.GroupLayout.PREFERRED_SIZE)));
-		layout.setVerticalGroup(layout
-				.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-				.addGroup(
-						layout.createSequentialGroup()
-								.addComponent(jPanel1,
-										javax.swing.GroupLayout.PREFERRED_SIZE,
-										javax.swing.GroupLayout.DEFAULT_SIZE,
-										javax.swing.GroupLayout.PREFERRED_SIZE)
-								.addPreferredGap(
-										javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-								.addComponent(informationPanel1,
-										javax.swing.GroupLayout.PREFERRED_SIZE,
-										javax.swing.GroupLayout.DEFAULT_SIZE,
-										javax.swing.GroupLayout.PREFERRED_SIZE)
-								.addContainerGap(
-										javax.swing.GroupLayout.DEFAULT_SIZE,
-										Short.MAX_VALUE)));
+        setJMenuBar(mainMenuBar);
 
-		pack();
-	}// </editor-fold>//GEN-END:initComponents
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(informationPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(informationPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        pack();
+    }// </editor-fold>//GEN-END:initComponents
+
+    private void CustomAlgorithmMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CustomAlgorithmMenuItemActionPerformed
+       this.model.getGraphPanelModel().handleMainGUICommand(
+				GUICommandConstants.CUSTOMGRAPH, null);
+    }//GEN-LAST:event_CustomAlgorithmMenuItemActionPerformed
 
 	private void exitMenuItemActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_exitMenuItemActionPerformed
 		// TODO add your handling code here:
@@ -403,25 +375,26 @@ public class MainGUI<V, E> extends javax.swing.JFrame {
 	// }
 	// });
 	// }
-	// Variables declaration - do not modify//GEN-BEGIN:variables
-	private javax.swing.JMenu GraphMenu;
-	private javax.swing.JMenu Menu1;
-	private javax.swing.JMenu algorithmMenu;
-	private javax.swing.JButton backwardButton;
-	private javax.swing.JMenuItem dijkstraMenuItem;
-	private javax.swing.JRadioButton directedRadioButton;
-	private javax.swing.JCheckBox editCheckBox;
-	private javax.swing.JMenuItem exitMenuItem;
-	private javax.swing.JButton forwardButton;
-	private ui.controls.InformationPanel informationPanel1;
-	private javax.swing.JPanel jPanel1;
-	private javax.swing.JRadioButton jRadioButton1;
-	private javax.swing.JMenuItem kruskalMenuItem;
-	private javax.swing.JMenuItem loadGraphjMenuItem;
-	private javax.swing.JMenuBar mainMenuBar;
-	private javax.swing.JMenuItem newGraphMenuItem;
-	private javax.swing.JButton runButton;
-	private javax.swing.JMenuItem saveGraphMenuItem;
-	// End of variables declaration//GEN-END:variables
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JMenuItem CustomAlgorithmMenuItem;
+    private javax.swing.JMenu GraphMenu;
+    private javax.swing.JMenu Menu1;
+    private javax.swing.JMenu algorithmMenu;
+    private javax.swing.JButton backwardButton;
+    private javax.swing.JMenuItem dijkstraMenuItem;
+    private javax.swing.JRadioButton directedRadioButton;
+    private javax.swing.JCheckBox editCheckBox;
+    private javax.swing.JMenuItem exitMenuItem;
+    private javax.swing.JButton forwardButton;
+    private ui.controls.InformationPanel informationPanel1;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JRadioButton jRadioButton1;
+    private javax.swing.JMenuItem kruskalMenuItem;
+    private javax.swing.JMenuItem loadGraphjMenuItem;
+    private javax.swing.JMenuBar mainMenuBar;
+    private javax.swing.JMenuItem newGraphMenuItem;
+    private javax.swing.JButton runButton;
+    private javax.swing.JMenuItem saveGraphMenuItem;
+    // End of variables declaration//GEN-END:variables
 
 }

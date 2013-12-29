@@ -9,9 +9,11 @@ import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class GraphImportExportDialog {
-	private String path = "";
+	public GraphImportExportDialog() {
+	}
 
-	public GraphImportExportDialog(boolean load) {
+	public static String show(boolean load) {
+		String path = null;
 		JFileChooser fc = new JFileChooser();
 		int rueckgabewert;
 		if (load) {
@@ -30,11 +32,8 @@ public class GraphImportExportDialog {
 		if (rueckgabewert == JFileChooser.APPROVE_OPTION) { // beim Klicken
 			// auf
 			// 'Speichern'
-			this.path = fc.getSelectedFile().getPath();
+			path = fc.getSelectedFile().getPath();
 		}
-	}
-
-	public String getPath() {
-		return this.path;
+		return path;
 	}
 }

@@ -172,13 +172,25 @@ public class GraphPanelModel<V, E> extends Observable {
 		if (gUICommandConstant.equals(GUICommandConstants.DIJKSTRA)) {
                         this.algorithmDataProcessor.resetGraphList();
 			this.graphExamples.dijkstra(this.graph, null);
+                        this.algorithmDataProcessor.first();
 		}
 		else if(gUICommandConstant.equals(GUICommandConstants.KRUSKAL))
 		{
                         this.algorithmDataProcessor.resetGraphList();	
                         this.graphExamples.kruskal(this.graph);
+                        this.algorithmDataProcessor.first();
 		}
-		// load/save/clear graph
+                //Iterate throug completed Algorithm
+                else if(gUICommandConstant.equals(GUICommandConstants.FORWARD))
+		{
+                        this.graph = this.algorithmDataProcessor.forward();	
+                }
+                
+                else if(gUICommandConstant.equals(GUICommandConstants.BACKWARD))
+		{
+                        this.graph = this.algorithmDataProcessor.backward();	
+                }
+                // load/save/clear graph
 		else if (gUICommandConstant.equals(GUICommandConstants.NEWGRAPH)) {
 			setNewGraph();
 		} else if (gUICommandConstant.equals(GUICommandConstants.LOADGRAPH)) {

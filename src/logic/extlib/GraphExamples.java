@@ -33,6 +33,7 @@ public class GraphExamples<V, E> {
 		// indicating the number of the connected component
 		// it belongs to. The attribute
 		// MSF is also assigned to the vertices.
+                recorder.recordStep(g);
 		int n = g.numberOfVertices();
 		final Object CLUSTER = new Object();
 		ArrayList<Vertex<V>>[] clusters = new ArrayList[n];
@@ -116,6 +117,7 @@ public class GraphExamples<V, E> {
 	}
 
 	public void dijkstra(Graph<V, E> g, Vertex<V> s) {
+                recorder.recordStep(g);
 		HeapPriorityQueue<Double, Vertex<V>> hq = new HeapPriorityQueue<>();
 		Iterator<Vertex<V>> it = g.vertices();
 		while (it.hasNext()) {

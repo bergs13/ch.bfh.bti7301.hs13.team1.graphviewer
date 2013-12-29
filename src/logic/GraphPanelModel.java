@@ -175,7 +175,8 @@ public class GraphPanelModel<V, E> extends Observable {
 		}
 		else if(gUICommandConstant.equals(GUICommandConstants.KRUSKAL))
 		{
-			this.graphExamples.kruskal(this.graph);
+                        this.algorithmDataProcessor.resetGraphList();	
+                        this.graphExamples.kruskal(this.graph);
 		}
 		// load/save/clear graph
 		else if (gUICommandConstant.equals(GUICommandConstants.NEWGRAPH)) {

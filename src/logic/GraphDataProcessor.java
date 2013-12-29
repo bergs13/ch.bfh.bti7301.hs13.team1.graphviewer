@@ -5,7 +5,11 @@ import com.sun.org.apache.xml.internal.serialize.XMLSerializer;
 import defs.EdgeFormat;
 import defs.FormatHelper;
 import defs.GraphFormat;
+import defs.ModelEventConstants;
 import defs.VertexFormat;
+
+import java.awt.Color;
+import java.awt.Point;
 import java.io.*;
 import java.text.Format;
 import java.util.Iterator;
@@ -74,7 +78,15 @@ public class GraphDataProcessor<V, E> {
             doc.appendChild(rootElement);
 
             //Global graph attributes
-            GraphFormat gf = null;
+            
+            //STEFAN
+            GraphFormat gf = FormatHelper.getFormat(GraphFormat.class,g);
+            if(null == gf)
+            {
+            	gf = new GraphFormat();
+            }
+            //STEFAN
+            
             //todo
             
 
@@ -159,8 +171,13 @@ public class GraphDataProcessor<V, E> {
             Element edges = doc.createElement("edges");
             rootElement.appendChild(edges);
 
-            Iterator<Edge<E>> it2 = g.edges();
+            Iterator<Edge<E>> it2 = g.edges();  
+            
+            //STEFAN
+            Vertex<V>[] vStartEnd = g.endVertices(it2.next());
+//STEFAN
 
+            
             while (it2.hasNext()) {
                 Edge<E> e = null;
                 EdgeFormat ef = null;
@@ -269,8 +286,16 @@ public class GraphDataProcessor<V, E> {
 
     public IncidenceListGraph<V, E> reconstructGraphFromString(String s) {
 
-        IncidenceListGraph<V, E> g = new IncidenceListGraph<>(false);
-
+    	//STEFAN
+    	  GraphFormat format = new GraphFormat();
+    	  //Xml to format
+    	  format.setDirected(true);
+    	  format.setActiveColor(Color.red);
+    	  //instantiate and set format
+        IncidenceListGraph<V, E> g = new IncidenceListGraph<V,E>(format.isDirected());  
+		g.set(FormatHelper.FORMAT, format);
+        //STEFAN
+        
         try {
 
             //Create xml-object  
@@ -393,3 +418,37 @@ public class GraphDataProcessor<V, E> {
         return null;
     }
 }
+//STEFAN
+////Graph manipulation Methods
+//	public void addVertex(Vertex<V> sourceVertex, VertexFormat format) {
+//		// Check variables
+//		if (null == sourceVertex) {
+//			return;
+//		}
+//
+//		// Update data
+//		// create object
+//		V vElement = null;
+//		Vertex<V> vNew = this.graph.insertVertex(vElement);
+//		// set format
+//		if (null == format) {
+//			format = new VertexFormat();
+//		}
+//		// Place the new vertex under the source vertex
+//		VertexFormat sourceFormat = FormatHelper.getFormat(VertexFormat.class,
+//				sourceVertex);
+//		if (null != sourceFormat) {
+//			Point sourceCenter = sourceFormat.getCenterPoint();
+//			if (null != sourceCenter) {
+//				format.setCenterPoint(sourceCenter.x, sourceCenter.y + 2
+//						* GraphFormat.OUTERCIRCLEDIAMETER);
+//			}
+//		}
+//		vNew.set(FormatHelper.FORMAT, format);
+//		// connect via edge if has source (if there is no source, it will be
+//		// null)
+//		E eElement = null;
+//		this.graph.insertEdge(sourceVertex, vNew, eElement);
+//
+//	}
+//STEFAN

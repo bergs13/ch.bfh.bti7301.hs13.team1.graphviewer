@@ -4,6 +4,8 @@ import defs.DecorableConstants;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
+import logic.AlgorithmDataProcessor;
+import logic.Recorder;
 
 public class GraphExamples<V, E> {
 
@@ -14,7 +16,12 @@ public class GraphExamples<V, E> {
 	static final Object PQLOCATOR = DecorableConstants.PQLOCATOR;
 	static final Object WEIGHT = DecorableConstants.WEIGHT;
 	static final Object MSF = DecorableConstants.MSF;
-
+        private Recorder recorder;
+        
+        public void setRecorder(AlgorithmDataProcessor processor){
+            recorder = new Recorder(processor);
+        }
+        
 	public final int kruskal(Graph<V, E> g) {
 		if (g.isDirected())
 			throw new RuntimeException("We need an undirected graph!");

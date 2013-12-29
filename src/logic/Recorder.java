@@ -5,9 +5,9 @@
  */
 package logic;
 
-import java.util.Stack;
 import logic.extlib.Graph;
 import logic.extlib.IncidenceListGraph;
+
 
 /**
  *
@@ -18,28 +18,20 @@ import logic.extlib.IncidenceListGraph;
 public class Recorder<V, E> {
 
     //Members
-    private GraphDataProcessor processor;
-    private final Stack graphstack= new Stack();
+   private  AlgorithmDataProcessor processor;
     //End of Members
     
     //Constructors
-    public Recorder() {
-        processor = new GraphDataProcessor();
+    public Recorder(AlgorithmDataProcessor processor) {
+        
     }
     //End of constructors
-    
-    public void add(Graph graph) {
-        String storedgraph = ""; //processor.exportGraph(graph);
-        graphstack.push(storedgraph);
+    public void breakPoint(Graph graph){
+        if (null == processor){
+            throw new RuntimeException("processor not instantiated");
+        }
+        this.processor.set((IncidenceListGraph)graph);
     }
-    public IncidenceListGraph remove(){
-        if (!graphstack.empty()){
-        IncidenceListGraph graph = new IncidenceListGraph(true);//processor.importGraph(graphstack.pop());
-        return graph;
-        }
-        else {
-        return null;
-        }
-    } 
-  
+    
+    
 }

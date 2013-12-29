@@ -8,6 +8,7 @@ public class GUICommandConstants {
         //algorithmiteration
         public static final String FORWARD = "FORWARD";
         public static final String BACKWARD ="BACKWARD";
+        public static final String RUN= "RUN";
         //graph manipulation
 	public static final String NEWGRAPH ="NEWGRAPH";
 	public static final String LOADGRAPH ="LOADGRAPH";

@@ -22,8 +22,8 @@ public class Recorder<V, E> {
     //End of Members
     
     //Constructors
-    public Recorder(AlgorithmDataProcessor processor) {
-        
+    public Recorder(AlgorithmDataProcessor modelProcessor) {
+        this.processor = modelProcessor;
     }
     //End of constructors
     

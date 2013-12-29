@@ -8,4 +8,5 @@ public class ModelEventConstants {
 	public static final String ADDVERTEXTOSELECTED = "ADDVERTEXTOSELECTED";
 	public static final String CONNECTVERTEXTOSELECTED = "CONNECTVERTEXTOSELECTED";
 	public static final String DELETESELECTEDVERTEX = "DELETESELECTEDVERTEX";
+	public static final String GRAPHREPLACED = "GRAPHREPLACED";
 }

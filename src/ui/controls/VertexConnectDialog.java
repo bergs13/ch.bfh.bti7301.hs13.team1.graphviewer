@@ -60,7 +60,10 @@ public class VertexConnectDialog<V, E> extends JDialog {
 				cBSV.addItem(new CustomComboBoxItem(key, value));
 			}
 			// Default selection
-			sourceVertex = key;
+			if (cBSV.getItemCount() > 0) {
+				cBSV.setSelectedIndex(0);
+				sourceVertex = (Vertex<V>) cBSV.getItemAt(0).getKey();
+			}
 			cBSV.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent arg0) {
@@ -86,7 +89,10 @@ public class VertexConnectDialog<V, E> extends JDialog {
 			cBTV.addItem(new CustomComboBoxItem(key, value));
 		}
 		// Default selection
-		targetVertex = key;
+		if (cBTV.getItemCount() > 0) {
+			cBTV.setSelectedIndex(0);
+			targetVertex = (Vertex<V>) cBTV.getItemAt(0).getKey();
+		}
 		cBTV.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {

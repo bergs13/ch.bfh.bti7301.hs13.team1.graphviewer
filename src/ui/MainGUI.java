@@ -126,10 +126,25 @@ public class MainGUI<V, E> extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         runButton.setText("Run");
+        runButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                runButtonActionPerformed(evt);
+            }
+        });
 
         backwardButton.setText("Backward");
+        backwardButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                backwardButtonActionPerformed(evt);
+            }
+        });
 
         forwardButton.setText("Forward");
+        forwardButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                forwardButtonActionPerformed(evt);
+            }
+        });
 
         directedRadioButton.setText("directed");
 
@@ -171,6 +186,11 @@ public class MainGUI<V, E> extends javax.swing.JFrame {
         Menu1.setText("Datei");
 
         exitMenuItem.setText("Beenden");
+        exitMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                exitMenuItemActionPerformed(evt);
+            }
+        });
         Menu1.add(exitMenuItem);
 
         mainMenuBar.add(Menu1);
@@ -178,12 +198,27 @@ public class MainGUI<V, E> extends javax.swing.JFrame {
         GraphMenu.setText("Graph");
 
         newGraphMenuItem.setText("New Graph");
+        newGraphMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                newGraphMenuItemActionPerformed(evt);
+            }
+        });
         GraphMenu.add(newGraphMenuItem);
 
         loadGraphjMenuItem.setText("Load Graph");
+        loadGraphjMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                loadGraphjMenuItemActionPerformed(evt);
+            }
+        });
         GraphMenu.add(loadGraphjMenuItem);
 
         saveGraphMenuItem.setText("Save Graph");
+        saveGraphMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                saveGraphMenuItemActionPerformed(evt);
+            }
+        });
         GraphMenu.add(saveGraphMenuItem);
 
         mainMenuBar.add(GraphMenu);
@@ -191,9 +226,19 @@ public class MainGUI<V, E> extends javax.swing.JFrame {
         algorithmMenu.setText("Algorithm");
 
         dijkstraMenuItem.setText("Dijkstra");
+        dijkstraMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                dijkstraMenuItemActionPerformed(evt);
+            }
+        });
         algorithmMenu.add(dijkstraMenuItem);
 
         kruskalMenuItem.setText("Kruskal");
+        kruskalMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                kruskalMenuItemActionPerformed(evt);
+            }
+        });
         algorithmMenu.add(kruskalMenuItem);
 
         mainMenuBar.add(algorithmMenu);
@@ -222,6 +267,42 @@ public class MainGUI<V, E> extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void exitMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitMenuItemActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_exitMenuItemActionPerformed
+
+    private void newGraphMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newGraphMenuItemActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_newGraphMenuItemActionPerformed
+
+    private void loadGraphjMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loadGraphjMenuItemActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_loadGraphjMenuItemActionPerformed
+
+    private void saveGraphMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveGraphMenuItemActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_saveGraphMenuItemActionPerformed
+
+    private void dijkstraMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dijkstraMenuItemActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_dijkstraMenuItemActionPerformed
+
+    private void kruskalMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_kruskalMenuItemActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_kruskalMenuItemActionPerformed
+
+    private void forwardButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_forwardButtonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_forwardButtonActionPerformed
+
+    private void backwardButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backwardButtonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_backwardButtonActionPerformed
+
+    private void runButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_runButtonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_runButtonActionPerformed
 
 	
 

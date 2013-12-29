@@ -20,7 +20,7 @@ public class GraphFormat {
 	public static final int INNERCIRCLEDIAMETER = 30;
 	public static final int OUTERCIRCLEDIAMETER = 40;
 	public static final int LOCATIONCENTERMODIFIER = 20;
-
+	public static final int SELECTEDVERTEXBORDERTHICKNESS =2;
 	public static final int ARROWTRIANGLEWIDTH = 20;
 	public static final int ARROWTRIANGLEHEIGHT = 30;
 

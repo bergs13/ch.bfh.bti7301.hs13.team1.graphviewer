@@ -171,11 +171,15 @@ public class GraphPanelModel<V, E> extends Observable {
 		if (gUICommandConstant.equals(GUICommandConstants.DIJKSTRA)) {
 			this.graphExamples.dijkstra(this.graph, null);
 		}
+		else if(gUICommandConstant.equals(GUICommandConstants.KRUSKAL))
+		{
+			this.graphExamples.kruskal(this.graph);
+		}
 		// load/save/clear graph
 		else if (gUICommandConstant.equals(GUICommandConstants.NEWGRAPH)) {
 			setNewGraph();
 		} else if (gUICommandConstant.equals(GUICommandConstants.LOADGRAPH)) {
-			if (String.class.isInstance(param)) {
+			if (null != param && String.class.isInstance(param)) {
 				IncidenceListGraph<V, E> g = graphDataProcessor
 						.importGraph((String) param);
 				if (null != g) {
@@ -183,7 +187,7 @@ public class GraphPanelModel<V, E> extends Observable {
 				}
 			}
 		} else if (gUICommandConstant.equals(GUICommandConstants.SAVEGRAPH)) {
-			if (String.class.isInstance(param)) {
+			if (null != param && String.class.isInstance(param)) {
 				graphDataProcessor.exportGraph(this.graph, (String) param);
 			}
 		}

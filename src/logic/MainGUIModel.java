@@ -12,8 +12,4 @@ public class MainGUIModel<V, E> {
 	public GraphPanelModel<V, E> getGraphPanelModel() {
 		return this.graphPanelModel;
 	}
-
-	public void sendMainGUICommand(String gUICommandConstant, Object param) {
-		this.graphPanelModel.handleMainGUICommand(gUICommandConstant, param);
-	}
 }

@@ -193,8 +193,9 @@ public class GraphPanelModel<V, E> extends Observable {
                 }
                 // load/save/clear graph
 		else if (gUICommandConstant.equals(GUICommandConstants.NEWGRAPH)) {
-			setNewGraph();
-		} else if (gUICommandConstant.equals(GUICommandConstants.LOADGRAPH)) {
+			this.setNewGraph();
+		} 
+                else if (gUICommandConstant.equals(GUICommandConstants.LOADGRAPH)) {
 			if (null != param && String.class.isInstance(param)) {
 				IncidenceListGraph<V, E> g = graphDataProcessor
 						.importGraph((String) param);
@@ -202,7 +203,8 @@ public class GraphPanelModel<V, E> extends Observable {
 					setExternalGraph(g);
 				}
 			}
-		} else if (gUICommandConstant.equals(GUICommandConstants.SAVEGRAPH)) {
+		}
+                else if (gUICommandConstant.equals(GUICommandConstants.SAVEGRAPH)) {
 			if (null != param && String.class.isInstance(param)) {
 				graphDataProcessor.exportGraph(this.graph, (String) param);
 			}

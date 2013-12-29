@@ -28,6 +28,10 @@ public class IncidenceListGraph<V, E> extends IGLDecorable implements
 		this.isDirected = isDirected;
 	}
 
+	public void setDirected(boolean isDirected) {
+		this.isDirected = isDirected;
+	}
+
 	@Override
 	public Vertex<V> aVertex() {
 		if (numberOfVertices() > 0)

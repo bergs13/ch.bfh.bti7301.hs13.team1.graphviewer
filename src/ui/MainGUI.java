@@ -337,11 +337,13 @@ public class MainGUI<V, E> extends javax.swing.JFrame {
 	}// GEN-LAST:event_saveGraphMenuItemActionPerformed
 
 	private void dijkstraMenuItemActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_dijkstraMenuItemActionPerformed
-		// TODO add your handling code here:
+		this.model.getGraphPanelModel().handleMainGUICommand(
+				GUICommandConstants.DIJKSTRA, null);
 	}// GEN-LAST:event_dijkstraMenuItemActionPerformed
 
 	private void kruskalMenuItemActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_kruskalMenuItemActionPerformed
-		// TODO add your handling code here:
+		this.model.getGraphPanelModel().handleMainGUICommand(
+				GUICommandConstants.KRUSKAL, null);
 	}// GEN-LAST:event_kruskalMenuItemActionPerformed
 
 	private void forwardButtonActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_forwardButtonActionPerformed

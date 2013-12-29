@@ -156,8 +156,8 @@ public class GraphPanel<V, E> extends JComponent implements Observer {
 						model.getGraph());
 				if (null == format) {
 					format = new GraphFormat();
-					model.getGraph().set(FormatHelper.FORMAT, format);
 				}
+				model.getGraph().set(FormatHelper.FORMAT, format);
 				GraphFormatDialog gFormatDialog = new GraphFormatDialog(format);
 				gFormatDialog.setVisible(true);
 				if (gFormatDialog.getSaved()) {

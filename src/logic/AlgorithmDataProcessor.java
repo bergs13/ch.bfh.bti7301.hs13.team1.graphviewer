@@ -17,7 +17,7 @@ public class AlgorithmDataProcessor {
 
     public AlgorithmDataProcessor() {
         GDProcessor = new GraphDataProcessor();
-        graphList = new ArrayList<>();
+        graphList = new ArrayList<String>();
 
     }
 
@@ -85,8 +85,8 @@ public class AlgorithmDataProcessor {
         return graphList;
     }
 
-    public void setGraphList(ArrayList GraphlistToImport) {
+    public void setGraphList(ArrayList<String> graphlistToImport) {
         this.resetGraphList();
-        graphList.addAll(GraphlistToImport);
+        graphList.addAll(graphlistToImport);
     }
 }

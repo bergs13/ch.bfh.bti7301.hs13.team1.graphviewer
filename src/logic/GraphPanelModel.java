@@ -18,13 +18,14 @@ public class GraphPanelModel<V, E> extends Observable {
 	Vertex<V> selectedVertex = null;
 	Vertex<V> changedVertex = null;
 	private GraphDataProcessor<V, E> graphDataProcessor = new GraphDataProcessor<V, E>();
+        private final AlgorithmDataProcessor algorithDataProcessor = new AlgorithmDataProcessor();
 
 	// End of Members
 
 	// Constructors
 	public GraphPanelModel(IncidenceListGraph<V, E> g) {
 		this.graphExamples = new GraphExamples<V, E>();
-
+                this.graphExamples.setRecorder(algorithDataProcessor);
 		// input graph?
 		if (null != g) {
 			setExternalGraph(g);

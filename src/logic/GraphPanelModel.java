@@ -160,6 +160,7 @@ public class GraphPanelModel<V, E> extends Observable {
 				newFormat = new GraphFormat();
 			}
 		}
+		this.graph.setDirected(newFormat.isDirected());
 		// observable implementation notifies the gui
 		this.graph.set(FormatHelper.FORMAT, newFormat);
 	}

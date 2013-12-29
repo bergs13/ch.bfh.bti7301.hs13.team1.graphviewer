@@ -2,7 +2,6 @@
 import defs.EdgeFormat;
 import defs.FormatHelper;
 import defs.VertexFormat;
-import demo.GraphDataProcessorGuc;
 import ui.controls.GraphImportExportDialog;
 import logic.GraphDataProcessor;
 import logic.extlib.Edge;
@@ -62,8 +61,8 @@ public class testGuc {
 //       // System.out.print(g1.constructStringFromGraph(testGraph));
 //       g1.exportGraph(testGraph, "\\C:\\Users\\Christian\\Desktop\\testgraph2.xml");
 
-        GraphImportExportDialog gie = new GraphImportExportDialog();
-        gie.chooseFile();
+        GraphImportExportDialog gie = new GraphImportExportDialog(true);
+    
 
 
 

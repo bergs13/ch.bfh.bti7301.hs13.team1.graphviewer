@@ -18,14 +18,14 @@ public class GraphPanelModel<V, E> extends Observable {
 	Vertex<V> selectedVertex = null;
 	Vertex<V> changedVertex = null;
 	private GraphDataProcessor<V, E> graphDataProcessor = new GraphDataProcessor<V, E>();
-        private final AlgorithmDataProcessor algorithDataProcessor = new AlgorithmDataProcessor();
+        private final AlgorithmDataProcessor algorithmDataProcessor = new AlgorithmDataProcessor();
 
 	// End of Members
 
 	// Constructors
 	public GraphPanelModel(IncidenceListGraph<V, E> g) {
 		this.graphExamples = new GraphExamples<V, E>();
-                this.graphExamples.setRecorder(algorithDataProcessor);
+                this.graphExamples.setRecorder(algorithmDataProcessor);
 		// input graph?
 		if (null != g) {
 			setExternalGraph(g);
@@ -170,7 +170,7 @@ public class GraphPanelModel<V, E> extends Observable {
 	public void handleMainGUICommand(String gUICommandConstant, Object param) {
 		// apply algorithms
 		if (gUICommandConstant.equals(GUICommandConstants.DIJKSTRA)) {
-                        
+                        this.algorithmDataProcessor.resetGraphList();
 			this.graphExamples.dijkstra(this.graph, null);
 		}
 		// load/save/clear graph

@@ -347,11 +347,13 @@ public class MainGUI<V, E> extends javax.swing.JFrame {
 	}// GEN-LAST:event_kruskalMenuItemActionPerformed
 
 	private void forwardButtonActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_forwardButtonActionPerformed
-		// TODO add your handling code here:
+		this.model.getGraphPanelModel().handleMainGUICommand(
+				GUICommandConstants.FORWARD, null);
 	}// GEN-LAST:event_forwardButtonActionPerformed
 
 	private void backwardButtonActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_backwardButtonActionPerformed
-		// TODO add your handling code here:
+		this.model.getGraphPanelModel().handleMainGUICommand(
+				GUICommandConstants.BACKWARD, null);
 	}// GEN-LAST:event_backwardButtonActionPerformed
 
 	private void runButtonActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_runButtonActionPerformed

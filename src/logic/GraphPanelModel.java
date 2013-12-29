@@ -184,12 +184,12 @@ public class GraphPanelModel<V, E> extends Observable {
                 //Iterate throug completed Algorithm
                 else if(gUICommandConstant.equals(GUICommandConstants.FORWARD))
 		{
-                        this.graph = this.algorithmDataProcessor.forward();	
+                        this.setExternalGraph(this.algorithmDataProcessor.forward());	
                 }
                 
                 else if(gUICommandConstant.equals(GUICommandConstants.BACKWARD))
 		{
-                        this.graph = this.algorithmDataProcessor.backward();	
+                        this.setExternalGraph(this.algorithmDataProcessor.backward());	
                 }
                 // load/save/clear graph
 		else if (gUICommandConstant.equals(GUICommandConstants.NEWGRAPH)) {

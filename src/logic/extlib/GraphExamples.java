@@ -18,6 +18,7 @@ public class GraphExamples<V, E> {
 	static final Object MSF = DecorableConstants.MSF;
         private Recorder recorder;
         
+        
         public void setRecorder(AlgorithmDataProcessor processor){
             this.recorder = new Recorder(processor);
         }

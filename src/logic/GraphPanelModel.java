@@ -170,6 +170,7 @@ public class GraphPanelModel<V, E> extends Observable {
 	public void handleMainGUICommand(String gUICommandConstant, Object param) {
 		// apply algorithms
 		if (gUICommandConstant.equals(GUICommandConstants.DIJKSTRA)) {
+                        
 			this.graphExamples.dijkstra(this.graph, null);
 		}
 		// load/save/clear graph

@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package ui.controls;
 
 import defs.GraphFormat;
@@ -23,61 +22,57 @@ import javax.swing.JRadioButton;
  *
  * @author Stephan_2
  */
-public class NewGraphDialog extends JDialog{
-    private final String question= "Should the new graph be";
-    private final JRadioButton directedButton=new JRadioButton();
-    private final JRadioButton undirectedButton= new JRadioButton();
-    private final ButtonGroup directionButtongroup = new ButtonGroup(); 
-    private boolean directed= false;
+public class NewGraphDialog extends JDialog {
+
+    //members
+    private final String question = "Should the new graph be";
     private final GraphFormat format;
-//consturctors
+
+    //end of members
+//constructors
     //This sets the field directed of GraphFormat of the new Graph  
-    public NewGraphDialog(GraphFormat newFormat){
+    public NewGraphDialog(GraphFormat graphFormat) {
         super();
         this.setModalityType(ModalityType.APPLICATION_MODAL);
-        this.format = newFormat;
-        
+        this.format = graphFormat;
+
         //Layout
         this.setLayout(new GridLayout(0, 1));
-        this.setMinimumSize(new Dimension(200, 200));
-	this.setMaximumSize(new Dimension(200, 200));
+        this.setMinimumSize(new Dimension(200, 100));
+        this.setMaximumSize(new Dimension(200, 100));
         
+        //Fields
         this.add(new JLabel(question));
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.setLayout(new GridLayout(1, 0));
         
-        JPanel buttonPanel = new JPanel();
-        buttonPanel.setLayout(new BorderLayout());
-        buttonPanel.add(setButtonPanel(), BorderLayout.NORTH);
-                
-        JButton okButton = new JButton("OK");
-                JPanel okPanel = new JPanel();
-                okPanel.add(okButton);buttonPanel.add(okPanel, BorderLayout.SOUTH);
-		okButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				setVisible(false);
-                                directed = directedButton.isSelected();
-                                format.setDirected(directed);
-				dispose();
-			};
-		});
-         buttonPanel.add(okPanel, BorderLayout.SOUTH);
-         this.add(buttonPanel);
-         this.setVisible(true);
-    }
-//End of constructors            
-    
-//Methods
-    
-    public final JPanel setButtonPanel(){
-        JPanel buttonPanel = new JPanel();
-        buttonPanel.setLayout(new GridLayout(0,1));
-        directedButton.setText("directed");
-        undirectedButton.setText("undirected");
+        //Buttons
+        JButton directedButton = new JButton("directed");
+        directedButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent arg0) {
+                setVisible(false);
+                format.setDirected(true);
+                dispose();
+            }
+        ;
+        });
+        JButton undirectedButton = new JButton("undirected");
+        undirectedButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent arg0) {
+                setVisible(false);
+                format.setDirected(false);
+                dispose();
+            }
+        ;
+        });       
+        
         buttonPanel.add(directedButton);
         buttonPanel.add(undirectedButton);
-        directionButtongroup.add(directedButton);
-        directionButtongroup.add(undirectedButton);
-        return buttonPanel;
+        this.add(buttonPanel);
+        this.setVisible(true);
     }
-    
+//End of constructors            
+
 }

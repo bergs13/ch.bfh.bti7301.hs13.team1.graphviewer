@@ -130,6 +130,7 @@ public class VertexConnectDialog<V, E> extends JDialog {
 			}
                 });
                 this.add(weightField);
+                
 		// OK/Cancel Buttons
 		JButton okButton = new JButton("OK");
 		okButton.addActionListener(new ActionListener() {

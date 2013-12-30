@@ -112,7 +112,6 @@ public class MainGUI<V, E> extends javax.swing.JFrame {
         runButton = new javax.swing.JButton();
         backwardButton = new javax.swing.JButton();
         forwardButton = new javax.swing.JButton();
-        directedRadioButton = new javax.swing.JRadioButton();
         jRadioButton1 = new javax.swing.JRadioButton();
         editCheckBox = new javax.swing.JCheckBox();
         informationPanel1 = new ui.controls.InformationPanel();
@@ -151,13 +150,6 @@ public class MainGUI<V, E> extends javax.swing.JFrame {
             }
         });
 
-        directedRadioButton.setText("directed");
-        directedRadioButton.addItemListener(new java.awt.event.ItemListener() {
-            public void itemStateChanged(java.awt.event.ItemEvent evt) {
-                directedRadioButtonItemStateChanged(evt);
-            }
-        });
-
         jRadioButton1.setText("weighted");
 
         editCheckBox.setText("Edit");
@@ -169,10 +161,8 @@ public class MainGUI<V, E> extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addComponent(editCheckBox)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(directedRadioButton)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jRadioButton1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 341, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 406, Short.MAX_VALUE)
                 .addComponent(forwardButton)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(backwardButton)
@@ -188,7 +178,6 @@ public class MainGUI<V, E> extends javax.swing.JFrame {
                     .addComponent(backwardButton)
                     .addComponent(forwardButton)
                     .addComponent(jRadioButton1)
-                    .addComponent(directedRadioButton)
                     .addComponent(editCheckBox))
                 .addContainerGap(25, Short.MAX_VALUE))
         );
@@ -291,10 +280,6 @@ public class MainGUI<V, E> extends javax.swing.JFrame {
 				GUICommandConstants.CUSTOMGRAPH, null);
     }//GEN-LAST:event_CustomAlgorithmMenuItemActionPerformed
 
-    private void directedRadioButtonItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_directedRadioButtonItemStateChanged
-        this.model.getGraphPanelModel().handleMainGUICommand(GUICommandConstants.DIRECTED, evt);
-    }//GEN-LAST:event_directedRadioButtonItemStateChanged
-
 	private void exitMenuItemActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_exitMenuItemActionPerformed
 		dispose();
                 System.exit(0);
@@ -393,7 +378,6 @@ public class MainGUI<V, E> extends javax.swing.JFrame {
     private javax.swing.JMenu algorithmMenu;
     private javax.swing.JButton backwardButton;
     private javax.swing.JMenuItem dijkstraMenuItem;
-    private javax.swing.JRadioButton directedRadioButton;
     private javax.swing.JCheckBox editCheckBox;
     private javax.swing.JMenuItem exitMenuItem;
     private javax.swing.JButton forwardButton;

@@ -11,6 +11,7 @@ import java.awt.event.ItemEvent;
 import logic.extlib.GraphExamples;
 import logic.extlib.IncidenceListGraph;
 import logic.extlib.Vertex;
+import ui.controls.NewGraphDialog;
 
 public class GraphPanelModel<V, E> extends Observable {
 	// Members
@@ -40,6 +41,7 @@ public class GraphPanelModel<V, E> extends Observable {
 
 	private void setNewGraph() {
 		GraphFormat format = new GraphFormat();
+                NewGraphDialog dialog = new NewGraphDialog(format);
 		this.graph = new IncidenceListGraph<V, E>(format.isDirected());
 		this.graph.set(FormatHelper.FORMAT, format);
 	}

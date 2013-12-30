@@ -6,11 +6,17 @@
 
 package ui.controls;
 
+import defs.GraphFormat;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JDialog;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 
 /**
@@ -18,40 +24,61 @@ import javax.swing.JRadioButton;
  * @author Stephan_2
  */
 public class NewGraphDialog extends JDialog{
-    private String question= "Should the new Graph be";
+    private final String question= "Should the new graph be";
     private final JRadioButton directedButton=new JRadioButton();
     private final JRadioButton undirectedButton= new JRadioButton();
-    private final ButtonGroup buttongroup = new ButtonGroup(); 
+    private final ButtonGroup directionButtongroup = new ButtonGroup(); 
     private boolean directed= false;
+    private final GraphFormat format;
 //consturctors
-    public NewGraphDialog(){
+    public NewGraphDialog(GraphFormat newFormat){
         super();
         this.setModalityType(ModalityType.APPLICATION_MODAL);
+        this.format = newFormat;
+        this.setLayout(new GridLayout(0, 1));
+        this.setMinimumSize(new Dimension(200, 200));
+	this.setMaximumSize(new Dimension(200, 200));
         
-        this.add(directedButton);
-        this.add(undirectedButton);
+        this.add(new JLabel(question));
+        JPanel buttonPanel = new JPanel();//setButtonPanel();
+        buttonPanel.setLayout(new BorderLayout());
+        buttonPanel.add(setButtonPanel(), BorderLayout.NORTH);
+        
+        this.add(buttonPanel);
+        
+        
+        
         
         JButton okButton = new JButton("OK");
+                JPanel okPanel = new JPanel();
+                okPanel.add(okButton);
 		okButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				setVisible(false);
                                 directed = directedButton.isSelected();
+                                format.setDirected(directed);
 				dispose();
 			};
 		});
-         this.add(okButton);
+         buttonPanel.add(okPanel, BorderLayout.SOUTH);
+         
+         this.setVisible(true);
     }
 //End of constructors            
     
 //Methods
-    private void setRadioButtons(){
+    
+    public final JPanel setButtonPanel(){
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.setLayout(new GridLayout(0,1));
         directedButton.setText("directed");
         undirectedButton.setText("undirected");
-        this.buttongroup.add(directedButton);
-        this.buttongroup.add(undirectedButton);
+        buttonPanel.add(directedButton);
+        buttonPanel.add(undirectedButton);
+        directionButtongroup.add(directedButton);
+        directionButtongroup.add(undirectedButton);
+        return buttonPanel;
     }
-    public boolean getSaved() {
-		return this.directed;
-    }
+    
 }

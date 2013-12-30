@@ -77,16 +77,19 @@ public class VertexAddDialog<V> extends JDialog {
 		final JTextField labelField = new JTextField(this.label);
 		// Listen for changes in the text
 		labelField.getDocument().addDocumentListener(new DocumentListener() {
+                        @Override
 			public void changedUpdate(DocumentEvent e) {
 				// text was changed
 				label = labelField.getText();
 			}
 
+                        @Override
 			public void removeUpdate(DocumentEvent e) {
 				// text was deleted
 				label = labelField.getText();
 			}
 
+                        @Override
 			public void insertUpdate(DocumentEvent e) {
 				// text was inserted
 				label = labelField.getText();

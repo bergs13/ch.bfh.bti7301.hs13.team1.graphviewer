@@ -131,7 +131,8 @@ public class GraphPanel<V, E> extends JComponent implements Observer {
 				if (vAddDialog.getSaved()) {
 					VertexFormat f = new VertexFormat();
 					f.setLabel(vAddDialog.getLabel());
-					model.addVertex(vAddDialog.getSourceVertex(), f);
+					model.addVertex(vAddDialog.getSourceVertex(), f, vAddDialog.getWeight());
+                                        System.out.println(vAddDialog.getWeight());
 				}
 			}
 		});
@@ -144,7 +145,9 @@ public class GraphPanel<V, E> extends JComponent implements Observer {
 				vConnectDialog.setVisible(true);
 				if (vConnectDialog.getSaved()) {
 					model.connectVertices(vConnectDialog.getSourceVertex(),
-							vConnectDialog.getTargetVertex());
+							vConnectDialog.getTargetVertex(),
+                                                        vConnectDialog.getWeight());
+                                        //System.out.println(vConnectDialog.getWeight());
 				}
 			}
 		});
@@ -156,8 +159,8 @@ public class GraphPanel<V, E> extends JComponent implements Observer {
 						model.getGraph());
 				if (null == format) {
 					format = new GraphFormat();
-					model.getGraph().set(FormatHelper.FORMAT, format);
 				}
+				model.getGraph().set(FormatHelper.FORMAT, format);
 				GraphFormatDialog gFormatDialog = new GraphFormatDialog(format);
 				gFormatDialog.setVisible(true);
 				if (gFormatDialog.getSaved()) {
@@ -167,19 +170,7 @@ public class GraphPanel<V, E> extends JComponent implements Observer {
 		});
 		this.setComponentPopupMenu(this.popupMenu);
 
-		// Add all decorables handled by this observer (graph/vertices/edges)
-		// graph
-		this.model.getGraph().addObserver(this);
-		// vertices
-		itV = model.getGraph().vertices();
-		while (itV.hasNext()) {
-			((Observable) (Decorable) itV.next()).addObserver(this);
-		}
-		// edges
-		itE = model.getGraph().edges();
-		while (itE.hasNext()) {
-			((Observable) (Decorable) itE.next()).addObserver(this);
-		}
+		addObserverToDecorables();
 	}
 
 	// End of Constructors
@@ -193,7 +184,6 @@ public class GraphPanel<V, E> extends JComponent implements Observer {
 	@Override
 	public void paintComponent(Graphics g) {
 		System.out.println("panel paint");
-
 		// clear all
 		this.removeAll();
 
@@ -384,7 +374,7 @@ public class GraphPanel<V, E> extends JComponent implements Observer {
 	// Observer methods
 	@Override
 	public void update(Observable observable, Object objArgs) {
-		// Argumente müssen bestimmte Form haben
+		// Argumente mï¿½ssen bestimmte Form haben
 		if (Observable.class.isInstance(objArgs)) {
 			repaintContent();
 		} else if (String.class.isInstance(objArgs)) {
@@ -455,7 +445,8 @@ public class GraphPanel<V, E> extends JComponent implements Observer {
 					if (vAddDialog.getSaved()) {
 						VertexFormat f = new VertexFormat();
 						f.setLabel(vAddDialog.getLabel());
-						model.addVertex(this.model.getSelectedVertex(), f);
+						model.addVertex(this.model.getSelectedVertex(), f, vAddDialog.getWeight());
+                                                System.out.print(vAddDialog.getWeight());
 					}
 				}
 			} else if (eventConstant
@@ -466,7 +457,8 @@ public class GraphPanel<V, E> extends JComponent implements Observer {
 					vConnectDialog.setVisible(true);
 					if (vConnectDialog.getSaved()) {
 						model.connectVertices(this.model.getSelectedVertex(),
-								vConnectDialog.getTargetVertex());
+								vConnectDialog.getTargetVertex(),
+                                                                vConnectDialog.getWeight());
 					}
 				}
 			} else if (eventConstant
@@ -474,6 +466,40 @@ public class GraphPanel<V, E> extends JComponent implements Observer {
 				if (null != this.model.getSelectedVertex()) {
 					this.model.deleteSelectedVertex();
 				}
+			} else if (eventConstant.equals(ModelEventConstants.GRAPHREPLACED)) {
+				// clear old stuff
+				this.removeAll();
+				this.vertexVertexComponents.clear();
+				this.model.deleteObservers();
+
+				// add new stuff
+				// observer for model
+				this.model.addObserver(this);
+				// vertices as components
+				Iterator<Vertex<V>> itV = model.getGraph().vertices();
+				Vertex<V> v;
+				VertexFormat f;
+				while (itV.hasNext()) {
+					v = itV.next();
+					f = FormatHelper.getFormat(VertexFormat.class, v);
+					if (f == null) {
+						f = new VertexFormat();
+					}
+					addVertexComponent(itV.next(), f.getCenterPoint());
+				}
+				// calculate the edges for the components
+				Iterator<Edge<E>> itE;
+				for (Vertex<V> vertex : this.vertexVertexComponents.keySet()) {
+					itE = model.getGraph().incidentEdges(vertex);
+					while (itE.hasNext()) {
+						reCalculateAndSetEdgeFormatPoints(vertex, itE.next());
+					}
+				}
+				// oberver for decorables
+				addObserverToDecorables();
+
+				// repaint
+				repaintContent();
 			}
 		}
 	}
@@ -521,7 +547,7 @@ public class GraphPanel<V, E> extends JComponent implements Observer {
 		Point circleCenterTarget = vertexVertexComponents.get(g.opposite(e, v))
 				.getCircleCenterLocation();
 
-		// Umpolen wenn nötig, wenn gerichtet
+		// Umpolen wenn nï¿½tig, wenn gerichtet
 		if (g.isDirected()) {
 			if (g.destination(e).equals(v)) {
 				Point temp = circleCenterSource;
@@ -574,6 +600,22 @@ public class GraphPanel<V, E> extends JComponent implements Observer {
 			}
 		}
 		repaintContent();
+	}
+
+	private void addObserverToDecorables() {
+		// Add all decorables handled by this observer (graph/vertices/edges)
+		// graph
+		this.model.getGraph().addObserver(this);
+		// vertices
+		Iterator<Vertex<V>> itV = model.getGraph().vertices();
+		while (itV.hasNext()) {
+			((Observable) (Decorable) itV.next()).addObserver(this);
+		}
+		// edges
+		Iterator<Edge<E>> itE = model.getGraph().edges();
+		while (itE.hasNext()) {
+			((Observable) (Decorable) itE.next()).addObserver(this);
+		}
 	}
 	// End of Helper methods
 }

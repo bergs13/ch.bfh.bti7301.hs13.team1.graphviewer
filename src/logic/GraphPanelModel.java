@@ -1,5 +1,6 @@
 package logic;
 
+import defs.DecorableConstants;
 import java.awt.Point;
 import java.util.Observable;
 import defs.GUICommandConstants;
@@ -7,9 +8,12 @@ import defs.FormatHelper;
 import defs.GraphFormat;
 import defs.ModelEventConstants;
 import defs.VertexFormat;
+import java.awt.event.ItemEvent;
+import logic.extlib.Edge;
 import logic.extlib.GraphExamples;
 import logic.extlib.IncidenceListGraph;
 import logic.extlib.Vertex;
+import ui.controls.NewGraphDialog;
 
 public class GraphPanelModel<V, E> extends Observable {
 	// Members
@@ -18,13 +22,14 @@ public class GraphPanelModel<V, E> extends Observable {
 	Vertex<V> selectedVertex = null;
 	Vertex<V> changedVertex = null;
 	private GraphDataProcessor<V, E> graphDataProcessor = new GraphDataProcessor<V, E>();
+	private final AlgorithmDataProcessor algorithmDataProcessor = new AlgorithmDataProcessor();
 
 	// End of Members
 
 	// Constructors
 	public GraphPanelModel(IncidenceListGraph<V, E> g) {
 		this.graphExamples = new GraphExamples<V, E>();
-
+		this.graphExamples.setRecorder(algorithmDataProcessor);
 		// input graph?
 		if (null != g) {
 			setExternalGraph(g);
@@ -38,6 +43,7 @@ public class GraphPanelModel<V, E> extends Observable {
 
 	private void setNewGraph() {
 		GraphFormat format = new GraphFormat();
+                NewGraphDialog dialog = new NewGraphDialog(format);
 		this.graph = new IncidenceListGraph<V, E>(format.isDirected());
 		this.graph.set(FormatHelper.FORMAT, format);
 	}
@@ -84,12 +90,7 @@ public class GraphPanelModel<V, E> extends Observable {
 	}
 
 	// Graph manipulation Methods
-	public void addVertex(Vertex<V> sourceVertex, VertexFormat format) {
-		// Check variables
-		if (null == sourceVertex) {
-			return;
-		}
-
+	public void addVertex(Vertex<V> sourceVertex, VertexFormat format , double weight) {
 		// Update data
 		// create object
 		V vElement = null;
@@ -98,21 +99,34 @@ public class GraphPanelModel<V, E> extends Observable {
 		if (null == format) {
 			format = new VertexFormat();
 		}
-		// Place the new vertex under the source vertex
-		VertexFormat sourceFormat = FormatHelper.getFormat(VertexFormat.class,
-				sourceVertex);
-		if (null != sourceFormat) {
-			Point sourceCenter = sourceFormat.getCenterPoint();
-			if (null != sourceCenter) {
-				format.setCenterPoint(sourceCenter.x, sourceCenter.y + 2
-						* GraphFormat.OUTERCIRCLEDIAMETER);
+
+		if (null != sourceVertex) {
+			// Place the new vertex under the source vertex
+			VertexFormat sourceFormat = FormatHelper.getFormat(
+					VertexFormat.class, sourceVertex);
+			if (null != sourceFormat) {
+				Point sourceCenter = sourceFormat.getCenterPoint();
+				if (null != sourceCenter) {
+					format.setCenterPoint(sourceCenter.x, sourceCenter.y + 2
+							* GraphFormat.OUTERCIRCLEDIAMETER);
+				}
 			}
+		} else {
+			// Place the vertex at a default location
+			format.setCenterPoint(2 * GraphFormat.OUTERCIRCLEDIAMETER,
+					2 * GraphFormat.OUTERCIRCLEDIAMETER);
 		}
 		vNew.set(FormatHelper.FORMAT, format);
-		// connect via edge if has source (if there is no source, it will be
-		// null)
-		E eElement = null;
-		this.graph.insertEdge(sourceVertex, vNew, eElement);
+
+		if (null != sourceVertex) {
+			// connect via edge if has source (if there is no source, it will be
+			// null)
+			E eElement = null;
+			Edge edge = this.graph.insertEdge(sourceVertex, vNew, eElement);
+                        if (weight > Double.NEGATIVE_INFINITY){
+                            edge.set(DecorableConstants.WEIGHT, weight);
+                }
+		}
 
 		// Update UI
 		changedVertex = vNew;
@@ -120,7 +134,7 @@ public class GraphPanelModel<V, E> extends Observable {
 		notifyObservers(ModelEventConstants.VERTEXADDED);
 	}
 
-	public void connectVertices(Vertex<V> sourceVertex, Vertex<V> targetVertex) {
+	public void connectVertices(Vertex<V> sourceVertex, Vertex<V> targetVertex, double weight) {
 		// Check variables
 		if (null == sourceVertex || null == targetVertex) {
 			return;
@@ -128,7 +142,10 @@ public class GraphPanelModel<V, E> extends Observable {
 
 		// connect via new Edge
 		E eElement = null;
-		this.graph.insertEdge(sourceVertex, targetVertex, eElement);
+		Edge edge = this.graph.insertEdge(sourceVertex, targetVertex, eElement);
+                if (weight > Double.NEGATIVE_INFINITY){
+                    edge.set(DecorableConstants.WEIGHT, weight);
+                }
 
 		// Update UI
 		changedVertex = sourceVertex; // For the edge recalculations
@@ -159,6 +176,7 @@ public class GraphPanelModel<V, E> extends Observable {
 				newFormat = new GraphFormat();
 			}
 		}
+		this.graph.setDirected(newFormat.isDirected());
 		// observable implementation notifies the gui
 		this.graph.set(FormatHelper.FORMAT, newFormat);
 	}
@@ -169,24 +187,44 @@ public class GraphPanelModel<V, E> extends Observable {
 	public void handleMainGUICommand(String gUICommandConstant, Object param) {
 		// apply algorithms
 		if (gUICommandConstant.equals(GUICommandConstants.DIJKSTRA)) {
+			this.algorithmDataProcessor.resetGraphList();
 			this.graphExamples.dijkstra(this.graph, null);
+			this.algorithmDataProcessor.first();
+		} else if (gUICommandConstant.equals(GUICommandConstants.KRUSKAL)) {
+			this.algorithmDataProcessor.resetGraphList();
+			this.graphExamples.kruskal(this.graph);
+			this.algorithmDataProcessor.first();
+		}
+		// Iterate throug completed Algorithm
+		else if (gUICommandConstant.equals(GUICommandConstants.FORWARD)) {
+			this.setExternalGraph(this.algorithmDataProcessor.forward());
+		}
+
+		else if (gUICommandConstant.equals(GUICommandConstants.BACKWARD)) {
+			this.setExternalGraph(this.algorithmDataProcessor.backward());
 		}
 		// load/save/clear graph
 		else if (gUICommandConstant.equals(GUICommandConstants.NEWGRAPH)) {
 			setNewGraph();
+			setChanged();
+			notifyObservers(ModelEventConstants.GRAPHREPLACED);
 		} else if (gUICommandConstant.equals(GUICommandConstants.LOADGRAPH)) {
-			if (String.class.isInstance(param)) {
+			if (null != param && String.class.isInstance(param)) {
 				IncidenceListGraph<V, E> g = graphDataProcessor
 						.importGraph((String) param);
 				if (null != g) {
 					setExternalGraph(g);
 				}
+				setChanged();
+				notifyObservers(ModelEventConstants.GRAPHREPLACED);
 			}
-		} else if (gUICommandConstant.equals(GUICommandConstants.SAVEGRAPH)) {
-			if (String.class.isInstance(param)) {
+		}
+                else if (gUICommandConstant.equals(GUICommandConstants.SAVEGRAPH)) {
+			if (null != param && String.class.isInstance(param)) {
 				graphDataProcessor.exportGraph(this.graph, (String) param);
 			}
 		}
+                
 	}
 	// Main GUI handlers
 

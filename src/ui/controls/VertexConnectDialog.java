@@ -13,6 +13,9 @@ import javax.swing.JLabel;
 import defs.CustomComboBoxItem;
 import defs.FormatHelper;
 import defs.VertexFormat;
+import javax.swing.JTextField;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import logic.extlib.IncidenceListGraph;
 import logic.extlib.Vertex;
 
@@ -20,6 +23,7 @@ import logic.extlib.Vertex;
 public class VertexConnectDialog<V, E> extends JDialog {
 	Vertex<V> sourceVertex = null;
 	Vertex<V> targetVertex = null;
+        double weight = Double.NEGATIVE_INFINITY;
 	// saved when closed?
 	boolean saved = false;
 
@@ -33,7 +37,7 @@ public class VertexConnectDialog<V, E> extends JDialog {
 		this.setModalityType(ModalityType.APPLICATION_MODAL);
 
 		// Layout
-		this.setLayout(new GridLayout(sourceVertexGiven ? 2 : 3, 2));
+		this.setLayout(new GridLayout(sourceVertexGiven ? 2 : 4, 2));
 		int height = sourceVertexGiven ? 90 : 135;
 		this.setMinimumSize(new Dimension(200, height));
 		this.setMaximumSize(new Dimension(200, height));
@@ -60,7 +64,10 @@ public class VertexConnectDialog<V, E> extends JDialog {
 				cBSV.addItem(new CustomComboBoxItem(key, value));
 			}
 			// Default selection
-			sourceVertex = key;
+			if (cBSV.getItemCount() > 0) {
+				cBSV.setSelectedIndex(0);
+				sourceVertex = (Vertex<V>) cBSV.getItemAt(0).getKey();
+			}
 			cBSV.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent arg0) {
@@ -86,7 +93,10 @@ public class VertexConnectDialog<V, E> extends JDialog {
 			cBTV.addItem(new CustomComboBoxItem(key, value));
 		}
 		// Default selection
-		targetVertex = key;
+		if (cBTV.getItemCount() > 0) {
+			cBTV.setSelectedIndex(0);
+			targetVertex = (Vertex<V>) cBTV.getItemAt(0).getKey();
+		}
 		cBTV.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
@@ -95,7 +105,31 @@ public class VertexConnectDialog<V, E> extends JDialog {
 			};
 		});
 		this.add(cBTV);
+                
+                
+                //Weight of Edge
+                this.add(new JLabel("Weight of Edge:"));
+                final JTextField weightField = new JTextField();
+                weightField.getDocument().addDocumentListener(new DocumentListener() {
+                        @Override
+			public void changedUpdate(DocumentEvent e) {
+				// text was changed
+				weight = Double.parseDouble(weightField.getText());
+			}
 
+                        @Override
+			public void removeUpdate(DocumentEvent e) {
+				// text was deleted
+				weight = Double.parseDouble(weightField.getText());
+			}
+
+                        @Override
+			public void insertUpdate(DocumentEvent e) {
+				// text was inserted
+				weight = Double.parseDouble(weightField.getText());
+			}
+                });
+                this.add(weightField);
 		// OK/Cancel Buttons
 		JButton okButton = new JButton("OK");
 		okButton.addActionListener(new ActionListener() {
@@ -129,4 +163,7 @@ public class VertexConnectDialog<V, E> extends JDialog {
 	public Vertex<V> getTargetVertex() {
 		return this.targetVertex;
 	}
+        public double getWeight(){
+            return this.weight;
+        }
 }

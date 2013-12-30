@@ -101,86 +101,15 @@ public class GraphDataProcessor<V, E> {
 
             //active color
             Element activeColor = doc.createElement("activeColor");
-            String strActiveColor = activeColor.getTextContent().toString();
+            String strActiveColor = "-";
+            if(gf.getActiveColor()!= null){
+                strActiveColor = gf.getActiveColor().toString();
+            }
             activeColor.appendChild(doc.createTextNode(strActiveColor));
+            graphAttributes.appendChild(activeColor);
 
             //   etc.         
 
-
-//            //Vertices
-//            Element vertices = doc.createElement("vertices");
-//            rootElement.appendChild(vertices);
-//
-//            Iterator<Vertex<V>> it = g.vertices();
-//
-//            while (it.hasNext()) {
-//                Vertex<V> v = null;
-//                VertexFormat f = null;
-//
-//                v = it.next();
-//                f = FormatHelper.getFormat(VertexFormat.class, v);
-//
-//                Element vertex = doc.createElement("vertex");
-//                vertices.appendChild(vertex);
-//
-//                //Attributes
-//                //Name
-//                Element name = doc.createElement("name");
-//                String strName = "-";
-//                if (v.element() != null) {
-//                    strName = v.element().toString();
-//                }
-//                name.appendChild(doc.createTextNode(strName));
-//                vertex.appendChild(name);
-//
-//                //Label
-//                Element label = doc.createElement("label");
-//                String strLabel = "-";
-//                if (f != null && f.getLabel() != null) {
-//                    strLabel = f.getLabel().toString();
-//                }
-//                label.appendChild(doc.createTextNode(strLabel));
-//                vertex.appendChild(label);
-//
-//                //Position
-//                Element position = doc.createElement("position");
-//                Element x = doc.createElement("x");
-//                Element y = doc.createElement("y");
-//
-//                //x, y coordinates
-//                String posX = "-";
-//                String posY = "-";
-//                if (f != null && f.getCenterPoint() != null) {
-//                    posX = Double.toString(f.getCenterPoint().getX());
-//                    posY = Double.toString(f.getCenterPoint().getY());
-//                }
-//
-//                x.appendChild(doc.createTextNode(posX));
-//                y.appendChild(doc.createTextNode(posY));
-//                position.appendChild(x);
-//                position.appendChild(y);
-//                vertex.appendChild(position);
-//
-//                //Visited?
-//                Element visited = doc.createElement("visited");
-//                String vis = "no";
-//
-//                if (f != null && f.isVisited() == true) {
-//                    vis = "yes";
-//                }
-//                visited.appendChild(doc.createTextNode(vis));
-//                vertex.appendChild(visited);
-//
-//                //Active?
-//                Element active = doc.createElement("active");
-//                String act = "no";
-//
-//                if (f != null && f.isActive() == true) {
-//                    act = "yes";
-//                }
-//                active.appendChild(doc.createTextNode(act));
-//                vertex.appendChild(active);
-//            }
 
             //Edges
             Element edges = doc.createElement("edges");
@@ -322,7 +251,7 @@ public class GraphDataProcessor<V, E> {
                 Element vID = doc.createElement("vertexID");
                 String strVertexID = "-";
                 if (vertexID > -1) {
-                    strVertexID = v.element().toString();
+                    strVertexID = Integer.toString(vertexID);
                 }
                 vID.appendChild(doc.createTextNode(strVertexID));
                 vertex.appendChild(vID);

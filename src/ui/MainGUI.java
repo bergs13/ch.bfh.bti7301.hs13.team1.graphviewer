@@ -301,7 +301,8 @@ public class MainGUI<V, E> extends javax.swing.JFrame {
 	}// GEN-LAST:event_exitMenuItemActionPerformed
 
 	private void newGraphMenuItemActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_newGraphMenuItemActionPerformed
-		this.model.getGraphPanelModel().handleMainGUICommand(
+		
+            this.model.getGraphPanelModel().handleMainGUICommand(
 				GUICommandConstants.NEWGRAPH, null);
 	}// GEN-LAST:event_newGraphMenuItemActionPerformed
 

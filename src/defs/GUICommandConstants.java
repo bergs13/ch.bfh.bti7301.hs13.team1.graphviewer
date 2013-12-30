@@ -13,5 +13,7 @@ public class GUICommandConstants {
 	public static final String NEWGRAPH = "NEWGRAPH";
 	public static final String LOADGRAPH = "LOADGRAPH";
 	public static final String SAVEGRAPH = "SAVEGRAPH";
+        // graph properties
+        public static final String DIRECTED = "DIRECTED";
 
 }

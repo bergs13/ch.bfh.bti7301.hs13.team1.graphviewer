@@ -152,6 +152,11 @@ public class MainGUI<V, E> extends javax.swing.JFrame {
         });
 
         directedRadioButton.setText("directed");
+        directedRadioButton.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                directedRadioButtonItemStateChanged(evt);
+            }
+        });
 
         jRadioButton1.setText("weighted");
 
@@ -286,8 +291,13 @@ public class MainGUI<V, E> extends javax.swing.JFrame {
 				GUICommandConstants.CUSTOMGRAPH, null);
     }//GEN-LAST:event_CustomAlgorithmMenuItemActionPerformed
 
+    private void directedRadioButtonItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_directedRadioButtonItemStateChanged
+        this.model.getGraphPanelModel().handleMainGUICommand(GUICommandConstants.DIRECTED, evt);
+    }//GEN-LAST:event_directedRadioButtonItemStateChanged
+
 	private void exitMenuItemActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_exitMenuItemActionPerformed
-		// TODO add your handling code here:
+		dispose();
+                System.exit(0);
 	}// GEN-LAST:event_exitMenuItemActionPerformed
 
 	private void newGraphMenuItemActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_newGraphMenuItemActionPerformed

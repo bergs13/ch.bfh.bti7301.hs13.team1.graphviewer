@@ -7,6 +7,7 @@ import defs.FormatHelper;
 import defs.GraphFormat;
 import defs.ModelEventConstants;
 import defs.VertexFormat;
+import java.awt.event.ItemEvent;
 import logic.extlib.GraphExamples;
 import logic.extlib.IncidenceListGraph;
 import logic.extlib.Vertex;
@@ -213,6 +214,15 @@ public class GraphPanelModel<V, E> extends Observable {
 				graphDataProcessor.exportGraph(this.graph, (String) param);
 			}
 		}
+                else if (gUICommandConstant.equals(GUICommandConstants.DIRECTED)){
+                   ItemEvent event = (ItemEvent) param;
+                   if (ItemEvent.SELECTED ==  event.getStateChange()){
+                       this.graph.setDirected(true);
+                   }
+                   else if (ItemEvent.DESELECTED == event.getStateChange()){
+                       this.graph.setDirected(false);
+                   }
+                }
 	}
 	// Main GUI handlers
 

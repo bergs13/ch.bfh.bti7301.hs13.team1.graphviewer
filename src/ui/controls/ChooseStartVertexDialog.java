@@ -18,6 +18,7 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
 import logic.extlib.Vertex;
 
 /**
@@ -37,12 +38,11 @@ public class ChooseStartVertexDialog<V> extends JDialog {
         super();
         this.setModalityType(Dialog.ModalityType.APPLICATION_MODAL);
         // Layout
-        this.setLayout(new GridLayout(4, 2));
-        this.setMinimumSize(new Dimension(200, 90));
-        this.setMaximumSize(new Dimension(200, 90));
+        this.setLayout(new GridLayout(2, 0));
+        this.setMinimumSize(new Dimension(200, 135));
+        this.setMaximumSize(new Dimension(200, 135));
 
         // Input fields
-        this.add(new JLabel("Start vertex:"));
         final JComboBox<CustomComboBoxItem> cBV = new JComboBox<CustomComboBoxItem>();
         Vertex<V> key = null;
         VertexFormat formatForValue;
@@ -70,8 +70,12 @@ public class ChooseStartVertexDialog<V> extends JDialog {
             }
         ;
         });
-			this.add(cBV);
-
+	
+         JPanel vertexPanel = new JPanel();
+         vertexPanel.setLayout(new GridLayout(0,2));
+         vertexPanel.add(new JLabel("Start vertex:"));
+         vertexPanel.add(cBV);
+         this.add(vertexPanel);
         // OK/Cancel Buttons
         JButton okButton = new JButton("OK");
         okButton.addActionListener(new ActionListener() {
@@ -92,8 +96,11 @@ public class ChooseStartVertexDialog<V> extends JDialog {
             }
         ;
         });
-	this.add(okButton);
-        this.add(cancelButton);
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.setLayout(new GridLayout(0,2));
+	buttonPanel.add(okButton);
+        buttonPanel.add(cancelButton);
+        this.add(buttonPanel);
         this.setVisible(true);
     }
 

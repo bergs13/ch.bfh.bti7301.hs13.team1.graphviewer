@@ -103,9 +103,10 @@ public class GraphDataProcessor<V, E> {
             Element activeColor = doc.createElement("activeColor");
             String strActiveColor = "-";
             if(gf.getActiveColor()!= null){
-                strActiveColor = activeColor.getTextContent().toString();
+                strActiveColor = gf.getActiveColor().toString();
             }
             activeColor.appendChild(doc.createTextNode(strActiveColor));
+            graphAttributes.appendChild(activeColor);
 
             //   etc.         
 
@@ -250,7 +251,7 @@ public class GraphDataProcessor<V, E> {
                 Element vID = doc.createElement("vertexID");
                 String strVertexID = "-";
                 if (vertexID > -1) {
-                    strVertexID = v.element().toString();
+                    strVertexID = Integer.toString(vertexID);
                 }
                 vID.appendChild(doc.createTextNode(strVertexID));
                 vertex.appendChild(vID);

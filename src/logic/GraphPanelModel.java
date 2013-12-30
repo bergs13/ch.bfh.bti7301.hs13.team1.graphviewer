@@ -90,7 +90,7 @@ public class GraphPanelModel<V, E> extends Observable {
 	}
 
 	// Graph manipulation Methods
-	public void addVertex(Vertex<V> sourceVertex, VertexFormat format) {
+	public void addVertex(Vertex<V> sourceVertex, VertexFormat format , double weight) {
 		// Update data
 		// create object
 		V vElement = null;
@@ -122,7 +122,10 @@ public class GraphPanelModel<V, E> extends Observable {
 			// connect via edge if has source (if there is no source, it will be
 			// null)
 			E eElement = null;
-			this.graph.insertEdge(sourceVertex, vNew, eElement);
+			Edge edge = this.graph.insertEdge(sourceVertex, vNew, eElement);
+                        if (weight > Double.NEGATIVE_INFINITY){
+                            edge.set(DecorableConstants.WEIGHT, weight);
+                }
 		}
 
 		// Update UI

@@ -57,7 +57,10 @@ public class VertexAddDialog<V> extends JDialog {
 				cBV.addItem(new CustomComboBoxItem(key, value));
 			}
 			// Default selection
-			sourceVertex = key;
+			if (cBV.getItemCount() > 0) {
+				cBV.setSelectedIndex(0);
+				sourceVertex = (Vertex<V>) cBV.getItemAt(0).getKey();
+			}
 			cBV.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent arg0) {

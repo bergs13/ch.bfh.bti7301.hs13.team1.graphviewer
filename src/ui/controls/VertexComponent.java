@@ -1,9 +1,11 @@
 package ui.controls;
 
+import java.awt.BasicStroke;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
+import java.awt.Stroke;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.awt.event.ActionEvent;
@@ -11,7 +13,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Ellipse2D;
-import javax.swing.BorderFactory;
+import java.awt.geom.Rectangle2D;
 import javax.swing.JComponent;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
@@ -63,8 +65,10 @@ public class VertexComponent<V> extends JComponent implements Transferable {
 		vertex.set(FormatHelper.FORMAT, format);
 
 		// set component size
-		this.setPreferredSize(new Dimension(GraphFormat.OUTERCIRCLEDIAMETER,
-				GraphFormat.OUTERCIRCLEDIAMETER));
+		this.setPreferredSize(new Dimension(GraphFormat.OUTERCIRCLEDIAMETER + 2
+				* GraphFormat.SELECTEDVERTEXBORDERTHICKNESS,
+				GraphFormat.OUTERCIRCLEDIAMETER + 2
+						* GraphFormat.SELECTEDVERTEXBORDERTHICKNESS));
 
 		// context menu and menu items
 		this.popupMenu.add(this.menuItemAddVertex);
@@ -117,7 +121,9 @@ public class VertexComponent<V> extends JComponent implements Transferable {
 				.getFormat(VertexFormat.class, vertex);
 
 		// Vertex mit innerem und �usserem Kreis
-		Ellipse2D outer = new Ellipse2D.Double(0, 0,
+		Ellipse2D outer = new Ellipse2D.Double(
+				GraphFormat.SELECTEDVERTEXBORDERTHICKNESS,
+				GraphFormat.SELECTEDVERTEXBORDERTHICKNESS,
 				GraphFormat.OUTERCIRCLEDIAMETER,
 				GraphFormat.OUTERCIRCLEDIAMETER);
 		g2.setColor(graphFormat.getVertexColor(format));
@@ -149,10 +155,22 @@ public class VertexComponent<V> extends JComponent implements Transferable {
 
 		// Selektionsrahmen
 		if (model.isSelected()) {
-			this.setBorder(BorderFactory.createDashedBorder(graphFormat
-					.getUnvisitedColor()));
-		} else {
-			this.setBorder(null);
+			Stroke oldStroke = g2.getStroke();
+			float dash[] = { 3.0f };
+			g2.setStroke(new BasicStroke(
+					GraphFormat.SELECTEDVERTEXBORDERTHICKNESS,
+					BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 3.0f, dash,
+					0.0f));
+			g2.draw(new Rectangle2D.Double(outer.getBounds().x
+					- GraphFormat.SELECTEDVERTEXBORDERTHICKNESS / 2, outer
+					.getBounds().y
+					- GraphFormat.SELECTEDVERTEXBORDERTHICKNESS
+					/ 2, outer.getBounds().width + 2
+					* (GraphFormat.SELECTEDVERTEXBORDERTHICKNESS / 2), outer
+					.getBounds().height
+					+ 2
+					* (GraphFormat.SELECTEDVERTEXBORDERTHICKNESS / 2)));
+			g2.setStroke(oldStroke);
 		}
 
 		// Drag & Drop

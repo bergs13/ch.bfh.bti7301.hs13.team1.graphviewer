@@ -18,14 +18,14 @@ public class GraphPanelModel<V, E> extends Observable {
 	Vertex<V> selectedVertex = null;
 	Vertex<V> changedVertex = null;
 	private GraphDataProcessor<V, E> graphDataProcessor = new GraphDataProcessor<V, E>();
-        private final AlgorithmDataProcessor algorithmDataProcessor = new AlgorithmDataProcessor();
+	private final AlgorithmDataProcessor algorithmDataProcessor = new AlgorithmDataProcessor();
 
 	// End of Members
 
 	// Constructors
 	public GraphPanelModel(IncidenceListGraph<V, E> g) {
 		this.graphExamples = new GraphExamples<V, E>();
-                this.graphExamples.setRecorder(algorithmDataProcessor);
+		this.graphExamples.setRecorder(algorithmDataProcessor);
 		// input graph?
 		if (null != g) {
 			setExternalGraph(g);
@@ -86,11 +86,6 @@ public class GraphPanelModel<V, E> extends Observable {
 
 	// Graph manipulation Methods
 	public void addVertex(Vertex<V> sourceVertex, VertexFormat format) {
-		// Check variables
-		if (null == sourceVertex) {
-			return;
-		}
-
 		// Update data
 		// create object
 		V vElement = null;
@@ -99,21 +94,31 @@ public class GraphPanelModel<V, E> extends Observable {
 		if (null == format) {
 			format = new VertexFormat();
 		}
-		// Place the new vertex under the source vertex
-		VertexFormat sourceFormat = FormatHelper.getFormat(VertexFormat.class,
-				sourceVertex);
-		if (null != sourceFormat) {
-			Point sourceCenter = sourceFormat.getCenterPoint();
-			if (null != sourceCenter) {
-				format.setCenterPoint(sourceCenter.x, sourceCenter.y + 2
-						* GraphFormat.OUTERCIRCLEDIAMETER);
+
+		if (null != sourceVertex) {
+			// Place the new vertex under the source vertex
+			VertexFormat sourceFormat = FormatHelper.getFormat(
+					VertexFormat.class, sourceVertex);
+			if (null != sourceFormat) {
+				Point sourceCenter = sourceFormat.getCenterPoint();
+				if (null != sourceCenter) {
+					format.setCenterPoint(sourceCenter.x, sourceCenter.y + 2
+							* GraphFormat.OUTERCIRCLEDIAMETER);
+				}
 			}
+		} else {
+			// Place the vertex at a default location
+			format.setCenterPoint(2 * GraphFormat.OUTERCIRCLEDIAMETER,
+					2 * GraphFormat.OUTERCIRCLEDIAMETER);
 		}
 		vNew.set(FormatHelper.FORMAT, format);
-		// connect via edge if has source (if there is no source, it will be
-		// null)
-		E eElement = null;
-		this.graph.insertEdge(sourceVertex, vNew, eElement);
+
+		if (null != sourceVertex) {
+			// connect via edge if has source (if there is no source, it will be
+			// null)
+			E eElement = null;
+			this.graph.insertEdge(sourceVertex, vNew, eElement);
+		}
 
 		// Update UI
 		changedVertex = vNew;
@@ -171,37 +176,36 @@ public class GraphPanelModel<V, E> extends Observable {
 	public void handleMainGUICommand(String gUICommandConstant, Object param) {
 		// apply algorithms
 		if (gUICommandConstant.equals(GUICommandConstants.DIJKSTRA)) {
-                        this.algorithmDataProcessor.resetGraphList();
+			this.algorithmDataProcessor.resetGraphList();
 			this.graphExamples.dijkstra(this.graph, null);
-                        this.algorithmDataProcessor.first();
+			this.algorithmDataProcessor.first();
+		} else if (gUICommandConstant.equals(GUICommandConstants.KRUSKAL)) {
+			this.algorithmDataProcessor.resetGraphList();
+			this.graphExamples.kruskal(this.graph);
+			this.algorithmDataProcessor.first();
 		}
-		else if(gUICommandConstant.equals(GUICommandConstants.KRUSKAL))
-		{
-                        this.algorithmDataProcessor.resetGraphList();	
-                        this.graphExamples.kruskal(this.graph);
-                        this.algorithmDataProcessor.first();
+		// Iterate throug completed Algorithm
+		else if (gUICommandConstant.equals(GUICommandConstants.FORWARD)) {
+			this.setExternalGraph(this.algorithmDataProcessor.forward());
 		}
-                //Iterate throug completed Algorithm
-                else if(gUICommandConstant.equals(GUICommandConstants.FORWARD))
-		{
-                        this.setExternalGraph(this.algorithmDataProcessor.forward());	
-                }
-                
-                else if(gUICommandConstant.equals(GUICommandConstants.BACKWARD))
-		{
-                        this.setExternalGraph(this.algorithmDataProcessor.backward());	
-                }
-                // load/save/clear graph
+
+		else if (gUICommandConstant.equals(GUICommandConstants.BACKWARD)) {
+			this.setExternalGraph(this.algorithmDataProcessor.backward());
+		}
+		// load/save/clear graph
 		else if (gUICommandConstant.equals(GUICommandConstants.NEWGRAPH)) {
-			this.setNewGraph();
-		} 
-                else if (gUICommandConstant.equals(GUICommandConstants.LOADGRAPH)) {
+			setNewGraph();
+			setChanged();
+			notifyObservers(ModelEventConstants.GRAPHREPLACED);
+		} else if (gUICommandConstant.equals(GUICommandConstants.LOADGRAPH)) {
 			if (null != param && String.class.isInstance(param)) {
 				IncidenceListGraph<V, E> g = graphDataProcessor
 						.importGraph((String) param);
 				if (null != g) {
 					setExternalGraph(g);
 				}
+				setChanged();
+				notifyObservers(ModelEventConstants.GRAPHREPLACED);
 			}
 		}
                 else if (gUICommandConstant.equals(GUICommandConstants.SAVEGRAPH)) {

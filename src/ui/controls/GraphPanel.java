@@ -144,7 +144,9 @@ public class GraphPanel<V, E> extends JComponent implements Observer {
 				vConnectDialog.setVisible(true);
 				if (vConnectDialog.getSaved()) {
 					model.connectVertices(vConnectDialog.getSourceVertex(),
-							vConnectDialog.getTargetVertex());
+							vConnectDialog.getTargetVertex(),
+                                                        vConnectDialog.getWeight());
+                                        //System.out.println(vConnectDialog.getWeight());
 				}
 			}
 		});
@@ -371,7 +373,7 @@ public class GraphPanel<V, E> extends JComponent implements Observer {
 	// Observer methods
 	@Override
 	public void update(Observable observable, Object objArgs) {
-		// Argumente müssen bestimmte Form haben
+		// Argumente mï¿½ssen bestimmte Form haben
 		if (Observable.class.isInstance(objArgs)) {
 			repaintContent();
 		} else if (String.class.isInstance(objArgs)) {
@@ -453,7 +455,8 @@ public class GraphPanel<V, E> extends JComponent implements Observer {
 					vConnectDialog.setVisible(true);
 					if (vConnectDialog.getSaved()) {
 						model.connectVertices(this.model.getSelectedVertex(),
-								vConnectDialog.getTargetVertex());
+								vConnectDialog.getTargetVertex(),
+                                                                vConnectDialog.getWeight());
 					}
 				}
 			} else if (eventConstant
@@ -542,7 +545,7 @@ public class GraphPanel<V, E> extends JComponent implements Observer {
 		Point circleCenterTarget = vertexVertexComponents.get(g.opposite(e, v))
 				.getCircleCenterLocation();
 
-		// Umpolen wenn nötig, wenn gerichtet
+		// Umpolen wenn nï¿½tig, wenn gerichtet
 		if (g.isDirected()) {
 			if (g.destination(e).equals(v)) {
 				Point temp = circleCenterSource;

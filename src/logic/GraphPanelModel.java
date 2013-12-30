@@ -1,5 +1,6 @@
 package logic;
 
+import defs.DecorableConstants;
 import java.awt.Point;
 import java.util.Observable;
 import defs.GUICommandConstants;
@@ -8,6 +9,7 @@ import defs.GraphFormat;
 import defs.ModelEventConstants;
 import defs.VertexFormat;
 import java.awt.event.ItemEvent;
+import logic.extlib.Edge;
 import logic.extlib.GraphExamples;
 import logic.extlib.IncidenceListGraph;
 import logic.extlib.Vertex;
@@ -129,7 +131,7 @@ public class GraphPanelModel<V, E> extends Observable {
 		notifyObservers(ModelEventConstants.VERTEXADDED);
 	}
 
-	public void connectVertices(Vertex<V> sourceVertex, Vertex<V> targetVertex) {
+	public void connectVertices(Vertex<V> sourceVertex, Vertex<V> targetVertex, double weight) {
 		// Check variables
 		if (null == sourceVertex || null == targetVertex) {
 			return;
@@ -137,7 +139,10 @@ public class GraphPanelModel<V, E> extends Observable {
 
 		// connect via new Edge
 		E eElement = null;
-		this.graph.insertEdge(sourceVertex, targetVertex, eElement);
+		Edge edge = this.graph.insertEdge(sourceVertex, targetVertex, eElement);
+                if (weight > Double.NEGATIVE_INFINITY){
+                    edge.set(DecorableConstants.WEIGHT, weight);
+                }
 
 		// Update UI
 		changedVertex = sourceVertex; // For the edge recalculations
@@ -216,15 +221,7 @@ public class GraphPanelModel<V, E> extends Observable {
 				graphDataProcessor.exportGraph(this.graph, (String) param);
 			}
 		}
-                else if (gUICommandConstant.equals(GUICommandConstants.DIRECTED)){
-                   ItemEvent event = (ItemEvent) param;
-                   if (ItemEvent.SELECTED ==  event.getStateChange()){
-                       this.graph.setDirected(true);
-                   }
-                   else if (ItemEvent.DESELECTED == event.getStateChange()){
-                       this.graph.setDirected(false);
-                   }
-                }
+                
 	}
 	// Main GUI handlers
 

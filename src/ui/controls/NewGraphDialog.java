@@ -31,27 +31,26 @@ public class NewGraphDialog extends JDialog{
     private boolean directed= false;
     private final GraphFormat format;
 //consturctors
+    //This sets the field directed of GraphFormat of the new Graph  
     public NewGraphDialog(GraphFormat newFormat){
         super();
         this.setModalityType(ModalityType.APPLICATION_MODAL);
         this.format = newFormat;
+        
+        //Layout
         this.setLayout(new GridLayout(0, 1));
         this.setMinimumSize(new Dimension(200, 200));
 	this.setMaximumSize(new Dimension(200, 200));
         
         this.add(new JLabel(question));
-        JPanel buttonPanel = new JPanel();//setButtonPanel();
+        
+        JPanel buttonPanel = new JPanel();
         buttonPanel.setLayout(new BorderLayout());
         buttonPanel.add(setButtonPanel(), BorderLayout.NORTH);
-        
-        this.add(buttonPanel);
-        
-        
-        
-        
+                
         JButton okButton = new JButton("OK");
                 JPanel okPanel = new JPanel();
-                okPanel.add(okButton);
+                okPanel.add(okButton);buttonPanel.add(okPanel, BorderLayout.SOUTH);
 		okButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
@@ -62,7 +61,7 @@ public class NewGraphDialog extends JDialog{
 			};
 		});
          buttonPanel.add(okPanel, BorderLayout.SOUTH);
-         
+         this.add(buttonPanel);
          this.setVisible(true);
     }
 //End of constructors            

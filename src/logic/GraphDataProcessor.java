@@ -83,12 +83,11 @@ public class GraphDataProcessor<V, E> {
 
             //Global graph attributes
 
-            //STEFAN
+            //if graph has no format -> set default graph format 
             GraphFormat gf = FormatHelper.getFormat(GraphFormat.class, g);
             if (null == gf) {
                 gf = new GraphFormat();
             }
-            //STEFAN
 
             // root element
             Document doc = docBuilder.newDocument();

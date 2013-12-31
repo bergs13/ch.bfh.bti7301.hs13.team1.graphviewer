@@ -13,6 +13,7 @@ import logic.extlib.Edge;
 import logic.extlib.GraphExamples;
 import logic.extlib.IncidenceListGraph;
 import logic.extlib.Vertex;
+import ui.controls.ChooseStartVertexDialog;
 import ui.controls.NewGraphDialog;
 
 public class GraphPanelModel<V, E> extends Observable {
@@ -188,8 +189,11 @@ public class GraphPanelModel<V, E> extends Observable {
 		// apply algorithms
 		if (gUICommandConstant.equals(GUICommandConstants.DIJKSTRA)) {
 			this.algorithmDataProcessor.resetGraphList();
-			this.graphExamples.dijkstra(this.graph, null);
-			this.algorithmDataProcessor.first();
+                        ChooseStartVertexDialog csvDialog = new ChooseStartVertexDialog(this.graph.vertices());
+			if (csvDialog.getSaved()){
+                            this.graphExamples.dijkstra(this.graph, csvDialog.getStartVertex());
+                            this.algorithmDataProcessor.first();
+                        }
 		} else if (gUICommandConstant.equals(GUICommandConstants.KRUSKAL)) {
 			this.algorithmDataProcessor.resetGraphList();
 			this.graphExamples.kruskal(this.graph);

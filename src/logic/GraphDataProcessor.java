@@ -80,7 +80,6 @@ public class GraphDataProcessor<V, E> {
             DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
 
-
             //Global graph attributes
 
             //if graph has no format -> set default graph format 
@@ -98,10 +97,19 @@ public class GraphDataProcessor<V, E> {
             Element graphAttributes = doc.createElement("graphAttributes");
             rootElement.appendChild(graphAttributes);
 
+            //isDirected
+            Element isDirected = doc.createElement("isDirected");
+            String strIsDirected = "false";
+            if (gf.isDirected() != false) {
+                strIsDirected = "true";
+            }
+            isDirected.appendChild(doc.createTextNode(strIsDirected));
+            graphAttributes.appendChild(isDirected);
+
             //active color
             Element activeColor = doc.createElement("activeColor");
             String strActiveColor = "-";
-            if(gf.getActiveColor()!= null){
+            if (gf.getActiveColor() != null) {
                 strActiveColor = gf.getActiveColor().toString();
             }
             activeColor.appendChild(doc.createTextNode(strActiveColor));
@@ -254,7 +262,7 @@ public class GraphDataProcessor<V, E> {
                 }
                 vID.appendChild(doc.createTextNode(strVertexID));
                 vertex.appendChild(vID);
-                
+
                 //Name
                 Element name = doc.createElement("name");
                 String strName = "-";
@@ -350,15 +358,6 @@ public class GraphDataProcessor<V, E> {
 
     public IncidenceListGraph<V, E> reconstructGraphFromString(String s) {
 
-        //STEFAN
-        GraphFormat format = new GraphFormat();
-        //Xml to format
-        format.setDirected(true);
-        format.setActiveColor(Color.red);
-        //instantiate and set format
-        IncidenceListGraph<V, E> g = new IncidenceListGraph<V, E>(format.isDirected());
-        g.set(FormatHelper.FORMAT, format);
-        //STEFAN
 
         try {
 
@@ -367,8 +366,33 @@ public class GraphDataProcessor<V, E> {
             DocumentBuilder builder = factory.newDocumentBuilder();
             Document doc = builder.parse(s);
 
+
             //Graph attributes
-            //todo
+            GraphFormat format = new GraphFormat();
+
+            //read graph-attributes
+            NodeList graphAttributes = doc.getElementsByTagName("graphAttributes");
+            Element graphAtt = (Element) graphAttributes.item(0);
+
+            //isDirected
+            NodeList isDirectedList = graphAtt.getElementsByTagName("isDirected");
+            Element isDirectedElement = (Element) isDirectedList.item(0);
+            if (isDirectedElement.getTextContent() == "true") {
+                format.setDirected(true);
+            } else {
+                format.setDirected(false);
+            }
+
+            //activeColor
+            NodeList activeColorList = graphAtt.getElementsByTagName("activeColor");
+            Element activeColorElement = (Element) activeColorList.item(0);
+            System.out.println(activeColorElement.getTextContent());
+
+            format.setActiveColor(Color.red);
+
+            //instantiate and set format
+            IncidenceListGraph<V, E> g = new IncidenceListGraph<V, E>(format.isDirected());
+            g.set(FormatHelper.FORMAT, format);
 
 
 
@@ -382,7 +406,21 @@ public class GraphDataProcessor<V, E> {
 
                 Node vertexNode = listOfVertices.item(i);
                 if (vertexNode.getNodeType() == Node.ELEMENT_NODE) {
+//                   vi = g.insertVertex();
+                    
+                    //add vertex
+                    // create object
+                    V vElement = null;
+                    Vertex<V> vNew = g.insertVertex(vElement);
+                    
+                    // vertex format
+                    VertexFormat vFi = new VertexFormat();
+                    
+                    vFi.setCenterPoint(5, 1);
+                    
+                    vNew.set(FormatHelper.FORMAT, vFi);
 
+                    
                     Element vertexElement = (Element) vertexNode;
 
                     //name
@@ -467,8 +505,6 @@ public class GraphDataProcessor<V, E> {
             }
 
             return g;
-
-
 
 
         } catch (SAXException ex) {

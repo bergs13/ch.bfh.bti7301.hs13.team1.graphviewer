@@ -22,22 +22,30 @@ import logic.extlib.Vertex;
 public class VertexConnectDialog<V, E> extends JDialog {
 	Vertex<V> sourceVertex = null;
 	Vertex<V> targetVertex = null;
-        double weight = Double.NEGATIVE_INFINITY;
+	double weight = Double.NEGATIVE_INFINITY;
 	// saved when closed?
 	boolean saved = false;
 
-	public VertexConnectDialog(IncidenceListGraph<V, E> graph) {
-		this(graph, false);
+	public VertexConnectDialog(IncidenceListGraph<V, E> graph,
+			boolean showWeight) {
+		this(graph, showWeight, false);
 	}
 
 	public VertexConnectDialog(IncidenceListGraph<V, E> graph,
-			boolean sourceVertexGiven) {
+			boolean showWeight, boolean showSourceVertex) {
 		super();
 		this.setModalityType(ModalityType.APPLICATION_MODAL);
 
 		// Layout
-		this.setLayout(new GridLayout(sourceVertexGiven ? 3 : 4, 2));
-		int height = sourceVertexGiven ? 135 : 180;
+		// adjust rows and height
+		// rows
+		int rows = showSourceVertex ? 4 : 3;
+		rows = !showWeight ? rows - 1 : rows;
+		// height
+		int height = showSourceVertex ? 180 : 135;
+		height = !showWeight ? height - 45 : height;
+		// Set layout
+		this.setLayout(new GridLayout(rows, 2));
 		this.setMinimumSize(new Dimension(200, height));
 		this.setMaximumSize(new Dimension(200, height));
 
@@ -46,7 +54,7 @@ public class VertexConnectDialog<V, E> extends JDialog {
 		VertexFormat formatForValue;
 		String value;
 		Iterator<Vertex<V>> itV;
-		if (!sourceVertexGiven) {
+		if (showSourceVertex) {
 			// Source vertex
 			this.add(new JLabel("Source vertex:"));
 
@@ -104,32 +112,34 @@ public class VertexConnectDialog<V, E> extends JDialog {
 			};
 		});
 		this.add(cBTV);
-                
-                
-                //Weight of Edge
-                this.add(new JLabel("Weight of Edge:"));
-                final JTextField weightField = new JTextField();
-                weightField.getDocument().addDocumentListener(new DocumentListener() {
-                        @Override
-			public void changedUpdate(DocumentEvent e) {
-				// text was changed
-				weight = Double.parseDouble(weightField.getText());
-			}
 
-                        @Override
-			public void removeUpdate(DocumentEvent e) {
-				// text was deleted
-				weight = Double.parseDouble(weightField.getText());
-			}
+		if (showWeight) {
+			// Weight of Edge
+			this.add(new JLabel("Weight of Edge:"));
+			final JTextField weightField = new JTextField();
+			weightField.getDocument().addDocumentListener(
+					new DocumentListener() {
+						@Override
+						public void changedUpdate(DocumentEvent e) {
+							// text was changed
+							weight = Double.parseDouble(weightField.getText());
+						}
 
-                        @Override
-			public void insertUpdate(DocumentEvent e) {
-				// text was inserted
-				weight = Double.parseDouble(weightField.getText());
-			}
-                });
-                this.add(weightField);
-                
+						@Override
+						public void removeUpdate(DocumentEvent e) {
+							// text was deleted
+							weight = Double.parseDouble(weightField.getText());
+						}
+
+						@Override
+						public void insertUpdate(DocumentEvent e) {
+							// text was inserted
+							weight = Double.parseDouble(weightField.getText());
+						}
+					});
+			this.add(weightField);
+		}
+
 		// OK/Cancel Buttons
 		JButton okButton = new JButton("OK");
 		okButton.addActionListener(new ActionListener() {
@@ -163,7 +173,8 @@ public class VertexConnectDialog<V, E> extends JDialog {
 	public Vertex<V> getTargetVertex() {
 		return this.targetVertex;
 	}
-        public double getWeight(){
-            return this.weight;
-        }
+
+	public double getWeight() {
+		return this.weight;
+	}
 }

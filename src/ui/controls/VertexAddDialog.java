@@ -25,24 +25,28 @@ public class VertexAddDialog<V> extends JDialog {
 	// saved when closed?
 	boolean saved = false;
 
-	public VertexAddDialog(Iterator<Vertex<V>> itV) {
-		this(itV, false);
+	public VertexAddDialog(Iterator<Vertex<V>> itV, boolean showWeight) {
+		this(itV, showWeight, true);
 	}
 
-	public VertexAddDialog(Iterator<Vertex<V>> itV, boolean sourceVertexGiven) {
+	public VertexAddDialog(Iterator<Vertex<V>> itV, boolean showWeight,
+			boolean showSourceVertex) {
 		super();
 		this.setModalityType(ModalityType.APPLICATION_MODAL);
 
 		// Layout
 		// no weight if first vertex
 		boolean isFirstVertex = !itV.hasNext();
+		if (isFirstVertex) {
+			showWeight = false;
+		}
 		// adjust rows and height
 		// rows
-		int rows = sourceVertexGiven ? 3 : 4;
-		rows = isFirstVertex ? rows - 1 : rows;
+		int rows = showSourceVertex ? 4 : 3;
+		rows = !showWeight ? rows - 1 : rows;
 		// height
-		int height = sourceVertexGiven ? 135 : 180;
-		height = isFirstVertex ? height - 45 : height;
+		int height = showSourceVertex ? 180 : 135;
+		height = !showWeight ? height - 45 : height;
 		// Set layout
 		this.setLayout(new GridLayout(rows, 2));
 		this.setMinimumSize(new Dimension(200, height));
@@ -50,7 +54,7 @@ public class VertexAddDialog<V> extends JDialog {
 
 		// Input fields
 		// Source vertex
-		if (!sourceVertexGiven && !isFirstVertex) {
+		if (showSourceVertex && !isFirstVertex) {
 			this.add(new JLabel("Source vertex:"));
 			final JComboBox<CustomComboBoxItem> cBV = new JComboBox<CustomComboBoxItem>();
 			Vertex<V> key = null;
@@ -106,7 +110,7 @@ public class VertexAddDialog<V> extends JDialog {
 		});
 		this.add(labelField);
 
-		if (!isFirstVertex) {
+		if (showWeight) {
 			// Weight of Edge
 			this.add(new JLabel("Weight of Edge:"));
 			final JTextField weightField = new JTextField();

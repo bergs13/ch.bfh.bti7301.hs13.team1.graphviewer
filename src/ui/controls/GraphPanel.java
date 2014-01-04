@@ -126,7 +126,8 @@ public class GraphPanel<V, E> extends JComponent implements Observer {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				VertexAddDialog<V> vAddDialog = new VertexAddDialog<V>(model
-						.getGraph().vertices());
+						.getGraph().vertices(), model.getGraphFormat()
+						.isWeighted());
 				vAddDialog.setVisible(true);
 				if (vAddDialog.getSaved()) {
 					VertexFormat f = new VertexFormat();
@@ -142,7 +143,8 @@ public class GraphPanel<V, E> extends JComponent implements Observer {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				VertexConnectDialog<V, E> vConnectDialog = new VertexConnectDialog<V, E>(
-						model.getGraph());
+						model.getGraph(), model.getGraphFormat().isWeighted(),
+						true);
 				vConnectDialog.setVisible(true);
 				if (vConnectDialog.getSaved()) {
 					model.connectVertices(vConnectDialog.getSourceVertex(),
@@ -441,7 +443,8 @@ public class GraphPanel<V, E> extends JComponent implements Observer {
 					.equals(ModelEventConstants.ADDVERTEXTOSELECTED)) {
 				if (null != this.model.getSelectedVertex()) {
 					VertexAddDialog<V> vAddDialog = new VertexAddDialog<V>(
-							model.getGraph().vertices(), true);
+							model.getGraph().vertices(), model.getGraphFormat()
+									.isWeighted(), false);
 					vAddDialog.setVisible(true);
 					if (vAddDialog.getSaved()) {
 						VertexFormat f = new VertexFormat();
@@ -455,7 +458,8 @@ public class GraphPanel<V, E> extends JComponent implements Observer {
 					.equals(ModelEventConstants.CONNECTVERTEXTOSELECTED)) {
 				if (null != this.model.getSelectedVertex()) {
 					VertexConnectDialog<V, E> vConnectDialog = new VertexConnectDialog<V, E>(
-							model.getGraph(), true);
+							model.getGraph(), model.getGraphFormat()
+									.isWeighted());
 					vConnectDialog.setVisible(true);
 					if (vConnectDialog.getSaved()) {
 						model.connectVertices(this.model.getSelectedVertex(),

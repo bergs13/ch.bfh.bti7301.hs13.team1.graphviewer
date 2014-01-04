@@ -192,9 +192,9 @@ public class GraphDataProcessor<V, E> {
                 //Label
                 Element label = doc.createElement("label");
                 String strLabel = "-";
-                if (ef != null && ef.getLabel() != null) {
-                    strLabel = ef.getLabel().toString();
-                }
+//                if (ef != null && ef.getLabel() != null) {
+//                    strLabel = ef.getLabel().toString();
+//                }
                 label.appendChild(doc.createTextNode(strLabel));
                 edge.appendChild(label);
 
@@ -233,9 +233,9 @@ public class GraphDataProcessor<V, E> {
                 Element weighted = doc.createElement("weighted");
                 String strWeighted = "no";
 
-                if (ef != null && ef.isWeighted() == true) {
-                    strWeighted = "yes";
-                }
+//                if (ef != null && ef.isWeighted() == true) {
+//                    strWeighted = "yes";
+//                }
                 weighted.appendChild(doc.createTextNode(strWeighted));
                 edge.appendChild(weighted);
             }
@@ -336,7 +336,7 @@ public class GraphDataProcessor<V, E> {
             String output = writer.toString();
 
 //          XMLSerializer serializer = new XMLSerializer(System.out, new OutputFormat(doc,"UTF-8", 
-true));
+//true));
 //          serializer.serialize(doc);
 
 

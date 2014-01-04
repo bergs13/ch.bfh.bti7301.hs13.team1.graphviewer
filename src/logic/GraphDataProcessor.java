@@ -35,6 +35,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import ui.controls.GraphPanel;
 import ui.controls.VertexComponent;
@@ -198,46 +199,52 @@ public class GraphDataProcessor<V, E> {
                 label.appendChild(doc.createTextNode(strLabel));
                 edge.appendChild(label);
 
-                //fromPoint
-                Element fromPoint = doc.createElement("fromPoint");
-                Element xFromPoint = doc.createElement("x");
-                Element yFromPoint = doc.createElement("y");
-                String fPosX = "-";
-                String fPosY = "-";
-                if (ef != null && ef.getFromPoint() != null) {
-                    fPosX = Double.toString(ef.getFromPoint().getX());
-                    fPosY = Double.toString(ef.getFromPoint().getY());
-                }
-                xFromPoint.appendChild(doc.createTextNode(fPosX));
-                yFromPoint.appendChild(doc.createTextNode(fPosY));
-                fromPoint.appendChild(xFromPoint);
-                fromPoint.appendChild(yFromPoint);
-
-                //toPoint
-                Element toPoint = doc.createElement("toPoint");
-                Element xToPoint = doc.createElement("x");
-                Element yToPoint = doc.createElement("y");
-
-                String tPosX = "-";
-                String tPosY = "-";
-                if (ef != null && ef.getToPoint() != null) {
-                    tPosX = Double.toString(ef.getToPoint().getX());
-                    tPosY = Double.toString(ef.getToPoint().getY());
-                }
-                xToPoint.appendChild(doc.createTextNode(tPosX));
-                yToPoint.appendChild(doc.createTextNode(tPosY));
-                toPoint.appendChild(xToPoint);
-                toPoint.appendChild(yToPoint);
-
-                //isWeighted?
-                Element weighted = doc.createElement("weighted");
-                String strWeighted = "no";
+//                //fromPoint
+//                Element fromPoint = doc.createElement("fromPoint");
+//                Element xFromPoint = doc.createElement("x");
+//                Element yFromPoint = doc.createElement("y");
+//                String fPosX = "-";
+//                String fPosY = "-";
+//                if (ef != null && ef.getFromPoint() != null) {
+//                    
+////                    fPosX = Double.toString(ef.getFromPoint().getX());
+////                    fPosY = Double.toString(ef.getFromPoint().getY());
+//                    
+//                    fPosX = "" + ef.getFromPoint().x;
+//                    fPosY = "" + ef.getFromPoint().y;
+//                    
+//                    
+//                }
+//                xFromPoint.appendChild(doc.createTextNode(fPosX));
+//                yFromPoint.appendChild(doc.createTextNode(fPosY));
+//                fromPoint.appendChild(xFromPoint);
+//                fromPoint.appendChild(yFromPoint);
+//
+//                //toPoint
+//                Element toPoint = doc.createElement("toPoint");
+//                Element xToPoint = doc.createElement("x");
+//                Element yToPoint = doc.createElement("y");
+//
+//                String tPosX = "-";
+//                String tPosY = "-";
+//                if (ef != null && ef.getToPoint() != null) {
+//                    tPosX = Double.toString(ef.getToPoint().getX());
+//                    tPosY = Double.toString(ef.getToPoint().getY());
+//                }
+//                xToPoint.appendChild(doc.createTextNode(tPosX));
+//                yToPoint.appendChild(doc.createTextNode(tPosY));
+//                toPoint.appendChild(xToPoint);
+//                toPoint.appendChild(yToPoint);
+//
+//                //isWeighted?
+//                Element weighted = doc.createElement("weighted");
+//                String strWeighted = "no";
 
 //                if (ef != null && ef.isWeighted() == true) {
 //                    strWeighted = "yes";
 //                }
-                weighted.appendChild(doc.createTextNode(strWeighted));
-                edge.appendChild(weighted);
+//                weighted.appendChild(doc.createTextNode(strWeighted));
+//                edge.appendChild(weighted);
             }
 
             //todo: evtl. Startknoten "markieren"
@@ -292,8 +299,8 @@ public class GraphDataProcessor<V, E> {
                 String posX = "-";
                 String posY = "-";
                 if (f != null && f.getCenterPoint() != null) {
-                    posX = Double.toString(f.getCenterPoint().getX());
-                    posY = Double.toString(f.getCenterPoint().getY());
+                    posX = "" + (f.getCenterPoint().x);
+                    posY = "" + (f.getCenterPoint().y);
                 }
 
                 x.appendChild(doc.createTextNode(posX));
@@ -391,7 +398,9 @@ public class GraphDataProcessor<V, E> {
             //  
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
             DocumentBuilder builder = factory.newDocumentBuilder();
-            Document doc = builder.parse(s);
+//            Document doc = builder.parse(s.toString());
+            Document doc = builder.parse(new InputSource(new ByteArrayInputStream(s.getBytes("utf-8"))));
+            // new InputSource(new ByteArrayInputStream(xml.getBytes("utf-8")))
 
             //Graph attributes
             GraphFormat format = new GraphFormat();
@@ -440,7 +449,7 @@ public class GraphDataProcessor<V, E> {
 
                 Node vertexNode = listOfVertices.item(i);
                 if (vertexNode.getNodeType() == Node.ELEMENT_NODE) {
-                    
+
                     //add vertex
                     // create object
                     V vElement = null;
@@ -449,26 +458,25 @@ public class GraphDataProcessor<V, E> {
                     VertexFormat vFi = new VertexFormat();
 
                     Element vertexElement = (Element) vertexNode;
-                    
+
                     //vertex-ID
                     NodeList vertexIDList = vertexElement.getElementsByTagName("vertexID");
                     Element vertexID = (Element) vertexIDList.item(0);
-                    
+
                     //x-Position
                     NodeList xPositionList = vertexElement.getElementsByTagName("x");
                     Element xElement = (Element) xPositionList.item(0);
-                    
+
                     //y-Position
                     NodeList yPositionList = vertexElement.getElementsByTagName("y");
                     Element yElement = (Element) yPositionList.item(0);
-          
-                    vFi.setCenterPoint(Integer.parseInt(xElement.getTextContent()), Integer.parseInt
-(yElement.getTextContent()));
-               
+
+                    vFi.setCenterPoint(Integer.parseInt(xElement.getTextContent()), Integer.parseInt(yElement.getTextContent()));
+
                     vNew.set(FormatHelper.FORMAT, vFi);
-                    
+
                     map.put(Integer.parseInt(vertexID.getTextContent()), vNew);
-                    
+
 //                    //name
 //                    NodeList nameList = vertexElement.getElementsByTagName("name");
 //                    Element nameElement = (Element) nameList.item(0);
@@ -492,19 +500,53 @@ public class GraphDataProcessor<V, E> {
 //
             }
 
-//            //Edges
-//            NodeList listOfEdges = doc.getElementsByTagName("edges");
-//            int totalEdges = listOfEdges.getLength();
-//
-//            Edge<String> ei = null;
-//
-//            for (int i = 0; i < totalEdges; i++) {
-//
-//                Node edgeNode = listOfEdges.item(i);
-//                if (edgeNode.getNodeType() == Node.ELEMENT_NODE) {
-//
-//                    Element edgeElement = (Element) edgeNode;
-//
+
+
+            //Edges
+            NodeList listOfEdges = doc.getElementsByTagName("edge");
+            int totalEdges = listOfEdges.getLength();
+
+            Edge<String> ei = null;
+
+            for (int i = 0; i < totalEdges; i++) {
+                Node edgeNode = listOfEdges.item(i);
+                if (edgeNode.getNodeType() == Node.ELEMENT_NODE) {
+
+                    Element edgeElement = (Element) edgeNode;
+
+                    E eElement = null;
+                    EdgeFormat eF = new EdgeFormat();
+
+                    // eF.setActive(true);
+
+                    //sourcePoint
+                    NodeList sourcePointList = edgeElement.getElementsByTagName("sourceVertex");
+                    Element sourcePointElement = (Element) sourcePointList.item(0);
+                    int sourceP = Integer.parseInt(sourcePointElement.getTextContent());
+
+                    //targetPoint
+                    NodeList targetPointList = edgeElement.getElementsByTagName("targetVertex");
+                    Element targetPointElement = (Element) targetPointList.item(0);
+                    int targetP = Integer.parseInt(targetPointElement.getTextContent());
+
+                    eF.setFromPoint(sourceP, targetP);
+
+                    //Vertex aus Map holen
+                    Vertex<V> sourceVertex = null;
+                    Vertex<V> targetVertex = null;
+                    if (map.containsKey(sourceP)) {
+                        sourceVertex = map.get(sourceP);
+                    }
+                    if (map.containsKey(targetP)) {
+                        targetVertex = map.get(targetP);
+                    }
+
+                    if (null != sourceVertex && null != targetVertex) {
+                        Edge<E> eNew = g.insertEdge(sourceVertex, targetVertex, eElement);
+                        eNew.set(FormatHelper.FORMAT, eF);
+                    }
+
+
 //                    //name
 //                    NodeList nameList = edgeElement.getElementsByTagName("name");
 //                    Element nameElement = (Element) nameList.item(0);
@@ -513,31 +555,16 @@ public class GraphDataProcessor<V, E> {
 //                    //label
 //                    NodeList labelList = edgeElement.getElementsByTagName("label");
 //                    Element labelElement = (Element) labelList.item(0);
-//
-//                    //fromPoint
-//                    NodeList fromPointList = edgeElement.getElementsByTagName("fromPoint");
-//                    if (fromPointList.getLength() > 0) {
-//                        NodeList fromPoints = fromPointList.item(0).getChildNodes();
-//                        Element xFromPointElement = (Element) fromPoints.item(0);   //x-Position
-//                        Element yFromPointElement = (Element) fromPoints.item(1);   //y-Position
-//                        System.out.println(xFromPointElement.getTextContent());
-//                        System.out.println(yFromPointElement.getTextContent());
-//                    }
-//
-//                    //toPoint
-//                    NodeList toPointList = edgeElement.getElementsByTagName("toPoint");
-//                    if (toPointList.getLength() > 0) {
-//                        NodeList toPoints = toPointList.item(0).getChildNodes();
-//                        Element xToPointElement = (Element) toPoints.item(0);   //x-Position
-//                        Element yToPointElement = (Element) toPoints.item(1);   //y-Position
-//                    }
-//
+
+
+
+
 //                    //weighted
 //                    NodeList weightedList = edgeElement.getElementsByTagName("weighted");
 //                    Element weightedElement = (Element) weightedList.item(0);
-//
-//                }
-//            }
+
+                }
+            }
 
             return g;
 

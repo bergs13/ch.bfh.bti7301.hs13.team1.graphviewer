@@ -138,6 +138,7 @@ public class GraphFormatDialog extends JDialog {
 				format.setActiveColor(activeColor);
 				format.setLabelVisible(isLabelVisible);
 				format.setDirected(isDirected);
+				format.setWeighted(isWeighted);
 				saved = true;
 				dispose();
 			};

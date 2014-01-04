@@ -92,7 +92,7 @@ public class GraphFormat {
 	public boolean isWeighted() {
 		return isWeighted;
 	}
-	public void setIsWeighted(boolean weighted) {
+	public void setWeighted(boolean weighted) {
 		this.isWeighted = weighted;
 	}
 	public Color getUnincludedColor() {

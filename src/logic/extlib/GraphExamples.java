@@ -38,13 +38,14 @@ public class GraphExamples<V, E> {
 		final Object CLUSTER = new Object();
 		ArrayList<Vertex<V>>[] clusters = new ArrayList[n];
 		Iterator<Vertex<V>> it = g.vertices();
-		int num = g.numberOfVertices();
+		int num = 0;//g.numberOfVertices();
 		while (it.hasNext()) {
 			// all vertices are in their own cluster
 			Vertex<V> v = it.next();
 			clusters[num].add(v);
 			v.set(CLUSTER, clusters[num++]);
 			v.set(MSF, null); // show to which component v belongs
+                        recorder.recordStep(g);
 		}
 		HeapPriorityQueue<Double, Edge<E>> pq = new HeapPriorityQueue<>();
 		Iterator<Edge<E>> eit = g.edges();
@@ -71,6 +72,7 @@ public class GraphExamples<V, E> {
 					c1 = tmp;
 				}
 				e.set(MSF, c0);
+                                recorder.recordStep(g);
 				num--;
 				// now copy all elements from c1 to c0 and change the attribute
 				for (Vertex<V> v : c1) {
@@ -259,6 +261,7 @@ public class GraphExamples<V, E> {
 	 */
 	private void traverse(Graph<V, E> g, Vertex<V> v) {
 		v.set(VISITED, null);
+                recorder.recordStep(g);
 		// System.out.println(v);
 		// now start the traversal at
 		// all neighbours which are

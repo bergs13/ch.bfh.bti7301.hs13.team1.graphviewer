@@ -33,6 +33,7 @@ public class Recorder<V, E> {
             throw new RuntimeException("processor not instantiated");
         }
         this.processor.set((IncidenceListGraph)graph);
+        
     }
     
     

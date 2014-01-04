@@ -2,6 +2,7 @@ package logic;
 
 import defs.DecorableConstants;
 import java.awt.Point;
+import java.util.Iterator;
 import java.util.Observable;
 import defs.GUICommandConstants;
 import defs.FormatHelper;
@@ -14,7 +15,7 @@ import logic.extlib.GraphExamples;
 import logic.extlib.IncidenceListGraph;
 import logic.extlib.Vertex;
 import ui.controls.ChooseStartVertexDialog;
-import ui.controls.NewGraphDialog;
+import ui.controls.GraphFormatDialog;
 
 public class GraphPanelModel<V, E> extends Observable {
 	// Members
@@ -44,9 +45,15 @@ public class GraphPanelModel<V, E> extends Observable {
 
 	private void setNewGraph() {
 		GraphFormat format = new GraphFormat();
-                NewGraphDialog dialog = new NewGraphDialog(format);
-		this.graph = new IncidenceListGraph<V, E>(format.isDirected());
-		this.graph.set(FormatHelper.FORMAT, format);
+		GraphFormatDialog gFormatDialog = new GraphFormatDialog(format, true);
+		gFormatDialog.setVisible(true);
+		if (gFormatDialog.getSaved()) {
+			format = gFormatDialog.getFormat();
+		}
+		if (gFormatDialog.getSaved() || null == this.graph) {
+			this.graph = new IncidenceListGraph<V, E>(format.isDirected());
+			this.graph.set(FormatHelper.FORMAT, format);
+		}
 	}
 
 	private void setExternalGraph(IncidenceListGraph<V, E> g) {
@@ -91,7 +98,8 @@ public class GraphPanelModel<V, E> extends Observable {
 	}
 
 	// Graph manipulation Methods
-	public void addVertex(Vertex<V> sourceVertex, VertexFormat format , double weight) {
+	public void addVertex(Vertex<V> sourceVertex, VertexFormat format,
+			double weight) {
 		// Update data
 		// create object
 		V vElement = null;
@@ -124,9 +132,9 @@ public class GraphPanelModel<V, E> extends Observable {
 			// null)
 			E eElement = null;
 			Edge edge = this.graph.insertEdge(sourceVertex, vNew, eElement);
-                        if (weight > Double.NEGATIVE_INFINITY){
-                            edge.set(DecorableConstants.WEIGHT, weight);
-                }
+			if (weight > Double.NEGATIVE_INFINITY) {
+				edge.set(DecorableConstants.WEIGHT, weight);
+			}
 		}
 
 		// Update UI
@@ -135,7 +143,8 @@ public class GraphPanelModel<V, E> extends Observable {
 		notifyObservers(ModelEventConstants.VERTEXADDED);
 	}
 
-	public void connectVertices(Vertex<V> sourceVertex, Vertex<V> targetVertex, double weight) {
+	public void connectVertices(Vertex<V> sourceVertex, Vertex<V> targetVertex,
+			double weight) {
 		// Check variables
 		if (null == sourceVertex || null == targetVertex) {
 			return;
@@ -143,10 +152,11 @@ public class GraphPanelModel<V, E> extends Observable {
 
 		// connect via new Edge
 		E eElement = null;
-		Edge edge = this.graph.insertEdge(sourceVertex, targetVertex, eElement);
-                if (weight > Double.NEGATIVE_INFINITY){
-                    edge.set(DecorableConstants.WEIGHT, weight);
-                }
+		Edge<E> edge = this.graph.insertEdge(sourceVertex, targetVertex,
+				eElement);
+		if (weight > Double.NEGATIVE_INFINITY) {
+			edge.set(DecorableConstants.WEIGHT, weight);
+		}
 
 		// Update UI
 		changedVertex = sourceVertex; // For the edge recalculations
@@ -178,6 +188,20 @@ public class GraphPanelModel<V, E> extends Observable {
 			}
 		}
 		this.graph.setDirected(newFormat.isDirected());
+		Iterator<Edge<E>> itE = this.graph.edges();
+		Edge<E> edge = null;
+		while (itE.hasNext()) {
+			edge = itE.next();
+			if (newFormat.isWeighted()) {
+				if (!edge.has(DecorableConstants.WEIGHT)) {
+					edge.set(DecorableConstants.WEIGHT, 0);
+				}
+			} else {
+				if (edge.has(DecorableConstants.WEIGHT)) {
+					edge.destroy(DecorableConstants.WEIGHT);
+				}
+			}
+		}
 		// observable implementation notifies the gui
 		this.graph.set(FormatHelper.FORMAT, newFormat);
 	}
@@ -189,11 +213,13 @@ public class GraphPanelModel<V, E> extends Observable {
 		// apply algorithms
 		if (gUICommandConstant.equals(GUICommandConstants.DIJKSTRA)) {
 			this.algorithmDataProcessor.resetGraphList();
-                        ChooseStartVertexDialog csvDialog = new ChooseStartVertexDialog(this.graph.vertices());
-			if (csvDialog.getSaved()){
-                            this.graphExamples.dijkstra(this.graph, csvDialog.getStartVertex());
-                            this.algorithmDataProcessor.first();
-                        }
+			ChooseStartVertexDialog csvDialog = new ChooseStartVertexDialog(
+					this.graph.vertices());
+			if (csvDialog.getSaved()) {
+				this.graphExamples.dijkstra(this.graph,
+						csvDialog.getStartVertex());
+				this.algorithmDataProcessor.first();
+			}
 		} else if (gUICommandConstant.equals(GUICommandConstants.KRUSKAL)) {
 			this.algorithmDataProcessor.resetGraphList();
 			this.graphExamples.kruskal(this.graph);
@@ -222,13 +248,12 @@ public class GraphPanelModel<V, E> extends Observable {
 				setChanged();
 				notifyObservers(ModelEventConstants.GRAPHREPLACED);
 			}
-		}
-                else if (gUICommandConstant.equals(GUICommandConstants.SAVEGRAPH)) {
+		} else if (gUICommandConstant.equals(GUICommandConstants.SAVEGRAPH)) {
 			if (null != param && String.class.isInstance(param)) {
 				graphDataProcessor.exportGraph(this.graph, (String) param);
 			}
 		}
-                
+
 	}
 	// Main GUI handlers
 

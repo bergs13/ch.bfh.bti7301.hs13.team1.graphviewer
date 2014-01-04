@@ -6,7 +6,10 @@ import java.awt.Polygon;
 import java.awt.RenderingHints;
 import java.awt.geom.Line2D;
 import logic.VisualizationCalculator;
+import logic.extlib.Edge;
+import defs.DecorableConstants;
 import defs.EdgeFormat;
+import defs.FormatHelper;
 import defs.GraphFormat;
 
 public class EdgePainter {
@@ -16,8 +19,13 @@ public class EdgePainter {
 	// End of Members
 
 	// methods
-	public static void paintEdge(GraphFormat graphFormat,
-			EdgeFormat edgeFormat, Graphics2D g2) {
+	public static <E> void paintEdge(GraphFormat graphFormat, Edge<E> edge,
+			Graphics2D g2) {
+		// Ohne Edge geht gar nix ;-)
+		if (null == edge) {
+			return;
+		}
+
 		// TODO: Ev. auch bei VertexComponent
 		if (antiAliasing) {
 			g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
@@ -25,6 +33,7 @@ public class EdgePainter {
 		}
 
 		// Formate müssen vorhanden sein
+		EdgeFormat edgeFormat = FormatHelper.getFormat(EdgeFormat.class, edge);
 		if (null == graphFormat || null == edgeFormat) {
 			return;
 		}
@@ -55,14 +64,17 @@ public class EdgePainter {
 					3));
 		}
 		// Gewicht anzeigen, wenn gewichtet
-		if (edgeFormat.isWeighted() && graphFormat.isLabelVisible()) {
+		if (graphFormat.isWeighted() && graphFormat.isLabelVisible()) {
 			g2.setColor(graphFormat.getVisitedColor());
-			String label = edgeFormat.getLabel();
-			if (null == label) {
-				label = "";
+			String label = "";
+			if (edge.has(DecorableConstants.WEIGHT)) {
+				Object weight = edge.get(DecorableConstants.WEIGHT);
+				if (null != weight) {
+					label = "" + weight;
+				}
 			}
 
-			// Punkt fï¿½r Gewichtanzeige
+			// Punkt für Gewichtanzeige
 			Point labelPointOnStraightLine = VisualizationCalculator
 					.getPointOnStraightLine(
 							edgeFormat.getToPoint(),

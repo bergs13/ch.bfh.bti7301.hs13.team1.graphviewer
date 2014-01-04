@@ -1,3 +1,4 @@
+import defs.DecorableConstants;
 import defs.EdgeFormat;
 import defs.FormatHelper;
 import defs.VertexFormat;
@@ -46,7 +47,7 @@ public class testGuc {
 		// Format Edge 1
 		EdgeFormat eF1 = new EdgeFormat();
 		// eF1.set(true);
-		eF1.setLabel("AB");
+		eAB.set(DecorableConstants.WEIGHT, 50);
 		// eF1.setTextVisible(true);
 		eAB.set(FormatHelper.FORMAT, eF1);
 		// Edge 2

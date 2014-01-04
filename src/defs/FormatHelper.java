@@ -25,43 +25,26 @@ public class FormatHelper {
 		Object format = null;
 		if (decorable.has(FORMAT)) {
 			format = decorable.get(FORMAT);
-		}
-		if (decorable.has(DecorableConstants.WEIGHT)) {
 			if (null != format) {
-				if (format.getClass().isInstance(EdgeFormat.class)) {
-					EdgeFormat f = (EdgeFormat) format;
-					if (null != f) {
-						f.setIsWeighted(true);
-						Object weight = decorable
-								.get(DecorableConstants.WEIGHT);
-						if (null != weight && Double.class.isInstance(weight)) {
-							f.setLabel("" + (Double) weight);
-						}
+				if (decorable.has(DecorableConstants.VISITED)
+						|| decorable.has(DecorableConstants.MSF)) {
+					if (format.getClass().isInstance(VertexFormat.class)) {
+						VertexFormat vformat = (VertexFormat) format;
+						vformat.setVisited();
 					}
-				}
-			}
-		}
-		if (decorable.has(DecorableConstants.VISITED)
-				|| decorable.has(DecorableConstants.MSF)) {
-			if (null != format) {
-				if (format.getClass().isInstance(VertexFormat.class)) {
-					VertexFormat vformat = (VertexFormat) format;
-					vformat.setVisited();
-				}
-				if (format.getClass().isInstance(EdgeFormat.class)) {
-					EdgeFormat eformat = (EdgeFormat) format;
-					eformat.setInMSF();
-				}
-			}
-		} else {
-			if (null != format) {
-				if (format.getClass().isInstance(VertexFormat.class)) {
-					VertexFormat vformat = (VertexFormat) format;
-					vformat.setUnvisited();
-				}
-				if (format.getClass().isInstance(EdgeFormat.class)) {
-					EdgeFormat eformat = (EdgeFormat) format;
-					eformat.setNotInMSF();
+					if (format.getClass().isInstance(EdgeFormat.class)) {
+						EdgeFormat eformat = (EdgeFormat) format;
+						eformat.setInMSF();
+					}
+				} else {
+					if (format.getClass().isInstance(VertexFormat.class)) {
+						VertexFormat vformat = (VertexFormat) format;
+						vformat.setUnvisited();
+					}
+					if (format.getClass().isInstance(EdgeFormat.class)) {
+						EdgeFormat eformat = (EdgeFormat) format;
+						eformat.setNotInMSF();
+					}
 				}
 			}
 		}

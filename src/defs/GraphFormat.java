@@ -10,6 +10,7 @@ public class GraphFormat {
 
 	private boolean isLabelVisible;
 	private boolean isDirected;
+	private boolean isWeighted;
 	private Color activeColor;
 	private Color visitedColor;
 	private Color unvisitedColor;
@@ -88,7 +89,12 @@ public class GraphFormat {
 	public void setDirected(boolean directed) {
 		this.isDirected = directed;
 	}
-
+	public boolean isWeighted() {
+		return isWeighted;
+	}
+	public void setWeighted(boolean weighted) {
+		this.isWeighted = weighted;
+	}
 	public Color getUnincludedColor() {
 		return unincludedColor;
 	}

@@ -20,10 +20,11 @@ public class GraphFormatDialog extends JDialog {
 	Color activeColor = null;
 	boolean isLabelVisible = false;
 	boolean isDirected = false;
+	boolean isWeighted = false;
 	// saved when closed?
 	boolean saved = false;
 
-	public GraphFormatDialog(final GraphFormat format) {
+	public GraphFormatDialog(final GraphFormat format, boolean newGraph) {
 		super();
 		this.setModalityType(ModalityType.APPLICATION_MODAL);
 		this.format = format;
@@ -32,10 +33,13 @@ public class GraphFormatDialog extends JDialog {
 		this.activeColor = format.getActiveColor();
 		this.isLabelVisible = format.isLabelVisible();
 		this.isDirected = format.isDirected();
+		this.isWeighted = format.isWeighted();
+
 		// Layout
-		this.setLayout(new GridLayout(6, 2));
-		this.setMinimumSize(new Dimension(200, 270));
-		this.setMaximumSize(new Dimension(200, 270));
+		this.setLayout(new GridLayout(newGraph ? 7 : 5, 2));
+		int height = newGraph ? 315 : 225;
+		this.setMinimumSize(new Dimension(200, height));
+		this.setMaximumSize(new Dimension(200, height));
 
 		// Input fields
 		// Unvisited color
@@ -96,18 +100,32 @@ public class GraphFormatDialog extends JDialog {
 		});
 		this.add(cBLVisible);
 
-		// Directed
-		this.add(new JLabel("Directed?:"));
-		final JComboBox<Boolean> cBDirected = new JComboBox<Boolean>(
-				new Boolean[] { true, false });
-		cBDirected.setSelectedItem(this.isDirected);
-		cBDirected.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				isDirected = (boolean) cBDirected.getSelectedItem();
-			};
-		});
-		this.add(cBDirected);
+		if (newGraph) {
+			// Directed
+			this.add(new JLabel("Directed?:"));
+			final JComboBox<Boolean> cBDirected = new JComboBox<Boolean>(
+					new Boolean[] { true, false });
+			cBDirected.setSelectedItem(this.isDirected);
+			cBDirected.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent arg0) {
+					isDirected = (boolean) cBDirected.getSelectedItem();
+				};
+			});
+			this.add(cBDirected);
+			// Weighted
+			this.add(new JLabel("Weighted?:"));
+			final JComboBox<Boolean> cBWeighted = new JComboBox<Boolean>(
+					new Boolean[] { true, false });
+			cBWeighted.setSelectedItem(this.isWeighted);
+			cBWeighted.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent arg0) {
+					isWeighted = (boolean) cBWeighted.getSelectedItem();
+				};
+			});
+			this.add(cBWeighted);
+		}
 
 		// OK/Cancel Buttons
 		JButton okButton = new JButton("OK");
@@ -120,6 +138,7 @@ public class GraphFormatDialog extends JDialog {
 				format.setActiveColor(activeColor);
 				format.setLabelVisible(isLabelVisible);
 				format.setDirected(isDirected);
+				format.setWeighted(isWeighted);
 				saved = true;
 				dispose();
 			};

@@ -9,7 +9,6 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
-
 import defs.CustomComboBoxItem;
 import defs.FormatHelper;
 import defs.VertexFormat;
@@ -37,8 +36,8 @@ public class VertexConnectDialog<V, E> extends JDialog {
 		this.setModalityType(ModalityType.APPLICATION_MODAL);
 
 		// Layout
-		this.setLayout(new GridLayout(sourceVertexGiven ? 2 : 4, 2));
-		int height = sourceVertexGiven ? 90 : 135;
+		this.setLayout(new GridLayout(sourceVertexGiven ? 3 : 4, 2));
+		int height = sourceVertexGiven ? 135 : 180;
 		this.setMinimumSize(new Dimension(200, height));
 		this.setMaximumSize(new Dimension(200, height));
 

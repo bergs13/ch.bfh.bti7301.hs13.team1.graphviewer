@@ -19,6 +19,7 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.sound.midi.SysexMessage;
+import javax.swing.JOptionPane;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -46,33 +47,40 @@ public class GraphDataProcessor<V, E> {
     public GraphDataProcessor() {
     }
 
-    // End of Constructors
     // Methods
     // Public Methods
     public void exportGraph(IncidenceListGraph<V, E> g, String filePath) {
 
-        //TODO: auf valieden Pfad prüfen!!
-
-
         // Get the String for the export
         String stringToExport = constructStringFromGraph(g);
 
-        // Export the string into the file specified
-        FileWriter fw = null;
+        // Pfad prüfen
+        File f = new File(filePath);
+        if (f.exists()) {
+           // Export the string into the file specified
+            FileWriter fw = null;
 
-        try {
-            fw = new FileWriter(filePath);
-            fw.write(stringToExport);  // text ist ein String
-        } catch (IOException ex) {
-            System.out.println(ex);
-        } finally {
-            if (fw != null) {
-                try {
-                    fw.close();
-                } catch (Exception ex) {
+            try {
+                fw = new FileWriter(filePath);
+                fw.write(stringToExport);  // text ist ein String
+            } catch (IOException ex) {
+                System.out.println(ex);
+            } finally {
+                if (fw != null) {
+                    try {
+                        fw.close();
+                    } catch (Exception ex) {
+                    }
                 }
             }
+        } else {
+            JOptionPane.showMessageDialog(null,
+                    "Der angegebene Pfad wurde nicht gefunden.",
+                    "Fehler",
+                    JOptionPane.WARNING_MESSAGE);
         }
+
+
     }
 
     public String constructStringFromGraph(IncidenceListGraph<V, E> g) {

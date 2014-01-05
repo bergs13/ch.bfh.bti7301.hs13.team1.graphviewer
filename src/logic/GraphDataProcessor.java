@@ -1,24 +1,13 @@
 package logic;
 
-import com.sun.org.apache.xml.internal.serialize.OutputFormat;
-import com.sun.org.apache.xml.internal.serialize.XMLSerializer;
-import defs.EdgeFormat;
-import defs.FormatHelper;
-import defs.GraphFormat;
-import defs.ModelEventConstants;
-import defs.VertexFormat;
-
+import defs.*;
 import java.awt.Color;
-import java.awt.Point;
 import java.io.*;
-import java.text.Format;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.sound.midi.SysexMessage;
 import javax.swing.JOptionPane;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -29,7 +18,6 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import logic.extlib.Edge;
-import logic.extlib.IGLDecorable;
 import logic.extlib.IncidenceListGraph;
 import logic.extlib.Vertex;
 import org.w3c.dom.Document;
@@ -38,8 +26,6 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
-import ui.controls.GraphPanel;
-import ui.controls.VertexComponent;
 
 public class GraphDataProcessor<V, E> {
 
@@ -51,45 +37,36 @@ public class GraphDataProcessor<V, E> {
     // Public Methods
     public void exportGraph(IncidenceListGraph<V, E> g, String filePath) {
 
+        //Pfad prüfen!? & file als xml speichern
+        
         // Get the String for the export
         String stringToExport = constructStringFromGraph(g);
 
-        // Pfad prüfen
-        File f = new File(filePath);
-        if (f.exists()) {
-           // Export the string into the file specified
-            FileWriter fw = null;
+        // Export the string into the file specified
+        FileWriter fw = null;
 
-            try {   //File schreiben
-                fw = new FileWriter(filePath);
-                fw.write(stringToExport);  // text ist ein String
-                
-                //Erfolgsmeldung
-                JOptionPane.showMessageDialog(null,
-                    "Der Graph wurde erfolgreich gespeichert.",
-                    "Erfolg",
-                    JOptionPane.WARNING_MESSAGE);
-                
-                
-            } catch (IOException ex) {
-                System.out.println(ex);
-            } finally {
-                if (fw != null) {
-                    try {
-                        fw.close();
-                    } catch (Exception ex) {
-                    }
-                }
-            }
-        } else {
+        try {   //File schreiben
+            fw = new FileWriter(filePath);
+            fw.write(stringToExport);  // text ist ein String
+
+            //Erfolgsmeldung
+            JOptionPane.showMessageDialog(null,
+                    "Der Graph wurde erfolgreich gespeichert.");
+
+        } catch (IOException ex) {
             //Fehlermeldung
             JOptionPane.showMessageDialog(null,
-                    "Der angegebene Pfad wurde nicht gefunden.",
+                    "Der Graph konnte nicht gespeichert werden.",
                     "Fehler",
-                    JOptionPane.WARNING_MESSAGE);
+                    JOptionPane.WARNING_MESSAGE);;
+        } finally {
+            if (fw != null) {
+                try {
+                    fw.close();
+                } catch (Exception ex) {
+                }
+            }
         }
-
-
     }
 
     public String constructStringFromGraph(IncidenceListGraph<V, E> g) {
@@ -106,110 +83,120 @@ public class GraphDataProcessor<V, E> {
             if (null == gf) {
                 gf = new GraphFormat();
             }
-
             // root element
             Document doc = docBuilder.newDocument();
             Element rootElement = doc.createElement("graph");
-            doc.appendChild(rootElement);
 
+            doc.appendChild(rootElement);
             //graph attributes
             Element graphAttributes = doc.createElement("graphAttributes");
-            rootElement.appendChild(graphAttributes);
 
+            rootElement.appendChild(graphAttributes);
             //isDirected
             Element isDirected = doc.createElement("isDirected");
             String strIsDirected = "false";
-            if (gf.isDirected() != false) {
+
+            if (gf.isDirected()
+                    != false) {
                 strIsDirected = "true";
             }
+
             isDirected.appendChild(doc.createTextNode(strIsDirected));
             graphAttributes.appendChild(isDirected);
-
             //active color
             Element activeColor = doc.createElement("activeColor");
             String strActiveColor = "-";
-            if (gf.getActiveColor() != null) {
+
+            if (gf.getActiveColor()
+                    != null) {
                 strActiveColor = Integer.toString(gf.getActiveColor().getRed());
                 strActiveColor += ";" + Integer.toString(gf.getActiveColor().getGreen());
                 strActiveColor += ";" + Integer.toString(gf.getActiveColor().getBlue());
             }
+
             activeColor.appendChild(doc.createTextNode(strActiveColor));
             graphAttributes.appendChild(activeColor);
-
             //isWeighted
             Element weighted = doc.createElement("isWeighted");
-            String strWeighted = "no";
-            if(gf.isWeighted()){
+            String strWeighted = "false";
+
+            if (gf.isWeighted()) {
                 strWeighted = "true";
             }
+
             weighted.appendChild(doc.createTextNode(strWeighted));
             graphAttributes.appendChild(weighted);
-            
             //visitedColor
             Element visitedColor = doc.createElement("visitedColor");
             String strVisitedColor = "-";
-            if(gf.getVisitedColor() != null){
+
+            if (gf.getVisitedColor()
+                    != null) {
                 strVisitedColor = Integer.toString(gf.getVisitedColor().getRed());
                 strVisitedColor += ";" + Integer.toString(gf.getVisitedColor().getGreen());
                 strVisitedColor += ";" + Integer.toString(gf.getVisitedColor().getBlue());
             }
+
             visitedColor.appendChild(doc.createTextNode(strVisitedColor));
             graphAttributes.appendChild(visitedColor);
-            
             //unvisitedColor
             Element unvisitedColor = doc.createElement("unvisitedColor");
             String strUnvisitedColor = "-";
-            if(gf.getUnvisitedColor() != null){
+
+            if (gf.getUnvisitedColor()
+                    != null) {
                 strUnvisitedColor = Integer.toString(gf.getUnvisitedColor().getRed());
                 strUnvisitedColor += ";" + Integer.toString(gf.getUnvisitedColor().getGreen());
                 strUnvisitedColor += ";" + Integer.toString(gf.getUnvisitedColor().getBlue());
             }
+
             unvisitedColor.appendChild(doc.createTextNode(strUnvisitedColor));
             graphAttributes.appendChild(unvisitedColor);
-            
             //includedColor
             Element includedColor = doc.createElement("includedColor");
             String strIncludedColor = "-";
-            if(gf.getIncludedColor() != null){
+
+            if (gf.getIncludedColor()
+                    != null) {
                 strIncludedColor = Integer.toString(gf.getIncludedColor().getRed());
                 strIncludedColor += ";" + Integer.toString(gf.getIncludedColor().getGreen());
                 strIncludedColor += ";" + Integer.toString(gf.getIncludedColor().getBlue());
             }
+
             includedColor.appendChild(doc.createTextNode(strIncludedColor));
             graphAttributes.appendChild(includedColor);
-            
             //unincludedColor
             Element unincludedColor = doc.createElement("unincludedColor");
             String strUnincludedColor = "-";
-            if(gf.getUnincludedColor() != null){
+
+            if (gf.getUnincludedColor()
+                    != null) {
                 strUnincludedColor = Integer.toString(gf.getUnincludedColor().getRed());
                 strUnincludedColor += ";" + Integer.toString(gf.getUnincludedColor().getGreen());
                 strUnincludedColor += ";" + Integer.toString(gf.getUnincludedColor().getBlue());
             }
+
             unincludedColor.appendChild(doc.createTextNode(strUnincludedColor));
             graphAttributes.appendChild(unincludedColor);
-
             //Edges
             Element edges = doc.createElement("edges");
+
             rootElement.appendChild(edges);
-
-            Iterator<Edge<E>> it2 = g.edges();
-
-            Map<Vertex<V>, Integer> map = new HashMap<Vertex<V>, Integer>();
-
+            Iterator<Edge<E>> it = g.edges();   //get all Edges from Graph
+            Map<Vertex<V>, Integer> map = new HashMap<Vertex<V>, Integer>();    //map to save the vertices
             int j = 1;      //counter
             int id = -1;    //vertex-id
 
-            while (it2.hasNext()) {
+            while (it.hasNext()) {  //Iterate over the edges
                 int sourceV = -1;
                 int targetV = -1;
 
-                Edge<E> e = it2.next();
+                //get source- and target-Vertex from the edges
+                Edge<E> e = it.next();
                 Vertex<V>[] vStartEnd = g.endVertices(e);
                 for (int i = 0; i < vStartEnd.length; i++) {
                     if (!map.containsKey(vStartEnd[i])) {
                         map.put(vStartEnd[i], j);
-                        //Vertices in Xml hier hinzufügen!?
                         id = j;
                         j++;
                     } else {
@@ -249,7 +236,7 @@ public class GraphDataProcessor<V, E> {
                 targetVertex.appendChild(doc.createTextNode(strTargetVertex));
                 edge.appendChild(targetVertex);
 
-                //Name
+                //name
                 Element name = doc.createElement("name");
                 String strName = "-";
                 if (e.element() != null) {
@@ -258,74 +245,38 @@ public class GraphDataProcessor<V, E> {
                 name.appendChild(doc.createTextNode(strName));
                 edge.appendChild(name);
 
-                //Label
-                Element label = doc.createElement("label");
-                String strLabel = "-";
-//                if (ef != null && ef.getLabel() != null) {
-//                    strLabel = ef.getLabel().toString();
-//                }
-                label.appendChild(doc.createTextNode(strLabel));
-                edge.appendChild(label);
+                // isWeighted?
+                Element edgeWeighted = doc.createElement("weighted");
+                String strEdgeWeighted = "no";
+                if (e.has(DecorableConstants.WEIGHT)) {
+                    strEdgeWeighted = "yes";
+                }
+                edgeWeighted.appendChild(doc.createTextNode(strEdgeWeighted));
+                edge.appendChild(edgeWeighted);
 
-//                //fromPoint
-//                Element fromPoint = doc.createElement("fromPoint");
-//                Element xFromPoint = doc.createElement("x");
-//                Element yFromPoint = doc.createElement("y");
-//                String fPosX = "-";
-//                String fPosY = "-";
-//                if (ef != null && ef.getFromPoint() != null) {
-//                    
-////                    fPosX = Double.toString(ef.getFromPoint().getX());
-////                    fPosY = Double.toString(ef.getFromPoint().getY());
-//                    
-//                    fPosX = "" + ef.getFromPoint().x;
-//                    fPosY = "" + ef.getFromPoint().y;
-//                    
-//                    
-//                }
-//                xFromPoint.appendChild(doc.createTextNode(fPosX));
-//                yFromPoint.appendChild(doc.createTextNode(fPosY));
-//                fromPoint.appendChild(xFromPoint);
-//                fromPoint.appendChild(yFromPoint);
-//
-//                //toPoint
-//                Element toPoint = doc.createElement("toPoint");
-//                Element xToPoint = doc.createElement("x");
-//                Element yToPoint = doc.createElement("y");
-//
-//                String tPosX = "-";
-//                String tPosY = "-";
-//                if (ef != null && ef.getToPoint() != null) {
-//                    tPosX = Double.toString(ef.getToPoint().getX());
-//                    tPosY = Double.toString(ef.getToPoint().getY());
-//                }
-//                xToPoint.appendChild(doc.createTextNode(tPosX));
-//                yToPoint.appendChild(doc.createTextNode(tPosY));
-//                toPoint.appendChild(xToPoint);
-//                toPoint.appendChild(yToPoint);
-//
-//                //isWeighted?
-//                Element weighted = doc.createElement("weighted");
-//                String strWeighted = "no";
+                // weight
+                Element weightLabel = doc.createElement("weightLabel");
+                String strWeight = "-";
+                if (e.has(DecorableConstants.WEIGHT)) {
+                    Object weight = e.get(DecorableConstants.WEIGHT);
+                    if (null != weight) {
+                        strWeight = "" + weight;
+                    }
+                }
+                weightLabel.appendChild(doc.createTextNode(strWeight));
+                edge.appendChild(weightLabel);
 
-//                if (ef != null && ef.isWeighted() == true) {
-//                    strWeighted = "yes";
-//                }
-//                weighted.appendChild(doc.createTextNode(strWeighted));
-//                edge.appendChild(weighted);
+
             }
-
-            //todo: evtl. Startknoten "markieren"
-
             //Vertices (iterate via map)
             Element vertices = doc.createElement("vertices");
-            rootElement.appendChild(vertices);
 
+            rootElement.appendChild(vertices);
             for (Vertex<V> v : map.keySet()) {
                 VertexFormat f = null;
 
-                int vertexID = map.get(v);
-                //v = it.next();
+                int vertexID = map.get(v);  //get vertex 
+
                 f = FormatHelper.getFormat(VertexFormat.class, v);
 
                 Element vertex = doc.createElement("vertex");
@@ -340,16 +291,16 @@ public class GraphDataProcessor<V, E> {
                 vID.appendChild(doc.createTextNode(strVertexID));
                 vertex.appendChild(vID);
 
-                //Name
-                Element name = doc.createElement("name");
-                String strName = "-";
-                if (v.element() != null) {
-                    strName = v.element().toString();
-                }
-                name.appendChild(doc.createTextNode(strName));
-                vertex.appendChild(name);
+                //name
+//                Element name = doc.createElement("name");
+//                String strName = "-";
+//                if (v.element() != null) {
+//                    strName = v.element().toString();
+//                }
+//                name.appendChild(doc.createTextNode(strName));
+//                vertex.appendChild(name);
 
-                //Label
+                //label
                 Element label = doc.createElement("label");
                 String strLabel = "-";
                 if (f != null && f.getLabel() != null) {
@@ -358,7 +309,7 @@ public class GraphDataProcessor<V, E> {
                 label.appendChild(doc.createTextNode(strLabel));
                 vertex.appendChild(label);
 
-                //Position
+                //position
                 Element position = doc.createElement("position");
                 Element x = doc.createElement("x");
                 Element y = doc.createElement("y");
@@ -397,27 +348,16 @@ public class GraphDataProcessor<V, E> {
                 active.appendChild(doc.createTextNode(act));
                 vertex.appendChild(active);
             }
-
-
-
             // Transform XML object to string
             TransformerFactory transformerFactory = TransformerFactory.newInstance();
             Transformer transformer = transformerFactory.newTransformer();
             DOMSource source = new DOMSource(doc);
-
             StringWriter writer = new StringWriter();
             StreamResult result = new StreamResult(writer);
+
             transformer.transform(source, result);
             String output = writer.toString();
-
-//          XMLSerializer serializer = new XMLSerializer(System.out, new OutputFormat(doc,"UTF-8", 
-//true));
-//          serializer.serialize(doc);
-
-
-            //return string
             return output;
-
         } catch (ParserConfigurationException pce) {
             pce.printStackTrace();
         } catch (TransformerException tfe) {
@@ -428,34 +368,54 @@ public class GraphDataProcessor<V, E> {
     }
 
     public IncidenceListGraph<V, E> importGraph(String filePath) {
+       //auf gültige xml-datei prüfen?!
+        
         // Get the String from the file
         String s = "";
 
         File file = new File(filePath);
 
-        if (!file.canRead() || !file.isFile()) {
-            System.exit(0);
-        }
+        //check if file exists 
+        if (!file.exists()) {
+            JOptionPane.showMessageDialog(null,
+                    "Der angegebene Pfad wurde nicht gefunden.",
+                    "Fehler",
+                    JOptionPane.WARNING_MESSAGE);
+        } else {
 
-        FileReader fr = null;
-        int c;
-        StringBuffer buff = new StringBuffer();
-        try {
-            fr = new FileReader(file);
-            while ((c = fr.read()) != -1) {
-                buff.append((char) c);
+            if (!file.canRead() || !file.isFile()) {
+                JOptionPane.showMessageDialog(null,
+                        "Das File kann nicht geladen werden.",
+                        "Fehler",
+                        JOptionPane.WARNING_MESSAGE);
             }
-            fr.close();
 
-        } catch (IOException e) {
-            e.printStackTrace();
+            //read the file
+            FileReader fr = null;
+            int c;
+            StringBuilder buff = new StringBuilder();
+            //StringBuffer
+
+            try {
+                fr = new FileReader(file);
+                while ((c = fr.read()) != -1) {
+                    buff.append((char) c);
+                }
+                fr.close();
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            s = buff.toString();
+
+            // Reconstruct the graph
+            return reconstructGraphFromString(s);
+
         }
 
-        s = buff.toString();
-        //System.out.println(s);
+        return null;
 
-        // Reconstruct the graph
-        return reconstructGraphFromString(s);
+
     }
 
     public IncidenceListGraph<V, E> reconstructGraphFromString(String s) {
@@ -463,12 +423,11 @@ public class GraphDataProcessor<V, E> {
 
         try {
 
-            //  
+            //Xml-Parser 
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
             DocumentBuilder builder = factory.newDocumentBuilder();
-//            Document doc = builder.parse(s.toString());
             Document doc = builder.parse(new InputSource(new ByteArrayInputStream(s.getBytes("utf-8"))));
-            // new InputSource(new ByteArrayInputStream(xml.getBytes("utf-8")))
+
 
             //Graph attributes
             GraphFormat format = new GraphFormat();
@@ -490,23 +449,92 @@ public class GraphDataProcessor<V, E> {
             NodeList activeColorList = graphAtt.getElementsByTagName("activeColor");
             Element activeColorElement = (Element) activeColorList.item(0);
 
-            String[] split = activeColorElement.getTextContent().split(";");
-            int red = Integer.parseInt(split[0]);
-            int green = Integer.parseInt(split[1]);
-            int blue = Integer.parseInt(split[2]);
-            Color actColor = new Color(red, green, blue);
+            if (!activeColorElement.getTextContent().equals("-")) {
+                String[] split = activeColorElement.getTextContent().split(";");
+                int red = Integer.parseInt(split[0]);
+                int green = Integer.parseInt(split[1]);
+                int blue = Integer.parseInt(split[2]);
+                Color actColor = new Color(red, green, blue);
 
-            format.setActiveColor(actColor);
+                format.setActiveColor(actColor);
+            }
 
-            //...
 
-            //instantiate and set format
+            //visitedColor
+            NodeList visitedColorList = graphAtt.getElementsByTagName("visitedColor");
+            Element visitedColorElement = (Element) visitedColorList.item(0);
+
+            if (!visitedColorElement.getTextContent().equals("-")) {
+                String[] split = visitedColorElement.getTextContent().split(";");
+                int red = Integer.parseInt(split[0]);
+                int green = Integer.parseInt(split[1]);
+                int blue = Integer.parseInt(split[2]);
+                Color visColor = new Color(red, green, blue);
+
+                format.setVisitedColor(visColor);
+            }
+
+            //unvisited Color
+            NodeList unvisitedColorList = graphAtt.getElementsByTagName("unvisitedColor");
+            Element unvisitedColorElement = (Element) unvisitedColorList.item(0);
+
+            if (!unvisitedColorElement.getTextContent().equals("-")) {
+                String[] split = unvisitedColorElement.getTextContent().split(";");
+                int red = Integer.parseInt(split[0]);
+                int green = Integer.parseInt(split[1]);
+                int blue = Integer.parseInt(split[2]);
+                Color unvisColor = new Color(red, green, blue);
+
+                format.setUnvisitedColor(unvisColor);
+            }
+
+            //included Color
+            NodeList includedColorList = graphAtt.getElementsByTagName("includedColor");
+            Element includedColorElement = (Element) includedColorList.item(0);
+
+            if (!includedColorElement.getTextContent().equals("-")) {
+                String[] split = includedColorElement.getTextContent().split(";");
+                int red = Integer.parseInt(split[0]);
+                int green = Integer.parseInt(split[1]);
+                int blue = Integer.parseInt(split[2]);
+                Color includedColor = new Color(red, green, blue);
+
+                format.setIncludedColor(includedColor);
+            }
+
+            //unincluded Color
+            NodeList unincludedColorList = graphAtt.getElementsByTagName("unincludedColor");
+            Element unincludedColorElement = (Element) unincludedColorList.item(0);
+
+            if (!unincludedColorElement.getTextContent().equals("-")) {
+                String[] split = unincludedColorElement.getTextContent().split(";");
+                int red = Integer.parseInt(split[0]);
+                int green = Integer.parseInt(split[1]);
+                int blue = Integer.parseInt(split[2]);
+                Color unincludedColor = new Color(red, green, blue);
+
+                format.setUnincludedColor(unincludedColor);
+            }
+
+            //isWeighted
+            NodeList weightedList = graphAtt.getElementsByTagName("isWeighted");
+            Element weightedElement = (Element) weightedList.item(0);
+
+            if (!weightedElement.getTextContent().equals("-")) {
+                if (weightedElement.getTextContent().equals("true")) {
+                    format.setWeighted(true);
+                } else {
+                    format.setWeighted(false);
+                }
+            }
+
+            //instantiate graph and set format
             IncidenceListGraph<V, E> g = new IncidenceListGraph<V, E>(format.isDirected());
             g.set(FormatHelper.FORMAT, format);
 
 
+            //Map for vertices
             Map<Integer, Vertex<V>> map = new HashMap<Integer, Vertex<V>>();
-
 
             //Vertices
             NodeList listOfVertices = doc.getElementsByTagName("vertex");
@@ -531,6 +559,7 @@ public class GraphDataProcessor<V, E> {
                     NodeList vertexIDList = vertexElement.getElementsByTagName("vertexID");
                     Element vertexID = (Element) vertexIDList.item(0);
 
+                    //----------------------
                     //x-Position
                     NodeList xPositionList = vertexElement.getElementsByTagName("x");
                     Element xElement = (Element) xPositionList.item(0);
@@ -539,36 +568,40 @@ public class GraphDataProcessor<V, E> {
                     NodeList yPositionList = vertexElement.getElementsByTagName("y");
                     Element yElement = (Element) yPositionList.item(0);
 
+                    //set Point
                     vFi.setCenterPoint(Integer.parseInt(xElement.getTextContent()), Integer.parseInt(yElement.getTextContent()));
+                    //----------------------
 
-                    vNew.set(FormatHelper.FORMAT, vFi);
+                    //label
+                    NodeList labelList = vertexElement.getElementsByTagName("label");
+                    Element labelElement = (Element) labelList.item(0);
+                    vFi.setLabel(labelElement.getTextContent());
 
-                    map.put(Integer.parseInt(vertexID.getTextContent()), vNew);
+                    //active
+                    NodeList activeList = vertexElement.getElementsByTagName("active");
+                    Element activeElement = (Element) activeList.item(0);
+                    if (activeElement != null) {
+                        if (activeElement.getTextContent().equals("yes")) {
+                            vFi.setActive();
+                        }
+                    }
 
-//                    //name
-//                    NodeList nameList = vertexElement.getElementsByTagName("name");
-//                    Element nameElement = (Element) nameList.item(0);
-//                    System.out.println(nameElement.getTextContent());
-//
-//                    //label
-//                    NodeList labelList = vertexElement.getElementsByTagName("label");
-//                    Element labelElement = (Element) labelList.item(0);
+                    //visited
+                    NodeList visitedList = vertexElement.getElementsByTagName("visited");
+                    Element visitedElement = (Element) visitedList.item(0);
+                    if (visitedElement != null) {
+                        if (visitedElement.getTextContent().equals("yes")) {
+                            vFi.setActive();
+                        }
+                    }
 
-//                    //Visited
-//                    NodeList visitedList = vertexElement.getElementsByTagName("visited");
-//                    Element visitedElement = (Element) visitedList.item(0);
-//                    System.out.println(visitedElement.getTextContent());
-//
-//                    //Active
-//                    NodeList activeList = vertexElement.getElementsByTagName("active");
-//                    Element activeElement = (Element) activeList.item(0);
-//                    System.out.println(activeElement.getTextContent());
+                    vNew.set(FormatHelper.FORMAT, vFi);     //set vertex-format
+
+                    map.put(Integer.parseInt(vertexID.getTextContent()), vNew);     //add vertex to map    
 
                 }
-//
+
             }
-
-
 
             //Edges
             NodeList listOfEdges = doc.getElementsByTagName("edge");
@@ -585,7 +618,16 @@ public class GraphDataProcessor<V, E> {
                     E eElement = null;
                     EdgeFormat eF = new EdgeFormat();
 
-                    // eF.setActive(true);
+                    //weighted
+                    NodeList edgeWeightedList = edgeElement.getElementsByTagName("weighted");
+                    NodeList edgeWeightList = edgeElement.getElementsByTagName("weightLabel");
+                    Element edgeWeightedElement = (Element) edgeWeightedList.item(0);
+                    Element edgeWeightElement = (Element) edgeWeightList.item(0);
+                    Double dWeight = 0.0;
+
+                    if (edgeWeightedElement.getTextContent().equals("yes")) {
+                        dWeight = Double.parseDouble(edgeWeightElement.getTextContent());
+                    }
 
                     //sourcePoint
                     NodeList sourcePointList = edgeElement.getElementsByTagName("sourceVertex");
@@ -596,8 +638,6 @@ public class GraphDataProcessor<V, E> {
                     NodeList targetPointList = edgeElement.getElementsByTagName("targetVertex");
                     Element targetPointElement = (Element) targetPointList.item(0);
                     int targetP = Integer.parseInt(targetPointElement.getTextContent());
-
-                    eF.setFromPoint(sourceP, targetP);
 
                     //Vertex aus Map holen
                     Vertex<V> sourceVertex = null;
@@ -611,30 +651,14 @@ public class GraphDataProcessor<V, E> {
 
                     if (null != sourceVertex && null != targetVertex) {
                         Edge<E> eNew = g.insertEdge(sourceVertex, targetVertex, eElement);
+                        eNew.set(DecorableConstants.WEIGHT, dWeight);
                         eNew.set(FormatHelper.FORMAT, eF);
                     }
-
-
-//                    //name
-//                    NodeList nameList = edgeElement.getElementsByTagName("name");
-//                    Element nameElement = (Element) nameList.item(0);
-//                    System.out.println(nameElement.getTextContent());
-//
-//                    //label
-//                    NodeList labelList = edgeElement.getElementsByTagName("label");
-//                    Element labelElement = (Element) labelList.item(0);
-
-
-
-
-//                    //weighted
-//                    NodeList weightedList = edgeElement.getElementsByTagName("weighted");
-//                    Element weightedElement = (Element) weightedList.item(0);
-
                 }
             }
 
             return g;
+
 
 
         } catch (SAXException ex) {
@@ -648,37 +672,3 @@ public class GraphDataProcessor<V, E> {
         return null;
     }
 }
-//STEFAN
-////Graph manipulation Methods
-//	public void addVertex(Vertex<V> sourceVertex, VertexFormat format) {
-//		// Check variables
-//		if (null == sourceVertex) {
-//			return;
-//		}
-//
-//		// Update data
-//		// create object
-//		V vElement = null;
-//		Vertex<V> vNew = this.graph.insertVertex(vElement);
-//		// set format
-//		if (null == format) {
-//			format = new VertexFormat();
-//		}
-//		// Place the new vertex under the source vertex
-//		VertexFormat sourceFormat = FormatHelper.getFormat(VertexFormat.class,
-//				sourceVertex);
-//		if (null != sourceFormat) {
-//			Point sourceCenter = sourceFormat.getCenterPoint();
-//			if (null != sourceCenter) {
-//				format.setCenterPoint(sourceCenter.x, sourceCenter.y + 2
-//						* GraphFormat.OUTERCIRCLEDIAMETER);
-//			}
-//		}
-//		vNew.set(FormatHelper.FORMAT, format);
-//		// connect via edge if has source (if there is no source, it will be
-//		// null)
-//		E eElement = null;
-//		this.graph.insertEdge(sourceVertex, vNew, eElement);
-//
-//	}
-//STEFAN

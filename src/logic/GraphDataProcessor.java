@@ -60,9 +60,17 @@ public class GraphDataProcessor<V, E> {
            // Export the string into the file specified
             FileWriter fw = null;
 
-            try {
+            try {   //File schreiben
                 fw = new FileWriter(filePath);
                 fw.write(stringToExport);  // text ist ein String
+                
+                //Erfolgsmeldung
+                JOptionPane.showMessageDialog(null,
+                    "Der Graph wurde erfolgreich gespeichert.",
+                    "Erfolg",
+                    JOptionPane.WARNING_MESSAGE);
+                
+                
             } catch (IOException ex) {
                 System.out.println(ex);
             } finally {
@@ -74,6 +82,7 @@ public class GraphDataProcessor<V, E> {
                 }
             }
         } else {
+            //Fehlermeldung
             JOptionPane.showMessageDialog(null,
                     "Der angegebene Pfad wurde nicht gefunden.",
                     "Fehler",
@@ -86,6 +95,7 @@ public class GraphDataProcessor<V, E> {
     public String constructStringFromGraph(IncidenceListGraph<V, E> g) {
 
         try {
+            //Xml-Parser
             DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
 
@@ -126,8 +136,58 @@ public class GraphDataProcessor<V, E> {
             activeColor.appendChild(doc.createTextNode(strActiveColor));
             graphAttributes.appendChild(activeColor);
 
-            //   etc.         
-
+            //isWeighted
+            Element weighted = doc.createElement("isWeighted");
+            String strWeighted = "no";
+            if(gf.isWeighted()){
+                strWeighted = "true";
+            }
+            weighted.appendChild(doc.createTextNode(strWeighted));
+            graphAttributes.appendChild(weighted);
+            
+            //visitedColor
+            Element visitedColor = doc.createElement("visitedColor");
+            String strVisitedColor = "-";
+            if(gf.getVisitedColor() != null){
+                strVisitedColor = Integer.toString(gf.getVisitedColor().getRed());
+                strVisitedColor += ";" + Integer.toString(gf.getVisitedColor().getGreen());
+                strVisitedColor += ";" + Integer.toString(gf.getVisitedColor().getBlue());
+            }
+            visitedColor.appendChild(doc.createTextNode(strVisitedColor));
+            graphAttributes.appendChild(visitedColor);
+            
+            //unvisitedColor
+            Element unvisitedColor = doc.createElement("unvisitedColor");
+            String strUnvisitedColor = "-";
+            if(gf.getUnvisitedColor() != null){
+                strUnvisitedColor = Integer.toString(gf.getUnvisitedColor().getRed());
+                strUnvisitedColor += ";" + Integer.toString(gf.getUnvisitedColor().getGreen());
+                strUnvisitedColor += ";" + Integer.toString(gf.getUnvisitedColor().getBlue());
+            }
+            unvisitedColor.appendChild(doc.createTextNode(strUnvisitedColor));
+            graphAttributes.appendChild(unvisitedColor);
+            
+            //includedColor
+            Element includedColor = doc.createElement("includedColor");
+            String strIncludedColor = "-";
+            if(gf.getIncludedColor() != null){
+                strIncludedColor = Integer.toString(gf.getIncludedColor().getRed());
+                strIncludedColor += ";" + Integer.toString(gf.getIncludedColor().getGreen());
+                strIncludedColor += ";" + Integer.toString(gf.getIncludedColor().getBlue());
+            }
+            includedColor.appendChild(doc.createTextNode(strIncludedColor));
+            graphAttributes.appendChild(includedColor);
+            
+            //unincludedColor
+            Element unincludedColor = doc.createElement("unincludedColor");
+            String strUnincludedColor = "-";
+            if(gf.getUnincludedColor() != null){
+                strUnincludedColor = Integer.toString(gf.getUnincludedColor().getRed());
+                strUnincludedColor += ";" + Integer.toString(gf.getUnincludedColor().getGreen());
+                strUnincludedColor += ";" + Integer.toString(gf.getUnincludedColor().getBlue());
+            }
+            unincludedColor.appendChild(doc.createTextNode(strUnincludedColor));
+            graphAttributes.appendChild(unincludedColor);
 
             //Edges
             Element edges = doc.createElement("edges");

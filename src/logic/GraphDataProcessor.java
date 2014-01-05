@@ -1,20 +1,13 @@
 package logic;
 
-import com.sun.org.apache.xml.internal.serialize.OutputFormat;
-import com.sun.org.apache.xml.internal.serialize.XMLSerializer;
 import defs.*;
-
 import java.awt.Color;
-import java.awt.Point;
 import java.io.*;
-import java.text.Format;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.sound.midi.SysexMessage;
 import javax.swing.JOptionPane;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -25,18 +18,14 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import logic.extlib.Edge;
-import logic.extlib.IGLDecorable;
 import logic.extlib.IncidenceListGraph;
 import logic.extlib.Vertex;
-import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
-import ui.controls.GraphPanel;
-import ui.controls.VertexComponent;
 
 public class GraphDataProcessor<V, E> {
 
@@ -379,7 +368,7 @@ public class GraphDataProcessor<V, E> {
     }
 
     public IncidenceListGraph<V, E> importGraph(String filePath) {
-       //auf xml-datei prüfen?!
+       //auf gültige xml-datei prüfen?!
         
         // Get the String from the file
         String s = "";

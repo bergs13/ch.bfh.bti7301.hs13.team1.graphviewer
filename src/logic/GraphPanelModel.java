@@ -217,7 +217,7 @@ public class GraphPanelModel<V, E> extends Observable {
 			if (csvDialog.getSaved()) {
 				this.graphExamples.dijkstra(this.graph,
 						csvDialog.getStartVertex());
-				this.algorithmDataProcessor.first();
+                               	this.algorithmDataProcessor.first();
 			}
 		} else if (gUICommandConstant.equals(GUICommandConstants.KRUSKAL)) {
 			this.algorithmDataProcessor.resetGraphList();

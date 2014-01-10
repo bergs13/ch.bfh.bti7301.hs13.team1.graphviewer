@@ -1,6 +1,7 @@
 package logic.extlib;
 
 import defs.DecorableConstants;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -131,6 +132,8 @@ public class GraphExamples<V, E> {
 			s.set(v, null);
 		}
 		hq.replaceKey((Locator<Double, Vertex<V>>) s.get(PQLOCATOR), 0.0);
+                
+                System.out.println("Distance " +s.get(DISTANCE));
 		s.set(s, s);
 		while (!hq.isEmpty()) {
 			Locator<Double, Vertex<V>> loc = hq.removeMin();
@@ -143,11 +146,16 @@ public class GraphExamples<V, E> {
 				eit = g.incidentEdges(v);
 			while (eit.hasNext()) {
 				Edge<E> e = eit.next();
+                                System.out.println( e.get(WEIGHT));
+                                System.out.println("Distance " +v.get(DISTANCE));
 				double weight = 1.0; // if no weight is entered
 				if (e.has(WEIGHT))
 					weight = (Double) e.get(WEIGHT);
+                               
 				Vertex<V> u = g.opposite(e, v);
 				double newDist = (Double) u.get(DISTANCE) + weight;
+                                 System.out.println( weight);
+                                 System.out.println( newDist);
 				if (newDist < (Double) u.get(DISTANCE)) {
 					u.set(DISTANCE, newDist);
 					hq.replaceKey(

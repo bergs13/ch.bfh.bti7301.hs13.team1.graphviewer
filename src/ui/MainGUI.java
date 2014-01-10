@@ -112,7 +112,6 @@ public class MainGUI<V, E> extends javax.swing.JFrame {
         runButton = new javax.swing.JButton();
         backwardButton = new javax.swing.JButton();
         forwardButton = new javax.swing.JButton();
-        editCheckBox = new javax.swing.JCheckBox();
         informationPanel1 = new ui.controls.InformationPanel();
         mainMenuBar = new javax.swing.JMenuBar();
         Menu1 = new javax.swing.JMenu();
@@ -150,15 +149,12 @@ public class MainGUI<V, E> extends javax.swing.JFrame {
             }
         });
 
-        editCheckBox.setText("Edit");
-
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(editCheckBox)
-                .addGap(59, 59, 59)
+                .addGap(102, 102, 102)
                 .addComponent(forwardButton)
                 .addGap(18, 18, 18)
                 .addComponent(backwardButton)
@@ -172,14 +168,13 @@ public class MainGUI<V, E> extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(runButton)
                     .addComponent(backwardButton)
-                    .addComponent(forwardButton)
-                    .addComponent(editCheckBox))
+                    .addComponent(forwardButton))
                 .addContainerGap(25, Short.MAX_VALUE))
         );
 
-        Menu1.setText("Datei");
+        Menu1.setText("File");
 
-        exitMenuItem.setText("Beenden");
+        exitMenuItem.setText("Quit");
         exitMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 exitMenuItemActionPerformed(evt);
@@ -387,7 +382,6 @@ public class MainGUI<V, E> extends javax.swing.JFrame {
     private javax.swing.JButton backwardButton;
     private javax.swing.JMenuItem bfsMenuItem;
     private javax.swing.JMenuItem dijkstraMenuItem;
-    private javax.swing.JCheckBox editCheckBox;
     private javax.swing.JMenuItem exitMenuItem;
     private javax.swing.JButton forwardButton;
     private ui.controls.InformationPanel informationPanel1;

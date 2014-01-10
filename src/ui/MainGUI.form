@@ -6,12 +6,12 @@
       <SubComponents>
         <Menu class="javax.swing.JMenu" name="Menu1">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Datei"/>
+            <Property name="text" type="java.lang.String" value="File"/>
           </Properties>
           <SubComponents>
             <MenuItem class="javax.swing.JMenuItem" name="exitMenuItem">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Beenden"/>
+                <Property name="text" type="java.lang.String" value="Quit"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="exitMenuItemActionPerformed"/>
@@ -143,8 +143,7 @@
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" attributes="0">
-                  <Component id="editCheckBox" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace min="-2" pref="59" max="-2" attributes="0"/>
+                  <EmptySpace min="-2" pref="102" max="-2" attributes="0"/>
                   <Component id="forwardButton" min="-2" max="-2" attributes="0"/>
                   <EmptySpace type="separate" max="-2" attributes="0"/>
                   <Component id="backwardButton" min="-2" max="-2" attributes="0"/>
@@ -161,7 +160,6 @@
                       <Component id="runButton" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="backwardButton" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="forwardButton" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="editCheckBox" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace pref="25" max="32767" attributes="0"/>
               </Group>
@@ -192,11 +190,6 @@
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="forwardButtonActionPerformed"/>
           </Events>
-        </Component>
-        <Component class="javax.swing.JCheckBox" name="editCheckBox">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="Edit"/>
-          </Properties>
         </Component>
       </SubComponents>
     </Container>

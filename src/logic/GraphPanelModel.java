@@ -224,6 +224,23 @@ public class GraphPanelModel<V, E> extends Observable {
 			this.graphExamples.kruskal(this.graph);
 			this.algorithmDataProcessor.first();
 		}
+                else if (gUICommandConstant.equals(GUICommandConstants.BFS)) {
+			this.algorithmDataProcessor.resetGraphList();
+			ChooseStartVertexDialog csvDialog = new ChooseStartVertexDialog(
+					this.graph.vertices());
+			if (csvDialog.getSaved()) {
+				this.graphExamples.bfs(this.graph,
+						csvDialog.getStartVertex());
+				this.algorithmDataProcessor.first();
+			}
+                }
+                else if (gUICommandConstant.equals(GUICommandConstants.CUSTOMGRAPH)) {
+			this.algorithmDataProcessor.resetGraphList();
+			
+						this.graphExamples.isConnected(this.graph);
+				this.algorithmDataProcessor.first();
+			
+                }
 		// Iterate throug completed Algorithm
 		else if (gUICommandConstant.equals(GUICommandConstants.FORWARD)) {
 			this.setExternalGraph(this.algorithmDataProcessor.forward());

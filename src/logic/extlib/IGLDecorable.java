@@ -39,7 +39,7 @@ public class IGLDecorable extends Observable implements Decorable {
 			((IGLDecorable) value).set(DecorableConstants.VISITED, null);
 		}
 		
-		FormatHelper.updateFormat(this);
+		FormatHelper.updateDecorableFormat(this);
 		this.setChanged();
 		this.notifyObservers(this);
 	}
@@ -48,7 +48,7 @@ public class IGLDecorable extends Observable implements Decorable {
 	public Object destroy(Object attr) {
 		Object ret = attrs.get(attr);
 		attrs.remove(attr);
-		FormatHelper.updateFormat(this);
+		FormatHelper.updateDecorableFormat(this);
 		this.setChanged();
 		this.notifyObservers(this);
 		return ret;

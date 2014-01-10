@@ -273,14 +273,14 @@ public class GraphDataProcessor<V, E> {
                 isActive.appendChild(doc.createTextNode(strIsActive));
                 edge.appendChild(isActive);
 
-//                // isIncluded
-//                Element isIncluded = doc.createElement("isIncluded");
-//                String strIsIncluded = "false";
-//                if (ef.) {
-//                    strIsActive = "true";
-//                }
-//                isIncluded.appendChild(doc.createTextNode(strIsIncluded));
-//                edge.appendChild(isIncluded);
+                // isIncluded
+                Element isIncluded = doc.createElement("isIncluded");
+                String strIsIncluded = "false";
+                if (ef.isInMSF()) {
+                    strIsIncluded = "true";
+                }
+                isIncluded.appendChild(doc.createTextNode(strIsIncluded));
+                edge.appendChild(isIncluded);
 
             }
             // Vertices (iterate via map)
@@ -305,16 +305,7 @@ public class GraphDataProcessor<V, E> {
                 }
                 vID.appendChild(doc.createTextNode(strVertexID));
                 vertex.appendChild(vID);
-
-                // name
-                // Element name = doc.createElement("name");
-                // String strName = "-";
-                // if (v.element() != null) {
-                // strName = v.element().toString();
-                // }
-                // name.appendChild(doc.createTextNode(strName));
-                // vertex.appendChild(name);
-
+                
                 // label
                 Element label = doc.createElement("label");
                 String strLabel = "-";
@@ -650,15 +641,15 @@ public class GraphDataProcessor<V, E> {
                     }
                     
                      //visited
-//                    NodeList visitedList = edgeElement.getElementsByTagName("isVisited");
-//                    Element visitedElement = (Element) visitedList.item(0);
-//                    if (visitedElement != null) {
-//                        if (visitedElement.getTextContent().equals("true")) {
-//                            eF.set(true);
-//                        } else {
-//                            eF.setActive(false);
-//                        }
-//                    }
+                    NodeList visitedList = edgeElement.getElementsByTagName("isVisited");
+                    Element visitedElement = (Element) visitedList.item(0);
+                    if (visitedElement != null) {
+                        if (visitedElement.getTextContent().equals("true")) {
+                            eF.setInMSF();
+                        } else {
+                            eF.setNotInMSF();
+                        }
+                    }
 
                     // Vertex aus Map holen
                     Vertex<V> sourceVertex = null;

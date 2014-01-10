@@ -591,7 +591,6 @@ public class GraphDataProcessor<V, E> {
                     vNew.set(FormatHelper.FORMAT, vFi); // set vertex-format
 
                     map.put(Integer.parseInt(vertexID.getTextContent()), vNew); // add vertex to map
-
                 }
 
             }

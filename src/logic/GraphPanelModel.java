@@ -242,7 +242,6 @@ public class GraphPanelModel<V, E> extends Observable {
 			this.setExternalGraph(this.algorithmDataProcessor.forward());
 			setChanged();
 			notifyObservers(ModelEventConstants.GRAPHREPLACED);
-			;
 		}
 
 		else if (gUICommandConstant.equals(GUICommandConstants.BACKWARD)) {

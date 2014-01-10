@@ -13,7 +13,7 @@ import java.awt.Point;
  */
 public class EdgeFormat {
 	private boolean active;
-	private boolean included;
+	private boolean visited;
 	private Point fromPoint = new Point();
 	private Point toPoint = new Point();
 
@@ -29,17 +29,16 @@ public class EdgeFormat {
 		this.active = active;
 	}
 
-	public boolean isInMSF() {
-		return included;
+	public boolean isVisited() {
+		return visited;
 	}
 
-	public void setInMSF() {
-		this.included = true;
+	public void setVisited() {
+		this.visited = true;
 		this.active = false;
 	}
-
-	public void setNotInMSF() {
-		this.included = false;
+	public void setUnvisited() {
+		this.visited = false;
 		this.active = false;
 	}
 

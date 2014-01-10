@@ -16,7 +16,6 @@ public class FormatHelper {
 		}
 		return returnValue;
 	}
-
 	public static void updateFormat(Decorable decorable) {
 		if (null == decorable) {
 			return;

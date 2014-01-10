@@ -157,36 +157,7 @@ public class GraphDataProcessor<V, E> {
 
 			unvisitedColor.appendChild(doc.createTextNode(strUnvisitedColor));
 			graphAttributes.appendChild(unvisitedColor);
-			// includedColor
-			Element includedColor = doc.createElement("includedColor");
-			String strIncludedColor = "-";
 
-			if (gf.getIncludedColor() != null) {
-				strIncludedColor = Integer.toString(gf.getIncludedColor()
-						.getRed());
-				strIncludedColor += ";"
-						+ Integer.toString(gf.getIncludedColor().getGreen());
-				strIncludedColor += ";"
-						+ Integer.toString(gf.getIncludedColor().getBlue());
-			}
-
-			includedColor.appendChild(doc.createTextNode(strIncludedColor));
-			graphAttributes.appendChild(includedColor);
-			// unincludedColor
-			Element unincludedColor = doc.createElement("unincludedColor");
-			String strUnincludedColor = "-";
-
-			if (gf.getUnincludedColor() != null) {
-				strUnincludedColor = Integer.toString(gf.getUnincludedColor()
-						.getRed());
-				strUnincludedColor += ";"
-						+ Integer.toString(gf.getUnincludedColor().getGreen());
-				strUnincludedColor += ";"
-						+ Integer.toString(gf.getUnincludedColor().getBlue());
-			}
-
-			unincludedColor.appendChild(doc.createTextNode(strUnincludedColor));
-			graphAttributes.appendChild(unincludedColor);
 			// Edges
 			Element edges = doc.createElement("edges");
 
@@ -508,39 +479,6 @@ public class GraphDataProcessor<V, E> {
 				Color unvisColor = new Color(red, green, blue);
 
 				format.setUnvisitedColor(unvisColor);
-			}
-
-			// included Color
-			NodeList includedColorList = graphAtt
-					.getElementsByTagName("includedColor");
-			Element includedColorElement = (Element) includedColorList.item(0);
-
-			if (!includedColorElement.getTextContent().equals("-")) {
-				String[] split = includedColorElement.getTextContent().split(
-						";");
-				int red = Integer.parseInt(split[0]);
-				int green = Integer.parseInt(split[1]);
-				int blue = Integer.parseInt(split[2]);
-				Color includedColor = new Color(red, green, blue);
-
-				format.setIncludedColor(includedColor);
-			}
-
-			// unincluded Color
-			NodeList unincludedColorList = graphAtt
-					.getElementsByTagName("unincludedColor");
-			Element unincludedColorElement = (Element) unincludedColorList
-					.item(0);
-
-			if (!unincludedColorElement.getTextContent().equals("-")) {
-				String[] split = unincludedColorElement.getTextContent().split(
-						";");
-				int red = Integer.parseInt(split[0]);
-				int green = Integer.parseInt(split[1]);
-				int blue = Integer.parseInt(split[2]);
-				Color unincludedColor = new Color(red, green, blue);
-
-				format.setUnincludedColor(unincludedColor);
 			}
 
 			// isWeighted

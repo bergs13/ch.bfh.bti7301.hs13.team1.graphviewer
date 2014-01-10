@@ -155,10 +155,14 @@ public class GraphExamples<V, E> {
 							newDist);
 					// now set as best gateway (until now) v
 					// i.e v is the gateway from u to s.
-					if (v == s)
+					if (v == s){
 						s.set(u, u);
-					else
+                                           
+                                        }
+                                        else{
 						s.set(u, s.get(v));
+                                        
+                                        }
                                         recorder.recordStep(g);
 				}
 			}
@@ -215,10 +219,12 @@ public class GraphExamples<V, E> {
 				Edge<E> e = eit.next();
 				Vertex<V> u = g.opposite(e, w);
 				if (v.get(u) == null) {// u not yet visited
-					if (w == v)
+					if (w == v){
 						v.set(u, u);
-					else
+                                        }
+                                        else{
 						v.set(u, v.get(w));
+                                        }
 					li.addFirst(u);
 				}
 			}

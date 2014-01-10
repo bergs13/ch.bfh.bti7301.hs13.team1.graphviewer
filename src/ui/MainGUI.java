@@ -124,6 +124,7 @@ public class MainGUI<V, E> extends javax.swing.JFrame {
         algorithmMenu = new javax.swing.JMenu();
         dijkstraMenuItem = new javax.swing.JMenuItem();
         kruskalMenuItem = new javax.swing.JMenuItem();
+        bfsMenuItem = new javax.swing.JMenuItem();
         CustomAlgorithmMenuItem = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -234,6 +235,14 @@ public class MainGUI<V, E> extends javax.swing.JFrame {
         });
         algorithmMenu.add(kruskalMenuItem);
 
+        bfsMenuItem.setText("BFS");
+        bfsMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bfsMenuItemActionPerformed(evt);
+            }
+        });
+        algorithmMenu.add(bfsMenuItem);
+
         CustomAlgorithmMenuItem.setText("Custom Algorithm");
         CustomAlgorithmMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -273,6 +282,11 @@ public class MainGUI<V, E> extends javax.swing.JFrame {
        this.model.getGraphPanelModel().handleMainGUICommand(
 				GUICommandConstants.CUSTOMGRAPH, null);
     }//GEN-LAST:event_CustomAlgorithmMenuItemActionPerformed
+
+    private void bfsMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bfsMenuItemActionPerformed
+       this.model.getGraphPanelModel().handleMainGUICommand(
+				GUICommandConstants.BFS, null);
+    }//GEN-LAST:event_bfsMenuItemActionPerformed
 
 	private void exitMenuItemActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_exitMenuItemActionPerformed
 		dispose();
@@ -371,6 +385,7 @@ public class MainGUI<V, E> extends javax.swing.JFrame {
     private javax.swing.JMenu Menu1;
     private javax.swing.JMenu algorithmMenu;
     private javax.swing.JButton backwardButton;
+    private javax.swing.JMenuItem bfsMenuItem;
     private javax.swing.JMenuItem dijkstraMenuItem;
     private javax.swing.JCheckBox editCheckBox;
     private javax.swing.JMenuItem exitMenuItem;

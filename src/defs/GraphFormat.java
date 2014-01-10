@@ -14,14 +14,12 @@ public class GraphFormat {
 	private Color activeColor;
 	private Color visitedColor;
 	private Color unvisitedColor;
-	private Color includedColor;
-	private Color unincludedColor;
 
 	// size of Vertex
 	public static final int INNERCIRCLEDIAMETER = 30;
 	public static final int OUTERCIRCLEDIAMETER = 40;
 	public static final int LOCATIONCENTERMODIFIER = 20;
-	public static final int SELECTEDVERTEXBORDERTHICKNESS =2;
+	public static final int SELECTEDVERTEXBORDERTHICKNESS = 2;
 	public static final int ARROWTRIANGLEWIDTH = 20;
 	public static final int ARROWTRIANGLEHEIGHT = 30;
 
@@ -38,8 +36,6 @@ public class GraphFormat {
 		this.visitedColor = aLayout.getVisitedColor();
 		this.unvisitedColor = aLayout.getUnvisitedColor();
 		this.isLabelVisible = aLayout.getLabelVisible();
-		this.includedColor = aLayout.getIncludedEdgeColor();
-		this.unincludedColor = aLayout.getUnincludedColor();
 	}
 
 	public Color getActiveColor() {
@@ -66,14 +62,6 @@ public class GraphFormat {
 		this.unvisitedColor = unvisitedColor;
 	}
 
-	public Color getIncludedColor() {
-		return includedColor;
-	}
-
-	public void setIncludedColor(Color includedColor) {
-		this.includedColor = includedColor;
-	}
-
 	public boolean isLabelVisible() {
 		return isLabelVisible;
 	}
@@ -89,25 +77,31 @@ public class GraphFormat {
 	public void setDirected(boolean directed) {
 		this.isDirected = directed;
 	}
+
 	public boolean isWeighted() {
 		return isWeighted;
 	}
+
 	public void setWeighted(boolean weighted) {
 		this.isWeighted = weighted;
 	}
-	public Color getUnincludedColor() {
-		return unincludedColor;
-	}
 
-	public void setUnincludedColor(Color unincludedColor) {
-		this.unincludedColor = unincludedColor;
-	}
-
-	public Color getVertexColor(VertexFormat format) {
+	public Color getColor(VertexFormat format) {
 		// get the color according to the current state
 		if (format.isActive()) {
 			return getActiveColor();
 		} else if (format.isVisited()) {
+			return getVisitedColor();
+		} else {
+			return getUnvisitedColor();
+		}
+	}
+
+	public Color getColor(EdgeFormat format) {
+		// get the color according to the current state
+		if (format.isActive()) {
+			return getActiveColor();
+		} else if (format.isInMSF()) {
 			return getVisitedColor();
 		} else {
 			return getUnvisitedColor();

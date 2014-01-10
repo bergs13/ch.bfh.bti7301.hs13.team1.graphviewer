@@ -32,7 +32,7 @@ public class AlgorithmDataProcessor {
         try {
             String graphString = GDProcessor.constructStringFromGraph(graph);
             graphList.add(graphString);
-            System.out.println(graphString.substring(0, 30));
+            System.out.println(graphString);
         } catch (IllegalArgumentException err) {
             System.err.println("No Graph");
         }

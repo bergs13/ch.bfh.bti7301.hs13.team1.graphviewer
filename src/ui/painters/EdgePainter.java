@@ -38,8 +38,8 @@ public class EdgePainter {
 			return;
 		}
 
-		g2.setColor(edgeFormat.isActive() ? graphFormat.getActiveColor()
-				: graphFormat.getUnincludedColor());
+		// edge color
+		g2.setColor(graphFormat.getColor(edgeFormat));
 
 		// Linie immer
 		g2.draw(new Line2D.Double(edgeFormat.getFromPoint().x, edgeFormat

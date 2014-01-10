@@ -65,10 +65,11 @@ public class VertexComponent<V> extends JComponent implements Transferable {
 		vertex.set(FormatHelper.FORMAT, format);
 
 		// set component size
+		this.setPreferredSize(new Dimension(300,300));
 		this.setPreferredSize(new Dimension(GraphFormat.OUTERCIRCLEDIAMETER + 2
 				* GraphFormat.SELECTEDVERTEXBORDERTHICKNESS,
 				GraphFormat.OUTERCIRCLEDIAMETER + 2
-						* GraphFormat.SELECTEDVERTEXBORDERTHICKNESS));
+					* GraphFormat.SELECTEDVERTEXBORDERTHICKNESS ));
 
 		// context menu and menu items
 		this.popupMenu.add(this.menuItemAddVertex);
@@ -126,7 +127,7 @@ public class VertexComponent<V> extends JComponent implements Transferable {
 				GraphFormat.SELECTEDVERTEXBORDERTHICKNESS,
 				GraphFormat.OUTERCIRCLEDIAMETER,
 				GraphFormat.OUTERCIRCLEDIAMETER);
-		g2.setColor(graphFormat.getVertexColor(format));
+		g2.setColor(graphFormat.getColor(format));
 		g2.fill(outer);
 		Ellipse2D inner = new Ellipse2D.Double(outer.getCenterX()
 				- GraphFormat.INNERCIRCLEDIAMETER / 2, outer.getCenterY()

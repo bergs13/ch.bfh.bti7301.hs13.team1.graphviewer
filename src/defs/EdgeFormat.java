@@ -20,15 +20,6 @@ public class EdgeFormat {
 	public EdgeFormat() {
 	}
 
-	/**
-	 * reset this edget to Start State
-	 */
-	private void reset() {
-		active = false;
-		included = false;
-
-	}
-
 	// Start Getters and Setters
 	public boolean isActive() {
 		return active;
@@ -48,7 +39,8 @@ public class EdgeFormat {
 	}
 
 	public void setNotInMSF() {
-		this.reset();
+		this.included = false;
+		this.active = false;
 	}
 
 	public Point getFromPoint() {

@@ -583,14 +583,14 @@ public class GraphDataProcessor<V, E> {
                     Element visitedElement = (Element) visitedList.item(0);
                     if (visitedElement != null) {
                         if (visitedElement.getTextContent().equals("yes")) {
-                            vFi.setActive();
+                            vFi.setVisited();      
+                            vNew.set(DecorableConstants.VISITED, null);
                         }
                     }
-
+                    
                     vNew.set(FormatHelper.FORMAT, vFi); // set vertex-format
 
                     map.put(Integer.parseInt(vertexID.getTextContent()), vNew); // add vertex to map
-
                 }
 
             }

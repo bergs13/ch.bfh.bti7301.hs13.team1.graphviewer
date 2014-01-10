@@ -384,4 +384,13 @@ public class GraphExamples<V, E> {
 		// if (e.has(DISCOVERY_EDGE)) System.out.println(e);
 		// }
 	}
+
+	public void testAlgorithm(Graph<V,E> g) {	
+		Iterator<Vertex<V>> itV = g.vertices();
+		while (itV.hasNext())
+		{
+			itV.next().set(VISITED, null);
+			recorder.recordStep(g);
+		}
+	}
 }

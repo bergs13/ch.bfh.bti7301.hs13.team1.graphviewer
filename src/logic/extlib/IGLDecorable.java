@@ -32,14 +32,12 @@ public class IGLDecorable extends Observable implements Decorable {
 		if (val != null)
 			value = val;
 		attrs.put(attr, value);
-
 		// Dijkstra (Umsetzung Vertex Target in VISITED
 		if (null != attr && Vertex.class.isInstance(attr)
 				&& Vertex.class.isInstance(value)) {
 			((IGLDecorable) value).set(DecorableConstants.VISITED, null);
 		}
-		
-		FormatHelper.updateFormat(this);
+		FormatHelper.updateDecorableFormat(this);
 		this.setChanged();
 		this.notifyObservers(this);
 	}
@@ -48,7 +46,7 @@ public class IGLDecorable extends Observable implements Decorable {
 	public Object destroy(Object attr) {
 		Object ret = attrs.get(attr);
 		attrs.remove(attr);
-		FormatHelper.updateFormat(this);
+		FormatHelper.updateDecorableFormat(this);
 		this.setChanged();
 		this.notifyObservers(this);
 		return ret;

@@ -9,7 +9,6 @@ import defs.FormatHelper;
 import defs.GraphFormat;
 import defs.ModelEventConstants;
 import defs.VertexFormat;
-import java.awt.event.ItemEvent;
 import logic.extlib.Edge;
 import logic.extlib.GraphExamples;
 import logic.extlib.IncidenceListGraph;

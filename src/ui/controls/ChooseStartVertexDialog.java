@@ -18,13 +18,13 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
-import javax.swing.JPanel;
 import logic.extlib.Vertex;
 
 /**
  * 
  * @author Stephan_2
  */
+@SuppressWarnings("serial")
 public class ChooseStartVertexDialog<V> extends JDialog {
 
 	// Members

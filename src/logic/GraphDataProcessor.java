@@ -670,6 +670,7 @@ public class GraphDataProcessor<V, E> {
 					if (edgeWeightedElement.getTextContent().equals("yes")) {
 						dWeight = Double.parseDouble(edgeWeightElement
 								.getTextContent());
+
 					}
 
 					// sourcePoint
@@ -701,7 +702,9 @@ public class GraphDataProcessor<V, E> {
 					if (null != sourceVertex && null != targetVertex) {
 						Edge<E> eNew = g.insertEdge(sourceVertex, targetVertex,
 								eElement);
-						eNew.set(DecorableConstants.WEIGHT, dWeight);
+						if (edgeWeightedElement.getTextContent().equals("yes")) {
+							eNew.set(DecorableConstants.WEIGHT, dWeight);
+						}
 						eNew.set(FormatHelper.FORMAT, eF);
 					}
 				}

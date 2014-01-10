@@ -10,15 +10,48 @@ package ui.controls;
  */
 @SuppressWarnings("serial")
 public class InformationPanel extends javax.swing.JPanel {
-private String type = "V or E";
+    private boolean weighted;
+    private boolean directed;
+    private boolean connected;
+    private String graphInformations = "";
     /**
      * Creates new form InformationPanel
      */
     public InformationPanel() {
         initComponents();
+        this.setGraphinformationText();
+        this.informationLabel.setText(graphInformations);
         
     }
-    
+    private String isWeighted(){
+        if (weighted){
+            return "weigthed, ";
+        }
+        else {
+            return "unweighted";
+        }
+    }
+    private String isDirected(){
+        if (directed){
+            return "is directet";
+        }
+        else {
+            return " is undirected";
+        }
+    }
+    private String isConnected(){
+        if (connected){
+            return "is connected";
+        }
+        else {
+            return "not connected";
+        }
+    }
+    private void setGraphinformationText(){
+        this.graphInformations =  "<html><p>is "+this.isWeighted()+ " and "+this.isDirected()+"</p>"+"<p>It is "+this.isConnected()+"</p>"+
+                "<p>and has";
+        
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -27,39 +60,37 @@ private String type = "V or E";
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
+        titlLabel = new javax.swing.JLabel();
+        informationLabel = new javax.swing.JLabel();
 
         setToolTipText("");
 
-        jLabel1.setText("Type:");
-
-        jLabel2.setText(type);
+        titlLabel.setText("This Graph:");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(informationLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(titlLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 132, Short.MAX_VALUE))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(jLabel2))
-                .addContainerGap(410, Short.MAX_VALUE))
+                .addComponent(titlLabel)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(informationLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(199, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel informationLabel;
+    private javax.swing.JLabel titlLabel;
     // End of variables declaration//GEN-END:variables
 
 

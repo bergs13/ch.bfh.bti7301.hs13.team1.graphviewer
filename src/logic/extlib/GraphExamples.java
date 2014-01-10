@@ -159,6 +159,7 @@ public class GraphExamples<V, E> {
 						s.set(u, u);
 					else
 						s.set(u, s.get(v));
+                                        recorder.recordStep(g);
 				}
 			}
 

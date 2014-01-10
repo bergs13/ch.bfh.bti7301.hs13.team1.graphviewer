@@ -112,7 +112,6 @@ public class MainGUI<V, E> extends javax.swing.JFrame {
         runButton = new javax.swing.JButton();
         backwardButton = new javax.swing.JButton();
         forwardButton = new javax.swing.JButton();
-        jRadioButton1 = new javax.swing.JRadioButton();
         editCheckBox = new javax.swing.JCheckBox();
         informationPanel1 = new ui.controls.InformationPanel();
         mainMenuBar = new javax.swing.JMenuBar();
@@ -150,8 +149,6 @@ public class MainGUI<V, E> extends javax.swing.JFrame {
             }
         });
 
-        jRadioButton1.setText("weighted");
-
         editCheckBox.setText("Edit");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -160,15 +157,13 @@ public class MainGUI<V, E> extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addComponent(editCheckBox)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jRadioButton1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 406, Short.MAX_VALUE)
+                .addGap(59, 59, 59)
                 .addComponent(forwardButton)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(18, 18, 18)
                 .addComponent(backwardButton)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(18, 18, 18)
                 .addComponent(runButton)
-                .addContainerGap())
+                .addContainerGap(410, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -177,7 +172,6 @@ public class MainGUI<V, E> extends javax.swing.JFrame {
                     .addComponent(runButton)
                     .addComponent(backwardButton)
                     .addComponent(forwardButton)
-                    .addComponent(jRadioButton1)
                     .addComponent(editCheckBox))
                 .addContainerGap(25, Short.MAX_VALUE))
         );
@@ -260,7 +254,7 @@ public class MainGUI<V, E> extends javax.swing.JFrame {
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
+                .addGap(0, 634, Short.MAX_VALUE)
                 .addComponent(informationPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         layout.setVerticalGroup(
@@ -383,7 +377,6 @@ public class MainGUI<V, E> extends javax.swing.JFrame {
     private javax.swing.JButton forwardButton;
     private ui.controls.InformationPanel informationPanel1;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JRadioButton jRadioButton1;
     private javax.swing.JMenuItem kruskalMenuItem;
     private javax.swing.JMenuItem loadGraphjMenuItem;
     private javax.swing.JMenuBar mainMenuBar;

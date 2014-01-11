@@ -1,6 +1,7 @@
 package logic;
 
 import defs.DecorableConstants;
+import defs.EdgeFormat;
 import java.awt.Point;
 import java.util.Iterator;
 import java.util.Observable;
@@ -209,7 +210,42 @@ public class GraphPanelModel<V, E> extends Observable {
 		// observable implementation notifies the gui
 		this.graph.set(FormatHelper.FORMAT, newFormat);
 	}
-
+        
+        public void resetFormatAndDecorable(IncidenceListGraph graph){
+                IncidenceListGraph graphToReset = graph;
+                Iterator<Vertex<V>> vIt = graphToReset.vertices();
+                Vertex<V> vertex = null;
+                VertexFormat vertexFormat = null;
+                while (vIt.hasNext()){
+                        vertex = vIt.next();
+                        if (vertex.has(DecorableConstants.VISITED)){
+                                    vertex.destroy(DecorableConstants.VISITED);
+                        }
+                        if (vertex.has(DecorableConstants.MSF)){
+                                    vertex.destroy(DecorableConstants.MSF);
+                        }
+                        if (vertex.has(DecorableConstants.PQLOCATOR)){
+                                    vertex.destroy(DecorableConstants.PQLOCATOR); 
+                        }
+                        if (vertex.has(DecorableConstants.DISTANCE)){
+                                    vertex.destroy(DecorableConstants.DISTANCE); 
+                        }
+                        FormatHelper.getFormat(VertexFormat.class, vertex).setUnvisited();
+                }
+                
+                Iterator<Edge<E>> eIt = graphToReset.edges();
+                Edge edge = null;
+                while (eIt.hasNext()){
+                        edge = eIt.next();
+                        if (edge.has(DecorableConstants.VISITED)){
+                                    edge.destroy(DecorableConstants.VISITED);
+                        }
+                        if (edge.has(DecorableConstants.MSF)){
+                                    edge.destroy(DecorableConstants.MSF);
+                        }
+                        FormatHelper.getFormat(EdgeFormat.class, edge).setUnvisited();
+                }
+        }
 	// End of graph manipulation methods
 
 	// Main GUI handlers
@@ -217,6 +253,7 @@ public class GraphPanelModel<V, E> extends Observable {
 		// apply algorithms
 		if (gUICommandConstant.equals(GUICommandConstants.DIJKSTRA)) {
 			this.algorithmDataProcessor.resetGraphList();
+                        resetFormatAndDecorable(this.graph);
 			ChooseStartVertexDialog csvDialog = new ChooseStartVertexDialog(
 					this.graph.vertices());
 			if (csvDialog.getSaved()) {
@@ -226,10 +263,13 @@ public class GraphPanelModel<V, E> extends Observable {
 			}
 		} else if (gUICommandConstant.equals(GUICommandConstants.KRUSKAL)) {
 			this.algorithmDataProcessor.resetGraphList();
+                        resetFormatAndDecorable(this.graph);
 			this.graphExamples.kruskal(this.graph);
 			this.algorithmDataProcessor.first();
+                        
 		} else if (gUICommandConstant.equals(GUICommandConstants.BFS)) {
 			this.algorithmDataProcessor.resetGraphList();
+                        resetFormatAndDecorable(this.graph);
 			ChooseStartVertexDialog csvDialog = new ChooseStartVertexDialog(
 					this.graph.vertices());
 			if (csvDialog.getSaved()) {
@@ -238,6 +278,7 @@ public class GraphPanelModel<V, E> extends Observable {
 			}
 		} else if (gUICommandConstant.equals(GUICommandConstants.CUSTOMGRAPH)) {
 			this.algorithmDataProcessor.resetGraphList();
+                        resetFormatAndDecorable(this.graph);
 			this.isGUIRefreshDisabled = true;
 			this.graphExamples.testAlgorithm(this.graph);
 			this.isGUIRefreshDisabled = false;

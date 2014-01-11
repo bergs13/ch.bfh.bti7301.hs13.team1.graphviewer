@@ -18,6 +18,7 @@ import ui.controls.GraphFormatDialog;
 
 public class GraphPanelModel<V, E> extends Observable {
 	// Members
+	private boolean isGUIRefreshDisabled = false;
 	private IncidenceListGraph<V, E> graph;
 	private GraphExamples<V, E> graphExamples;
 	Vertex<V> selectedVertex = null;
@@ -94,6 +95,10 @@ public class GraphPanelModel<V, E> extends Observable {
 
 	public Vertex<V> getChangedVertex() {
 		return this.changedVertex;
+	}
+
+	public boolean isGUIRefreshDisabled() {
+		return this.isGUIRefreshDisabled;
 	}
 
 	// Graph manipulation Methods
@@ -233,9 +238,12 @@ public class GraphPanelModel<V, E> extends Observable {
 			}
 		} else if (gUICommandConstant.equals(GUICommandConstants.CUSTOMGRAPH)) {
 			this.algorithmDataProcessor.resetGraphList();
+			this.isGUIRefreshDisabled = true;
 			this.graphExamples.testAlgorithm(this.graph);
-			this.algorithmDataProcessor.first();
-
+			this.isGUIRefreshDisabled = false;
+			this.setExternalGraph(this.algorithmDataProcessor.first());
+			setChanged();
+			notifyObservers(ModelEventConstants.GRAPHREPLACED);
 		}
 		// Iterate throug completed Algorithm
 		else if (gUICommandConstant.equals(GUICommandConstants.FORWARD)) {

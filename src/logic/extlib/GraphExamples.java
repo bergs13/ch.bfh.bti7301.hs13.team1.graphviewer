@@ -19,13 +19,12 @@ public class GraphExamples<V, E> {
 	static final Object PQLOCATOR = DecorableConstants.PQLOCATOR;
 	static final Object WEIGHT = DecorableConstants.WEIGHT;
 	static final Object MSF = DecorableConstants.MSF;
-        private Recorder recorder;
-        
-        
-        public void setRecorder(AlgorithmDataProcessor processor){
-            this.recorder = new Recorder(processor);
-        }
-        
+	private Recorder recorder;
+
+	public void setRecorder(AlgorithmDataProcessor processor) {
+		this.recorder = new Recorder(processor);
+	}
+
 	public final int kruskal(Graph<V, E> g) {
 		if (g.isDirected())
 			throw new RuntimeException("We need an undirected graph!");
@@ -36,19 +35,19 @@ public class GraphExamples<V, E> {
 		// indicating the number of the connected component
 		// it belongs to. The attribute
 		// MSF is also assigned to the vertices.
-                recorder.recordStep(g);
+		recorder.recordStep(g);
 		int n = g.numberOfVertices();
 		final Object CLUSTER = new Object();
 		ArrayList<Vertex<V>>[] clusters = new ArrayList[n];
 		Iterator<Vertex<V>> it = g.vertices();
-		int num = 0;//g.numberOfVertices();
+		int num = 0;// g.numberOfVertices();
 		while (it.hasNext()) {
 			// all vertices are in their own cluster
 			Vertex<V> v = it.next();
 			clusters[num].add(v);
 			v.set(CLUSTER, clusters[num++]);
 			v.set(MSF, null); // show to which component v belongs
-                        recorder.recordStep(g);
+			recorder.recordStep(g);
 		}
 		HeapPriorityQueue<Double, Edge<E>> pq = new HeapPriorityQueue<>();
 		Iterator<Edge<E>> eit = g.edges();
@@ -75,7 +74,7 @@ public class GraphExamples<V, E> {
 					c1 = tmp;
 				}
 				e.set(MSF, c0);
-                                recorder.recordStep(g);
+				recorder.recordStep(g);
 				num--;
 				// now copy all elements from c1 to c0 and change the attribute
 				for (Vertex<V> v : c1) {
@@ -122,7 +121,7 @@ public class GraphExamples<V, E> {
 	}
 
 	public void dijkstra(Graph<V, E> g, Vertex<V> s) {
-                recorder.recordStep(g);
+		recorder.recordStep(g);
 		HeapPriorityQueue<Double, Vertex<V>> hq = new HeapPriorityQueue<>();
 		Iterator<Vertex<V>> it = g.vertices();
 		while (it.hasNext()) {
@@ -170,15 +169,14 @@ public class GraphExamples<V, E> {
 							newDist);
 					// now set as best gateway (until now) v
 					// i.e v is the gateway from u to s.
-					if (v == s){
+					if (v == s) {
 						s.set(u, u);
-                                           
-                                        }
-                                        else{
+
+					} else {
 						s.set(u, s.get(v));
-                                        
-                                        }
-                                        recorder.recordStep(g);
+
+					}
+					recorder.recordStep(g);
 				}
 			}
 
@@ -234,12 +232,11 @@ public class GraphExamples<V, E> {
 				Edge<E> e = eit.next();
 				Vertex<V> u = g.opposite(e, w);
 				if (v.get(u) == null) {// u not yet visited
-					if (w == v){
+					if (w == v) {
 						v.set(u, u);
-                                        }
-                                        else{
+					} else {
 						v.set(u, v.get(w));
-                                        }
+					}
 					li.addFirst(u);
 				}
 			}
@@ -283,7 +280,7 @@ public class GraphExamples<V, E> {
 	 */
 	private void traverse(Graph<V, E> g, Vertex<V> v) {
 		v.set(VISITED, null);
-                recorder.recordStep(g);
+		recorder.recordStep(g);
 		// System.out.println(v);
 		// now start the traversal at
 		// all neighbours which are
@@ -392,12 +389,27 @@ public class GraphExamples<V, E> {
 		// }
 	}
 
-	public void testAlgorithm(Graph<V,E> g) {	
+	public void testAlgorithm(Graph<V, E> g) {
 		Iterator<Vertex<V>> itV = g.vertices();
-		while (itV.hasNext())
-		{
-			itV.next().set(VISITED, null);
+		if (itV.hasNext()) {
+			Vertex<V> first = itV.next();
+			first.set(VISITED, null);
 			recorder.recordStep(g);
+
+			Iterator<Edge<E>> itE = g.incidentEdges(first);
+			Edge<E> e = null;
+			Vertex<V> opposite = null;
+			while (itE.hasNext()) {
+				e = itE.next();
+				e.set(VISITED, null);
+				opposite = g.opposite(e, first);
+				if (null != opposite) {
+					e.set(VISITED, null);
+					opposite.set(VISITED, null);
+				}
+				recorder.recordStep(g);
+			}
 		}
+
 	}
 }

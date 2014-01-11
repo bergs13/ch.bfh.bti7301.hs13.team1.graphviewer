@@ -33,7 +33,7 @@ public class FormatHelper {
 					}
 					if (EdgeFormat.class.isInstance(format)) {
 						EdgeFormat eformat = (EdgeFormat) format;
-						eformat.setInMSF();
+						eformat.setVisited();
 					}
 				} else {
 					if (VertexFormat.class.isInstance(format)) {
@@ -42,7 +42,7 @@ public class FormatHelper {
 					}
 					if (EdgeFormat.class.isInstance(format)) {
 						EdgeFormat eformat = (EdgeFormat) format;
-						eformat.setNotInMSF();
+						eformat.setUnvisited();
 					}
 				}
 			}

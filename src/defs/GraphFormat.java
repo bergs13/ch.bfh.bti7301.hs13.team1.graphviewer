@@ -101,7 +101,7 @@ public class GraphFormat {
 		// get the color according to the current state
 		if (format.isActive()) {
 			return getActiveColor();
-		} else if (format.isInMSF()) {
+		} else if (format.isVisited()) {
 			return getVisitedColor();
 		} else {
 			return getUnvisitedColor();

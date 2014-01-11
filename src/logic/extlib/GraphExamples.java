@@ -1,6 +1,8 @@
 package logic.extlib;
 
 import defs.DecorableConstants;
+import defs.FormatHelper;
+import defs.VertexFormat;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -130,10 +132,11 @@ public class GraphExamples<V, E> {
 					(Double) v.get(DISTANCE), v);
 			v.set(PQLOCATOR, loc);
 			s.set(v, null);
+                        s.set(DISTANCE, 0.0);
 		}
 		hq.replaceKey((Locator<Double, Vertex<V>>) s.get(PQLOCATOR), 0.0);
                 
-                System.out.println("Distance " +s.get(DISTANCE));
+                System.out.println("Distance StartVertex" +s.get(DISTANCE));
 		s.set(s, s);
 		while (!hq.isEmpty()) {
 			Locator<Double, Vertex<V>> loc = hq.removeMin();
@@ -146,16 +149,20 @@ public class GraphExamples<V, E> {
 				eit = g.incidentEdges(v);
 			while (eit.hasNext()) {
 				Edge<E> e = eit.next();
-                                System.out.println( e.get(WEIGHT));
-                                System.out.println("Distance " +v.get(DISTANCE));
-				double weight = 1.0; // if no weight is entered
+                                double weight = 1.0; // if no weight is entered
 				if (e.has(WEIGHT))
 					weight = (Double) e.get(WEIGHT);
                                
 				Vertex<V> u = g.opposite(e, v);
-				double newDist = (Double) u.get(DISTANCE) + weight;
-                                 System.out.println( weight);
-                                 System.out.println( newDist);
+                                //System.out.println("Vertex " + FormatHelper.getFormat(VertexFormat.class, u).getLabel() + " Distance " + u.get(DISTANCE));
+				double newDist= (Double) u.get(DISTANCE) + weight;;
+                                if ((Double)u.get(DISTANCE) < Double.POSITIVE_INFINITY){
+                                 newDist = (Double) u.get(DISTANCE) + weight;
+                                }
+                                else{
+                                    newDist = weight;
+                                }
+                                 
 				if (newDist < (Double) u.get(DISTANCE)) {
 					u.set(DISTANCE, newDist);
 					hq.replaceKey(

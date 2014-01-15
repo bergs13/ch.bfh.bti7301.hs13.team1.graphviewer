@@ -137,14 +137,14 @@ public class MainGUI<V, E> extends javax.swing.JFrame {
             }
         });
 
-        backwardButton.setText("Backward");
+        backwardButton.setText("Previous");
         backwardButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 backwardButtonActionPerformed(evt);
             }
         });
 
-        forwardButton.setText("Forward");
+        forwardButton.setText("Next");
         forwardButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 forwardButtonActionPerformed(evt);
@@ -170,27 +170,27 @@ public class MainGUI<V, E> extends javax.swing.JFrame {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(forwardButton)
+                .addComponent(FirstButton)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(backwardButton)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(runButton)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(FirstButton)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(forwardButton)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(LastButton)
-                .addContainerGap(366, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(runButton)
+                .addContainerGap(370, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(runButton)
                     .addComponent(backwardButton)
-                    .addComponent(forwardButton)
                     .addComponent(FirstButton)
-                    .addComponent(LastButton))
-                .addContainerGap(25, Short.MAX_VALUE))
+                    .addComponent(LastButton)
+                    .addComponent(forwardButton)
+                    .addComponent(runButton))
+                .addContainerGap(29, Short.MAX_VALUE))
         );
 
         Menu1.setText("File");

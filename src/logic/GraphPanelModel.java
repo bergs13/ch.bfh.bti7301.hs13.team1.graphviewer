@@ -212,42 +212,43 @@ public class GraphPanelModel<V, E> extends Observable {
 		// observable implementation notifies the gui
 		this.graph.set(FormatHelper.FORMAT, newFormat);
 	}
-        
-        public void resetFormatAndDecorable(IncidenceListGraph graph){
-                IncidenceListGraph graphToReset = graph;
-                Iterator<Vertex<V>> vIt = graphToReset.vertices();
-                Vertex<V> vertex = null;
-                VertexFormat vertexFormat = null;
-                while (vIt.hasNext()){
-                        vertex = vIt.next();
-                        if (vertex.has(DecorableConstants.VISITED)){
-                                    vertex.destroy(DecorableConstants.VISITED);
-                        }
-                        if (vertex.has(DecorableConstants.MSF)){
-                                    vertex.destroy(DecorableConstants.MSF);
-                        }
-                        if (vertex.has(DecorableConstants.PQLOCATOR)){
-                                    vertex.destroy(DecorableConstants.PQLOCATOR); 
-                        }
-                        if (vertex.has(DecorableConstants.DISTANCE)){
-                                    vertex.destroy(DecorableConstants.DISTANCE); 
-                        }
-                        FormatHelper.getFormat(VertexFormat.class, vertex).setUnvisited();
-                }
-                
-                Iterator<Edge<E>> eIt = graphToReset.edges();
-                Edge edge = null;
-                while (eIt.hasNext()){
-                        edge = eIt.next();
-                        if (edge.has(DecorableConstants.VISITED)){
-                                    edge.destroy(DecorableConstants.VISITED);
-                        }
-                        if (edge.has(DecorableConstants.MSF)){
-                                    edge.destroy(DecorableConstants.MSF);
-                        }
-                        FormatHelper.getFormat(EdgeFormat.class, edge).setUnvisited();
-                }
-        }
+
+	public void resetFormatAndDecorable(IncidenceListGraph graph) {
+		IncidenceListGraph graphToReset = graph;
+		Iterator<Vertex<V>> vIt = graphToReset.vertices();
+		Vertex<V> vertex = null;
+		VertexFormat vertexFormat = null;
+		while (vIt.hasNext()) {
+			vertex = vIt.next();
+			if (vertex.has(DecorableConstants.VISITED)) {
+				vertex.destroy(DecorableConstants.VISITED);
+			}
+			if (vertex.has(DecorableConstants.MSF)) {
+				vertex.destroy(DecorableConstants.MSF);
+			}
+			if (vertex.has(DecorableConstants.PQLOCATOR)) {
+				vertex.destroy(DecorableConstants.PQLOCATOR);
+			}
+			if (vertex.has(DecorableConstants.DISTANCE)) {
+				vertex.destroy(DecorableConstants.DISTANCE);
+			}
+			FormatHelper.getFormat(VertexFormat.class, vertex).setUnvisited();
+		}
+
+		Iterator<Edge<E>> eIt = graphToReset.edges();
+		Edge edge = null;
+		while (eIt.hasNext()) {
+			edge = eIt.next();
+			if (edge.has(DecorableConstants.VISITED)) {
+				edge.destroy(DecorableConstants.VISITED);
+			}
+			if (edge.has(DecorableConstants.MSF)) {
+				edge.destroy(DecorableConstants.MSF);
+			}
+			FormatHelper.getFormat(EdgeFormat.class, edge).setUnvisited();
+		}
+	}
+
 	// End of graph manipulation methods
 
 	// Main GUI handlers
@@ -255,38 +256,47 @@ public class GraphPanelModel<V, E> extends Observable {
 		// apply algorithms
 		if (gUICommandConstant.equals(GUICommandConstants.DIJKSTRA)) {
 			this.algorithmDataProcessor.resetGraphList();
-                        resetFormatAndDecorable(this.graph);
+			resetFormatAndDecorable(this.graph);
 			ChooseStartVertexDialog csvDialog = new ChooseStartVertexDialog(
 					this.graph.vertices());
 			if (csvDialog.getSaved()) {
+				this.isGUIRefreshDisabled = true;
 				this.graphExamples.dijkstra(this.graph,
 						csvDialog.getStartVertex());
-                               	this.algorithmDataProcessor.first();
+				this.isGUIRefreshDisabled = false;
+				this.algorithmDataProcessor.first();
 			}
 		} else if (gUICommandConstant.equals(GUICommandConstants.KRUSKAL)) {
 			this.algorithmDataProcessor.resetGraphList();
-                        resetFormatAndDecorable(this.graph);
+			resetFormatAndDecorable(this.graph);
+			this.isGUIRefreshDisabled = true;
 			this.graphExamples.kruskal(this.graph);
+			this.isGUIRefreshDisabled = false;
 			this.algorithmDataProcessor.first();
-                        
 		} else if (gUICommandConstant.equals(GUICommandConstants.BFS)) {
 			this.algorithmDataProcessor.resetGraphList();
-                        resetFormatAndDecorable(this.graph);
+			resetFormatAndDecorable(this.graph);
 			ChooseStartVertexDialog csvDialog = new ChooseStartVertexDialog(
 					this.graph.vertices());
 			if (csvDialog.getSaved()) {
+				this.isGUIRefreshDisabled = true;
 				this.graphExamples.bfs(this.graph, csvDialog.getStartVertex());
-				
+				this.isGUIRefreshDisabled = false;
 			}
-                        this.setExternalGraph(this.algorithmDataProcessor.first());
-                        setChanged();
+			this.setExternalGraph(this.algorithmDataProcessor.first());
+			setChanged();
 			notifyObservers(ModelEventConstants.GRAPHREPLACED);
 		} else if (gUICommandConstant.equals(GUICommandConstants.CUSTOMGRAPH)) {
 			this.algorithmDataProcessor.resetGraphList();
-                        resetFormatAndDecorable(this.graph);
-			this.isGUIRefreshDisabled = true;
-			this.graphExamples.customAlgorithm(this.graph);
-			this.isGUIRefreshDisabled = false;
+			resetFormatAndDecorable(this.graph);
+			ChooseStartVertexDialog csvDialog = new ChooseStartVertexDialog(
+					this.graph.vertices());
+			if (csvDialog.getSaved()) {
+				this.isGUIRefreshDisabled = true;
+				this.graphExamples.customAlgorithm(this.graph,
+						csvDialog.getStartVertex());
+				this.isGUIRefreshDisabled = false;
+			}
 			this.setExternalGraph(this.algorithmDataProcessor.first());
 			setChanged();
 			notifyObservers(ModelEventConstants.GRAPHREPLACED);
@@ -302,26 +312,23 @@ public class GraphPanelModel<V, E> extends Observable {
 			this.setExternalGraph(this.algorithmDataProcessor.backward());
 			setChanged();
 			notifyObservers(ModelEventConstants.GRAPHREPLACED);
-		}
-                else if (gUICommandConstant.equals(GUICommandConstants.RUN)) {
-			this.setExternalGraph(this.algorithmDataProcessor.first());
-                        setChanged();
-                        notifyObservers(ModelEventConstants.GRAPHREPLACED);
-                        int listSize = this.algorithmDataProcessor.getGraphList().size();
-                        for (int i = 0; i<listSize; i++){
-                            
-                            this.setExternalGraph(this.algorithmDataProcessor.forward());
-                            setChanged();
-                            notifyObservers(ModelEventConstants.GRAPHREPLACED);
-                        }
-			
-		}
-                else if (gUICommandConstant.equals(GUICommandConstants.FIRST)) {
+		} else if (gUICommandConstant.equals(GUICommandConstants.RUN)) {
 			this.setExternalGraph(this.algorithmDataProcessor.first());
 			setChanged();
 			notifyObservers(ModelEventConstants.GRAPHREPLACED);
-		}
-                else if (gUICommandConstant.equals(GUICommandConstants.LAST)) {
+			int listSize = this.algorithmDataProcessor.getGraphList().size();
+			for (int i = 0; i < listSize; i++) {
+
+				this.setExternalGraph(this.algorithmDataProcessor.forward());
+				setChanged();
+				notifyObservers(ModelEventConstants.GRAPHREPLACED);
+			}
+
+		} else if (gUICommandConstant.equals(GUICommandConstants.FIRST)) {
+			this.setExternalGraph(this.algorithmDataProcessor.first());
+			setChanged();
+			notifyObservers(ModelEventConstants.GRAPHREPLACED);
+		} else if (gUICommandConstant.equals(GUICommandConstants.LAST)) {
 			this.setExternalGraph(this.algorithmDataProcessor.last());
 			setChanged();
 			notifyObservers(ModelEventConstants.GRAPHREPLACED);

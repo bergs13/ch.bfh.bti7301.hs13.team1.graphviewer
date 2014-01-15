@@ -143,13 +143,16 @@
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" attributes="0">
-                  <EmptySpace min="-2" pref="102" max="-2" attributes="0"/>
                   <Component id="forwardButton" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace type="separate" max="-2" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
                   <Component id="backwardButton" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace type="separate" max="-2" attributes="0"/>
+                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
                   <Component id="runButton" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace pref="410" max="32767" attributes="0"/>
+                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                  <Component id="FirstButton" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                  <Component id="LastButton" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace pref="366" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -160,6 +163,8 @@
                       <Component id="runButton" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="backwardButton" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="forwardButton" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="FirstButton" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="LastButton" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace pref="25" max="32767" attributes="0"/>
               </Group>
@@ -189,6 +194,22 @@
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="forwardButtonActionPerformed"/>
+          </Events>
+        </Component>
+        <Component class="javax.swing.JButton" name="FirstButton">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="First"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="FirstButtonActionPerformed"/>
+          </Events>
+        </Component>
+        <Component class="javax.swing.JButton" name="LastButton">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Last"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="LastButtonActionPerformed"/>
           </Events>
         </Component>
       </SubComponents>

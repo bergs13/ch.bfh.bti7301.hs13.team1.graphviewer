@@ -19,7 +19,7 @@ public class InformationPanel extends javax.swing.JPanel {
      */
     public InformationPanel() {
         initComponents();
-        this.setGraphinformationText();
+        //this.setGraphinformationText();
         this.informationLabel.setText(graphInformations);
         
     }

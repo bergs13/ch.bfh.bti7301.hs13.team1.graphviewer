@@ -79,6 +79,7 @@ public class AlgorithmDataProcessor {
         IncidenceListGraph graph = GDProcessor.reconstructGraphFromString(graphString);
         return graph;
     }
+    
     //export the Graphlist
     public ArrayList<String> getGraphList() {
         return graphList;

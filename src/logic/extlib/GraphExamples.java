@@ -408,19 +408,19 @@ public class GraphExamples<V, E> {
 		recorder.recordStep(g);
 		Iterator<Edge<E>> itE = g.incidentEdges(vStart);
 		Edge<E> e = null;
-		Vertex<V> vNext = null;
+		Vertex<V> vOpposite = null;
 		int i = 10;
 		while (itE.hasNext()) {
 			e = itE.next();
-			vNext = g.opposite(e, vStart);
+			vOpposite = g.opposite(e, vStart);
 			e.set(ACTIVE, null);
 			vStart.set(VISITED, null);
 			vStart.set(DISTANCE, i);
 			recorder.recordStep(g);
 			e.set(VISITED, null);
-			vNext.set(ACTIVE, null);
+			vOpposite.set(ACTIVE, null);
 			recorder.recordStep(g);
-			vStart = vNext;
+			vOpposite.set(VISITED, null);
 			i += 10;
 		}
 	}

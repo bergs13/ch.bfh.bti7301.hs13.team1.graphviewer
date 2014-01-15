@@ -90,9 +90,9 @@ public class ChooseStartVertexDialog<V> extends JDialog {
                     public void keyTyped(KeyEvent e) {
                         if (KeyEvent.VK_ENTER == e.getKeyCode()) {
                             okButton.doClick();
-            }
+                        }
                     }        
-        });
+                });
 		final JButton cancelButton = new JButton("Cancel");
 		cancelButton.addActionListener(new ActionListener() {
 			@Override
@@ -111,8 +111,7 @@ public class ChooseStartVertexDialog<V> extends JDialog {
             
                         }
                     }
-                   
-        });
+                });
 		this.add(okButton);
 		this.add(cancelButton);
                 getRootPane().setDefaultButton(okButton);

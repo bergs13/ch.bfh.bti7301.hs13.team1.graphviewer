@@ -137,6 +137,7 @@ public class MainGUI<V, E> extends javax.swing.JFrame {
             }
         });
 
+        backwardButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ui/icons/arrow-left-2.png"))); // NOI18N
         backwardButton.setText("Previous");
         backwardButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -144,6 +145,7 @@ public class MainGUI<V, E> extends javax.swing.JFrame {
             }
         });
 
+        forwardButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ui/icons/arrow-right-2.png"))); // NOI18N
         forwardButton.setText("Next");
         forwardButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -151,6 +153,7 @@ public class MainGUI<V, E> extends javax.swing.JFrame {
             }
         });
 
+        FirstButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ui/icons/arrow-left-double-2.png"))); // NOI18N
         FirstButton.setText("First");
         FirstButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -158,6 +161,7 @@ public class MainGUI<V, E> extends javax.swing.JFrame {
             }
         });
 
+        LastButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ui/icons/arrow-right-double-2.png"))); // NOI18N
         LastButton.setText("Last");
         LastButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

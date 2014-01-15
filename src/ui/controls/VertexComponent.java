@@ -65,11 +65,10 @@ public class VertexComponent<V> extends JComponent implements Transferable {
 		vertex.set(FormatHelper.FORMAT, format);
 
 		// set component size
-		this.setPreferredSize(new Dimension(300,300));
 		this.setPreferredSize(new Dimension(GraphFormat.OUTERCIRCLEDIAMETER + 2
 				* GraphFormat.SELECTEDVERTEXBORDERTHICKNESS,
 				GraphFormat.OUTERCIRCLEDIAMETER + 2
-					* GraphFormat.SELECTEDVERTEXBORDERTHICKNESS ));
+						* GraphFormat.SELECTEDVERTEXBORDERTHICKNESS + 10));
 
 		// context menu and menu items
 		this.popupMenu.add(this.menuItemAddVertex);
@@ -172,6 +171,11 @@ public class VertexComponent<V> extends JComponent implements Transferable {
 					+ 2
 					* (GraphFormat.SELECTEDVERTEXBORDERTHICKNESS / 2)));
 			g2.setStroke(oldStroke);
+		}
+
+		// Distance if set as tooltip
+		if (format.hasDistance()) {
+			this.setToolTipText("" + format.getDistance());
 		}
 
 		// Drag & Drop

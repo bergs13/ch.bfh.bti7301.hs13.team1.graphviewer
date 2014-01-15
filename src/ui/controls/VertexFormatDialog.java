@@ -12,8 +12,6 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
 import defs.VertexFormat;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
 
 @SuppressWarnings("serial")
 public class VertexFormatDialog extends JDialog {
@@ -60,7 +58,7 @@ public class VertexFormatDialog extends JDialog {
 		this.add(labelField);
 
 		// OK/Cancel Buttons
-		final JButton okButton = new JButton("OK");
+		JButton okButton = new JButton("OK");
 		okButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
@@ -70,15 +68,6 @@ public class VertexFormatDialog extends JDialog {
 				dispose();
 			};
 		});
-                okButton.addKeyListener(new KeyAdapter(){
-                
-                    @Override
-                    public void keyTyped(KeyEvent e) {
-                        if (KeyEvent.VK_ENTER == e.getKeyCode()) {
-                            okButton.doClick();
-                        }
-                    }        
-                });
 		JButton cancelButton = new JButton("Cancel");
 		cancelButton.addActionListener(new ActionListener() {
 			@Override
@@ -89,7 +78,6 @@ public class VertexFormatDialog extends JDialog {
 		});
 		this.add(okButton);
 		this.add(cancelButton);
-                getRootPane().setDefaultButton(okButton);
 	}
 
 	public boolean getSaved() {

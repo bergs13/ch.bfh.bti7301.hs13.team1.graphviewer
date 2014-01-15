@@ -16,6 +16,7 @@ public class FormatHelper {
 		}
 		return returnValue;
 	}
+
 	public static void updateDecorableFormat(Decorable decorable) {
 		if (null == decorable) {
 			return;
@@ -25,22 +26,32 @@ public class FormatHelper {
 		if (decorable.has(FORMAT)) {
 			format = decorable.get(FORMAT);
 			if (null != format) {
-				//Distance
-				if(decorable.has(DecorableConstants.DISTANCE))
-				{
+				// Active
+				if (decorable.has(DecorableConstants.ACTIVE)) {
 					if (VertexFormat.class.isInstance(format)) {
 						VertexFormat vformat = (VertexFormat) format;
-						vformat.setDistance(decorable.get(DecorableConstants.DISTANCE));
+						vformat.setActive();
+					}
+				} else {
+					if (VertexFormat.class.isInstance(format)) {
+						VertexFormat vformat = (VertexFormat) format;
+						vformat.setInActive();
 					}
 				}
-				else
-				{
+				// Distance
+				if (decorable.has(DecorableConstants.DISTANCE)) {
+					if (VertexFormat.class.isInstance(format)) {
+						VertexFormat vformat = (VertexFormat) format;
+						vformat.setDistance(decorable
+								.get(DecorableConstants.DISTANCE));
+					}
+				} else {
 					if (VertexFormat.class.isInstance(format)) {
 						VertexFormat vformat = (VertexFormat) format;
 						vformat.setDistance(null);
 					}
 				}
-				//Visited
+				// Visited
 				if (decorable.has(DecorableConstants.VISITED)
 						|| decorable.has(DecorableConstants.MSF)) {
 					if (VertexFormat.class.isInstance(format)) {

@@ -1,7 +1,6 @@
 package ui.controls;
 
 import java.awt.BasicStroke;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -15,8 +14,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Rectangle2D;
-
-import javax.swing.BorderFactory;
 import javax.swing.JComponent;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
@@ -25,7 +22,6 @@ import logic.extlib.Vertex;
 import logic.DragAndDropTransferHandler;
 import logic.VertexComponentModel;
 import logic.VisualizationCalculator;
-import defs.DecorableConstants;
 import defs.FormatHelper;
 import defs.GraphFormat;
 import defs.VertexFormat;

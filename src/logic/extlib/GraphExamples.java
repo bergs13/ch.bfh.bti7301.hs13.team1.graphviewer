@@ -11,7 +11,7 @@ import logic.AlgorithmDataProcessor;
 import logic.Recorder;
 
 public class GraphExamples<V, E> {
-
+	static final Object ACTIVE = DecorableConstants.ACTIVE;
 	static final Object VISITED = DecorableConstants.VISITED;
 	static final Object NUMBER = DecorableConstants.NUMBER;
 	static final Object INCOUNT = DecorableConstants.INCOUNT;
@@ -221,15 +221,15 @@ public class GraphExamples<V, E> {
 		// the value of this attribute is the first
 		// vertex on a shortest path from w to v
 		LinkedList<Vertex<V>> li = new LinkedList<Vertex<V>>();
-                
-                v.set(v, v);
-                v.set(VISITED, null);
-                recorder.recordStep(g);
-                li.addFirst(v);
+
+		v.set(v, v);
+		v.set(VISITED, null);
+		recorder.recordStep(g);
+		li.addFirst(v);
 		while (li.size() > 0) {
 			Vertex<V> w = li.removeLast();
-                        //FormatHelper.getFormat(VertexFormat.class, w).setActive();
-                        //recorder.recordStep(g);
+			// FormatHelper.getFormat(VertexFormat.class, w).setActive();
+			// recorder.recordStep(g);
 			Iterator<Edge<E>> eit;
 			if (g.isDirected())
 				eit = g.incidentOutEdges(w);
@@ -245,11 +245,11 @@ public class GraphExamples<V, E> {
 						v.set(u, v.get(w));
 					}
 					li.addFirst(u);
-                                        e.set(VISITED, null);
+					e.set(VISITED, null);
 				}
 			}
-                        w.set(VISITED, null);
-                        recorder.recordStep(g);
+			w.set(VISITED, null);
+			recorder.recordStep(g);
 
 		}
 	}
@@ -399,33 +399,29 @@ public class GraphExamples<V, E> {
 		// }
 	}
 
-	public void customAlgorithm(Graph<V, E> g) {
-		testalgorithm(g);
+	public void customAlgorithm(Graph<V, E> g, Vertex<V> vStart) {
+		testalgorithm(g, vStart);
 	}
 
-	private void testalgorithm(Graph<V, E> g) {
-		Iterator<Vertex<V>> itV = g.vertices();
-		if (itV.hasNext()) {
-			Vertex<V> first = itV.next();
-			first.set(VISITED, null);
-			first.set(DISTANCE, 0);
+	private void testalgorithm(Graph<V, E> g, Vertex<V> vStart) {
+		vStart.set(ACTIVE, null);
+		recorder.recordStep(g);
+		Iterator<Edge<E>> itE = g.incidentEdges(vStart);
+		Edge<E> e = null;
+		Vertex<V> vNext = null;
+		int i = 10;
+		while (itE.hasNext()) {
+			e = itE.next();
+			vNext = g.opposite(e, vStart);
+			e.set(ACTIVE, null);
+			vStart.set(VISITED, null);
+			vStart.set(DISTANCE, i);
 			recorder.recordStep(g);
-
-			Iterator<Edge<E>> itE = g.incidentEdges(first);
-			Edge<E> e = null;
-			Vertex<V> opposite = null;
-			int i = 10;
-			while (itE.hasNext()) {
-				e = itE.next();
-				opposite = g.opposite(e, first);
-				if (null != opposite) {
-					e.set(VISITED, null);
-					opposite.set(VISITED, null);
-					opposite.set(DISTANCE, i);
-				}
-				recorder.recordStep(g);
-				i += 10;
-			}
+			e.set(VISITED, null);
+			vNext.set(ACTIVE, null);
+			recorder.recordStep(g);
+			vStart = vNext;
+			i += 10;
 		}
 	}
 }

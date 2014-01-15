@@ -350,13 +350,32 @@ public class GraphDataProcessor<V, E> {
 				// Active
 				Element active = doc.createElement("active");
 				String act = "no";
-
 				if (!clearProgressDecorables && f != null
 						&& f.isActive() == true) {
 					act = "yes";
 				}
 				active.appendChild(doc.createTextNode(act));
 				vertex.appendChild(active);
+
+				// hasDistance
+				Element hasDistance = doc.createElement("hasDistance");
+				String strHasDistance = "no";
+				if (!clearProgressDecorables && f != null
+						&& f.hasDistance() == true) {
+					strHasDistance = "yes";
+				}
+				hasDistance.appendChild(doc.createTextNode(strHasDistance));
+				vertex.appendChild(hasDistance);
+
+				// distance
+				Element distance = doc.createElement("distance");
+				String strDistance = "-";
+				if (!clearProgressDecorables && f != null
+						&& f.hasDistance() == true) {
+					strDistance = "" + f.getDistance();
+				}
+				distance.appendChild(doc.createTextNode(strDistance));
+				vertex.appendChild(distance);
 			}
 			// Transform XML object to string
 			TransformerFactory transformerFactory = TransformerFactory
@@ -606,6 +625,19 @@ public class GraphDataProcessor<V, E> {
 							vFi.setVisited();
 							vNew.set(DecorableConstants.VISITED, null);
 						}
+					}
+
+					// distance
+					NodeList hasDistances = vertexElement
+							.getElementsByTagName("hasDistance");
+					NodeList distances = vertexElement
+							.getElementsByTagName("distance");
+					Element hasDistance = (Element) hasDistances.item(0);
+					Element distance = (Element) distances.item(0);
+					if (hasDistance.getTextContent().equals("yes")) {
+						vFi.setDistance(distance.getTextContent());
+					} else {
+						vFi.setDistance(null);
 					}
 
 					vNew.set(FormatHelper.FORMAT, vFi); // set vertex-format

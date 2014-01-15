@@ -18,7 +18,9 @@ public class VertexFormat {
     private Point centerPoint = new Point();
     private String label;
     private boolean active;
-    private boolean visited;   
+    private boolean visited;  
+    private boolean hasDistance;
+    private Object distance;
     
     // End of members
 
@@ -79,6 +81,19 @@ public class VertexFormat {
     public void setVisited() {
         this.visited = true;
         this.active = false;
+    }
+    public boolean hasDistance()
+    {
+    	return this.hasDistance;
+    }
+    public void setDistance(Object distance)
+    {
+    	this.hasDistance = null != distance;
+    	this.distance = distance;
+    }
+    public Object getDistance()
+    {
+    	return this.distance;
     }
     //get the color according to the current state
    

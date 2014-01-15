@@ -1,6 +1,7 @@
 package ui.controls;
 
 import java.awt.BasicStroke;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -14,6 +15,8 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Rectangle2D;
+
+import javax.swing.BorderFactory;
 import javax.swing.JComponent;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
@@ -22,6 +25,7 @@ import logic.extlib.Vertex;
 import logic.DragAndDropTransferHandler;
 import logic.VertexComponentModel;
 import logic.VisualizationCalculator;
+import defs.DecorableConstants;
 import defs.FormatHelper;
 import defs.GraphFormat;
 import defs.VertexFormat;
@@ -65,11 +69,10 @@ public class VertexComponent<V> extends JComponent implements Transferable {
 		vertex.set(FormatHelper.FORMAT, format);
 
 		// set component size
-		this.setPreferredSize(new Dimension(300,300));
 		this.setPreferredSize(new Dimension(GraphFormat.OUTERCIRCLEDIAMETER + 2
 				* GraphFormat.SELECTEDVERTEXBORDERTHICKNESS,
 				GraphFormat.OUTERCIRCLEDIAMETER + 2
-					* GraphFormat.SELECTEDVERTEXBORDERTHICKNESS ));
+						* GraphFormat.SELECTEDVERTEXBORDERTHICKNESS + 10));
 
 		// context menu and menu items
 		this.popupMenu.add(this.menuItemAddVertex);
@@ -172,6 +175,11 @@ public class VertexComponent<V> extends JComponent implements Transferable {
 					+ 2
 					* (GraphFormat.SELECTEDVERTEXBORDERTHICKNESS / 2)));
 			g2.setStroke(oldStroke);
+		}
+
+		// Distance if set as tooltip
+		if (format.hasDistance()) {
+			this.setToolTipText("" + format.getDistance());
 		}
 
 		// Drag & Drop

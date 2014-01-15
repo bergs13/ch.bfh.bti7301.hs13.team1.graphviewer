@@ -131,11 +131,11 @@ public class GraphExamples<V, E> {
 					(Double) v.get(DISTANCE), v);
 			v.set(PQLOCATOR, loc);
 			s.set(v, null);
-                        s.set(DISTANCE, 0.0);
+			s.set(DISTANCE, 0.0);
 		}
 		hq.replaceKey((Locator<Double, Vertex<V>>) s.get(PQLOCATOR), 0.0);
-                
-                System.out.println("Distance StartVertex" +s.get(DISTANCE));
+
+		System.out.println("Distance StartVertex" + s.get(DISTANCE));
 		s.set(s, s);
 		while (!hq.isEmpty()) {
 			Locator<Double, Vertex<V>> loc = hq.removeMin();
@@ -148,20 +148,22 @@ public class GraphExamples<V, E> {
 				eit = g.incidentEdges(v);
 			while (eit.hasNext()) {
 				Edge<E> e = eit.next();
-                                double weight = 1.0; // if no weight is entered
+				double weight = 1.0; // if no weight is entered
 				if (e.has(WEIGHT))
 					weight = (Double) e.get(WEIGHT);
-                               
+
 				Vertex<V> u = g.opposite(e, v);
-                                //System.out.println("Vertex " + FormatHelper.getFormat(VertexFormat.class, u).getLabel() + " Distance " + u.get(DISTANCE));
-				double newDist= (Double) u.get(DISTANCE) + weight;;
-                                if ((Double)u.get(DISTANCE) < Double.POSITIVE_INFINITY){
-                                 newDist = (Double) u.get(DISTANCE) + weight;
-                                }
-                                else{
-                                    newDist = weight;
-                                }
-                                 
+				// System.out.println("Vertex " +
+				// FormatHelper.getFormat(VertexFormat.class, u).getLabel() +
+				// " Distance " + u.get(DISTANCE));
+				double newDist = (Double) u.get(DISTANCE) + weight;
+				;
+				if ((Double) u.get(DISTANCE) < Double.POSITIVE_INFINITY) {
+					newDist = (Double) u.get(DISTANCE) + weight;
+				} else {
+					newDist = weight;
+				}
+
 				if (newDist < (Double) u.get(DISTANCE)) {
 					u.set(DISTANCE, newDist);
 					hq.replaceKey(
@@ -388,28 +390,33 @@ public class GraphExamples<V, E> {
 		// if (e.has(DISCOVERY_EDGE)) System.out.println(e);
 		// }
 	}
+
 	public void customAlgorithm(Graph<V, E> g) {
 		testalgorithm(g);
 	}
+
 	private void testalgorithm(Graph<V, E> g) {
 		Iterator<Vertex<V>> itV = g.vertices();
 		if (itV.hasNext()) {
 			Vertex<V> first = itV.next();
 			first.set(VISITED, null);
+			first.set(DISTANCE, 0);
 			recorder.recordStep(g);
 
 			Iterator<Edge<E>> itE = g.incidentEdges(first);
 			Edge<E> e = null;
 			Vertex<V> opposite = null;
+			int i = 10;
 			while (itE.hasNext()) {
 				e = itE.next();
-				e.set(VISITED, null);
 				opposite = g.opposite(e, first);
 				if (null != opposite) {
 					e.set(VISITED, null);
 					opposite.set(VISITED, null);
+					opposite.set(DISTANCE, i);
 				}
 				recorder.recordStep(g);
+				i += 10;
 			}
 		}
 	}

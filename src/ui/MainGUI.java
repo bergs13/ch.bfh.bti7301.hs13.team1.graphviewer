@@ -328,7 +328,8 @@ public class MainGUI<V, E> extends javax.swing.JFrame {
 	}// GEN-LAST:event_backwardButtonActionPerformed
 
 	private void runButtonActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_runButtonActionPerformed
-		// TODO add your handling code here:
+		this.model.getGraphPanelModel().handleMainGUICommand(
+				GUICommandConstants.RUN, null);
 	}// GEN-LAST:event_runButtonActionPerformed
 
 	/**

@@ -73,7 +73,7 @@ public class AlgorithmDataProcessor {
 
     //returns the last step
     public IncidenceListGraph last() {
-
+        
         graphListIndex = graphList.size() - 1;
         String graphString = graphList.get(graphListIndex);
         IncidenceListGraph graph = GDProcessor.reconstructGraphFromString(graphString);

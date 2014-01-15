@@ -42,7 +42,7 @@ public class GraphDataProcessor<V, E> {
 		// Pfad prüfen!? & file als xml speichern
 
 		// Get the String for the export
-		String stringToExport = constructStringFromGraph(g);
+		String stringToExport = constructStringFromGraph(g, true);
 
 		// Export the string into the file specified
 		FileWriter fw = null;
@@ -71,7 +71,8 @@ public class GraphDataProcessor<V, E> {
 		}
 	}
 
-	public String constructStringFromGraph(IncidenceListGraph<V, E> g) {
+	public String constructStringFromGraph(IncidenceListGraph<V, E> g,
+			boolean clearProgressDecorables) {
 
 		try {
 			// Xml-Parser
@@ -270,7 +271,7 @@ public class GraphDataProcessor<V, E> {
 				// isActive
 				Element isActive = doc.createElement("isActive");
 				String strIsActive = "false";
-				if (ef.isActive()) {
+				if (!clearProgressDecorables && ef.isActive()) {
 					strIsActive = "true";
 				}
 				isActive.appendChild(doc.createTextNode(strIsActive));
@@ -279,12 +280,11 @@ public class GraphDataProcessor<V, E> {
 				// isVisited
 				Element isVisited = doc.createElement("isVisited");
 				String strIsVisited = "false";
-				if (ef.isVisited()) {
+				if (!clearProgressDecorables && ef.isVisited()) {
 					strIsVisited = "true";
 				}
 				isVisited.appendChild(doc.createTextNode(strIsVisited));
 				edge.appendChild(isVisited);
-
 			}
 			// Vertices (iterate via map)
 			Element vertices = doc.createElement("vertices");
@@ -340,8 +340,8 @@ public class GraphDataProcessor<V, E> {
 				// Visited
 				Element visited = doc.createElement("visited");
 				String vis = "no";
-
-				if (f != null && f.isVisited() == true) {
+				if (!clearProgressDecorables && f != null
+						&& f.isVisited() == true) {
 					vis = "yes";
 				}
 				visited.appendChild(doc.createTextNode(vis));
@@ -351,12 +351,12 @@ public class GraphDataProcessor<V, E> {
 				Element active = doc.createElement("active");
 				String act = "no";
 
-				if (f != null && f.isActive() == true) {
+				if (!clearProgressDecorables && f != null
+						&& f.isActive() == true) {
 					act = "yes";
 				}
 				active.appendChild(doc.createTextNode(act));
 				vertex.appendChild(active);
-
 			}
 			// Transform XML object to string
 			TransformerFactory transformerFactory = TransformerFactory

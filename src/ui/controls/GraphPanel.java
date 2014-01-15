@@ -182,14 +182,12 @@ public class GraphPanel<V, E> extends JComponent implements Observer {
 	// Painting methods
 	private void repaintContent() {
 		if (!model.isGUIRefreshDisabled()) {
-			System.out.println("manual repaint");
 			this.repaint();
 		}
 	}
 
 	@Override
 	public void paintComponent(Graphics g) {
-		System.out.println("panel paint");
 		// clear all
 		this.removeAll();
 

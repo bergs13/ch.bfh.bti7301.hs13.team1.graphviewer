@@ -14,7 +14,12 @@ public class IGLDecorable extends Observable implements Decorable {
 	public Object get(Object attr) {
 		Object ret = attrs.get(attr);
 		if (ret == null)
+                    if (Vertex.class.isInstance(attr) ){
+                        return null;
+                    }
+                    else{
 			throw new RuntimeException("no attribute " + attr);
+                    }
 		if (ret == DUMMY)
 			ret = null;
 		return ret;
@@ -29,8 +34,9 @@ public class IGLDecorable extends Observable implements Decorable {
 	@Override
 	public void set(Object attr, Object val) {
 		Object value = DUMMY;
-		if (val != null)
+		if (val != null){
 			value = val;
+                }
 		attrs.put(attr, value);
 		// Dijkstra (Umsetzung Vertex Target in VISITED
 		if (null != attr && Vertex.class.isInstance(attr)

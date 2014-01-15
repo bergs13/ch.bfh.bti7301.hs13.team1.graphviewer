@@ -219,10 +219,13 @@ public class GraphExamples<V, E> {
 		// the value of this attribute is the first
 		// vertex on a shortest path from w to v
 		LinkedList<Vertex<V>> li = new LinkedList<Vertex<V>>();
-		v.set(v, v);
-		li.addFirst(v);
+                recorder.recordStep(g);
+                v.set(v, v);
+                li.addFirst(v);
 		while (li.size() > 0) {
 			Vertex<V> w = li.removeLast();
+                        FormatHelper.getFormat(VertexFormat.class, w).setActive();
+                        recorder.recordStep(g);
 			Iterator<Edge<E>> eit;
 			if (g.isDirected())
 				eit = g.incidentOutEdges(w);
@@ -240,6 +243,8 @@ public class GraphExamples<V, E> {
 					li.addFirst(u);
 				}
 			}
+                        w.set(VISITED, null);
+                        recorder.recordStep(g);
 
 		}
 	}

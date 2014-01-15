@@ -112,6 +112,8 @@ public class MainGUI<V, E> extends javax.swing.JFrame {
         runButton = new javax.swing.JButton();
         backwardButton = new javax.swing.JButton();
         forwardButton = new javax.swing.JButton();
+        FirstButton = new javax.swing.JButton();
+        LastButton = new javax.swing.JButton();
         informationPanel1 = new ui.controls.InformationPanel();
         mainMenuBar = new javax.swing.JMenuBar();
         Menu1 = new javax.swing.JMenu();
@@ -149,18 +151,35 @@ public class MainGUI<V, E> extends javax.swing.JFrame {
             }
         });
 
+        FirstButton.setText("First");
+        FirstButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                FirstButtonActionPerformed(evt);
+            }
+        });
+
+        LastButton.setText("Last");
+        LastButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                LastButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(102, 102, 102)
                 .addComponent(forwardButton)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(backwardButton)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(runButton)
-                .addContainerGap(410, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(FirstButton)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(LastButton)
+                .addContainerGap(366, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -168,7 +187,9 @@ public class MainGUI<V, E> extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(runButton)
                     .addComponent(backwardButton)
-                    .addComponent(forwardButton))
+                    .addComponent(forwardButton)
+                    .addComponent(FirstButton)
+                    .addComponent(LastButton))
                 .addContainerGap(25, Short.MAX_VALUE))
         );
 
@@ -283,6 +304,16 @@ public class MainGUI<V, E> extends javax.swing.JFrame {
 				GUICommandConstants.BFS, null);
     }//GEN-LAST:event_bfsMenuItemActionPerformed
 
+    private void FirstButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_FirstButtonActionPerformed
+        this.model.getGraphPanelModel().handleMainGUICommand(
+				GUICommandConstants.FIRST, null);
+    }//GEN-LAST:event_FirstButtonActionPerformed
+
+    private void LastButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LastButtonActionPerformed
+        this.model.getGraphPanelModel().handleMainGUICommand(
+				GUICommandConstants.LAST, null);
+    }//GEN-LAST:event_LastButtonActionPerformed
+
 	private void exitMenuItemActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_exitMenuItemActionPerformed
 		dispose();
                 System.exit(0);
@@ -377,7 +408,9 @@ public class MainGUI<V, E> extends javax.swing.JFrame {
 	// }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem CustomAlgorithmMenuItem;
+    private javax.swing.JButton FirstButton;
     private javax.swing.JMenu GraphMenu;
+    private javax.swing.JButton LastButton;
     private javax.swing.JMenu Menu1;
     private javax.swing.JMenu algorithmMenu;
     private javax.swing.JButton backwardButton;

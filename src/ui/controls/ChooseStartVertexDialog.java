@@ -13,6 +13,9 @@ import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.util.Iterator;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -72,7 +75,7 @@ public class ChooseStartVertexDialog<V> extends JDialog {
 		this.add(cBV);
 
 		// OK/Cancel Buttons
-		JButton okButton = new JButton("OK");
+		final JButton okButton = new JButton("OK");
 		okButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
@@ -81,7 +84,16 @@ public class ChooseStartVertexDialog<V> extends JDialog {
 				dispose();
 			};
 		});
-		JButton cancelButton = new JButton("Cancel");
+                okButton.addKeyListener(new KeyAdapter(){
+                
+                    @Override
+                    public void keyTyped(KeyEvent e) {
+                        if (KeyEvent.VK_ENTER == e.getKeyCode()) {
+                            okButton.doClick();
+            }
+                    }        
+        });
+		final JButton cancelButton = new JButton("Cancel");
 		cancelButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
@@ -89,9 +101,22 @@ public class ChooseStartVertexDialog<V> extends JDialog {
 				dispose();
 			};
 		});
+                cancelButton.addKeyListener(new KeyAdapter(){
+                    
+                    @Override
+                    public void keyTyped(KeyEvent e) {
+                        if (KeyEvent.VK_ESCAPE == e.getKeyCode()) {
+                            getRootPane().setDefaultButton(cancelButton);
+                            cancelButton.doClick();
+            
+                        }
+                    }
+                   
+        });
 		this.add(okButton);
 		this.add(cancelButton);
-		this.setVisible(true);
+                getRootPane().setDefaultButton(okButton);
+                this.setVisible(true);
 	}
 
 	public boolean getSaved() {

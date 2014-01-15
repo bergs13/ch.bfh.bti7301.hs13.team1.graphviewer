@@ -19,7 +19,7 @@ public class InformationPanel extends javax.swing.JPanel {
      */
     public InformationPanel() {
         initComponents();
-        //this.setGraphinformationText();
+        this.setGraphinformationText();
         this.informationLabel.setText(graphInformations);
         
     }
@@ -48,8 +48,8 @@ public class InformationPanel extends javax.swing.JPanel {
         }
     }
     private void setGraphinformationText(){
-        this.graphInformations =  "<html><p>is "+this.isWeighted()+ " and "+this.isDirected()+"</p>"+"<p>It is "+this.isConnected()+"</p>"+
-                "<p>and has";
+        this.graphInformations =  "<html><p>was implemented by</p>"+"<p>Stefan Berger</p>"+"<p>Christian Gugelmann</p>"+"<p>Stephan Menzi</p>"+
+                "<p>as \"Projekt 1\"</p>";
         
     }
     /**
@@ -65,7 +65,7 @@ public class InformationPanel extends javax.swing.JPanel {
 
         setToolTipText("");
 
-        titlLabel.setText("This Graph:");
+        titlLabel.setText("This Graphviewer");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);

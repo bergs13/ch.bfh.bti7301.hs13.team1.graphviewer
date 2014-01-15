@@ -44,7 +44,7 @@
   <SubComponents>
     <Component class="javax.swing.JLabel" name="titlLabel">
       <Properties>
-        <Property name="text" type="java.lang.String" value="This Graph:"/>
+        <Property name="text" type="java.lang.String" value="This Graphviewer"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="informationLabel">

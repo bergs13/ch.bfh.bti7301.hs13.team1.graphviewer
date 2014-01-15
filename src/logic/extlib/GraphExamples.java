@@ -224,8 +224,8 @@ public class GraphExamples<V, E> {
                 li.addFirst(v);
 		while (li.size() > 0) {
 			Vertex<V> w = li.removeLast();
-                        FormatHelper.getFormat(VertexFormat.class, w).setActive();
-                        recorder.recordStep(g);
+                        //FormatHelper.getFormat(VertexFormat.class, w).setActive();
+                        //recorder.recordStep(g);
 			Iterator<Edge<E>> eit;
 			if (g.isDirected())
 				eit = g.incidentOutEdges(w);
@@ -241,6 +241,7 @@ public class GraphExamples<V, E> {
 						v.set(u, v.get(w));
 					}
 					li.addFirst(u);
+                                        e.set(VISITED, null);
 				}
 			}
                         w.set(VISITED, null);

@@ -219,8 +219,10 @@ public class GraphExamples<V, E> {
 		// the value of this attribute is the first
 		// vertex on a shortest path from w to v
 		LinkedList<Vertex<V>> li = new LinkedList<Vertex<V>>();
-                recorder.recordStep(g);
+                
                 v.set(v, v);
+                v.set(VISITED, null);
+                recorder.recordStep(g);
                 li.addFirst(v);
 		while (li.size() > 0) {
 			Vertex<V> w = li.removeLast();

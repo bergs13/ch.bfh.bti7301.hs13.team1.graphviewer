@@ -636,7 +636,8 @@ public class GraphDataProcessor<V, E> {
 					Element distance = (Element) distances.item(0);
 					if (hasDistance.getTextContent().equals("yes")) {
 						vFi.setDistance(distance.getTextContent());
-						vNew.set(DecorableConstants.DISTANCE, distance.getTextContent());
+					} else {
+						vFi.setDistance(null);
 					}
 
 					vNew.set(FormatHelper.FORMAT, vFi); // set vertex-format

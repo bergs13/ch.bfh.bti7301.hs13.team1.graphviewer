@@ -40,22 +40,6 @@ public class FormatHelper {
 						vformat.setDistance(null);
 					}
 				}
-				//Active
-				//Distance
-				if(decorable.has(DecorableConstants.ACTIVE))
-				{
-					if (VertexFormat.class.isInstance(format)) {
-						VertexFormat vformat = (VertexFormat) format;
-						vformat.setActive();
-					}
-				}
-				else
-				{
-					if (VertexFormat.class.isInstance(format)) {
-						VertexFormat vformat = (VertexFormat) format;
-						vformat.setInactive();
-					}
-				}
 				//Visited
 				if (decorable.has(DecorableConstants.VISITED)
 						|| decorable.has(DecorableConstants.MSF)) {

@@ -282,7 +282,7 @@ public class GraphPanelModel<V, E> extends Observable {
 			this.algorithmDataProcessor.resetGraphList();
                         resetFormatAndDecorable(this.graph);
 			this.isGUIRefreshDisabled = true;
-			this.graphExamples.testAlgorithm(this.graph);
+			this.graphExamples.customAlgorithm(this.graph);
 			this.isGUIRefreshDisabled = false;
 			this.setExternalGraph(this.algorithmDataProcessor.first());
 			setChanged();

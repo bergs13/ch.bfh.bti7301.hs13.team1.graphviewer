@@ -30,7 +30,7 @@ public class AlgorithmDataProcessor {
     //save a grap to the GrapList as a string
     public void set(IncidenceListGraph graph) {
         try {
-            String graphString = GDProcessor.constructStringFromGraph(graph);
+            String graphString = GDProcessor.constructStringFromGraph(graph, false);
             graphList.add(graphString);
             System.out.println(graphString);
         } catch (IllegalArgumentException err) {

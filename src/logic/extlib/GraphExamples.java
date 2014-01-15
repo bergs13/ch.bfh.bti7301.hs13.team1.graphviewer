@@ -388,8 +388,10 @@ public class GraphExamples<V, E> {
 		// if (e.has(DISCOVERY_EDGE)) System.out.println(e);
 		// }
 	}
-
-	public void testAlgorithm(Graph<V, E> g) {
+	public void customAlgorithm(Graph<V, E> g) {
+		testalgorithm(g);
+	}
+	private void testalgorithm(Graph<V, E> g) {
 		Iterator<Vertex<V>> itV = g.vertices();
 		if (itV.hasNext()) {
 			Vertex<V> first = itV.next();
@@ -410,6 +412,5 @@ public class GraphExamples<V, E> {
 				recorder.recordStep(g);
 			}
 		}
-
 	}
 }

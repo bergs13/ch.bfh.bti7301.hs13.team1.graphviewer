@@ -32,10 +32,18 @@ public class FormatHelper {
 						VertexFormat vformat = (VertexFormat) format;
 						vformat.setActive();
 					}
+					if (EdgeFormat.class.isInstance(format)) {
+						EdgeFormat eformat = (EdgeFormat) format;
+						eformat.setActive(true);
+					}
 				} else {
 					if (VertexFormat.class.isInstance(format)) {
 						VertexFormat vformat = (VertexFormat) format;
-						vformat.setInActive();
+						vformat.setInactive();
+					}
+					if (EdgeFormat.class.isInstance(format)) {
+						EdgeFormat eformat = (EdgeFormat) format;
+						eformat.setActive(false);
 					}
 				}
 				// Distance

@@ -22,6 +22,8 @@ import javax.xml.transform.stream.StreamResult;
 import logic.extlib.Edge;
 import logic.extlib.IncidenceListGraph;
 import logic.extlib.Vertex;
+
+import org.omg.PortableInterceptor.ACTIVE;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -613,6 +615,7 @@ public class GraphDataProcessor<V, E> {
 					if (activeElement != null) {
 						if (activeElement.getTextContent().equals("yes")) {
 							vFi.setActive();
+							vNew.set(DecorableConstants.ACTIVE, null);
 						}
 					}
 
@@ -636,8 +639,8 @@ public class GraphDataProcessor<V, E> {
 					Element distance = (Element) distances.item(0);
 					if (hasDistance.getTextContent().equals("yes")) {
 						vFi.setDistance(distance.getTextContent());
-					} else {
-						vFi.setDistance(null);
+						vNew.set(DecorableConstants.DISTANCE,
+								distance.getTextContent());
 					}
 
 					vNew.set(FormatHelper.FORMAT, vFi); // set vertex-format
@@ -737,6 +740,9 @@ public class GraphDataProcessor<V, E> {
 						}
 						if (visitedElement.getTextContent().equals("true")) {
 							eNew.set(DecorableConstants.VISITED, null);
+						}
+						if (activeElement.getTextContent().equals("true")) {
+							eNew.set(DecorableConstants.ACTIVE, null);
 						}
 						eNew.set(FormatHelper.FORMAT, eF);
 					}

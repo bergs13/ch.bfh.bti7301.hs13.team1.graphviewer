@@ -63,7 +63,7 @@ public class VertexFormat {
 		visited = false;
 	}
 
-	public void setInActive() {
+	public void setInactive() {
 		this.active = false;
 		this.visited = false;
 	}

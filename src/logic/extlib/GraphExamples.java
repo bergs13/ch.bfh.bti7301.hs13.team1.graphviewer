@@ -405,23 +405,27 @@ public class GraphExamples<V, E> {
 
 	private void testalgorithm(Graph<V, E> g, Vertex<V> vStart) {
 		vStart.set(ACTIVE, null);
+		vStart.set(DISTANCE, 0);
+		recorder.recordStep(g);
+		vStart.set(VISITED, null);
 		recorder.recordStep(g);
 		Iterator<Edge<E>> itE = g.incidentEdges(vStart);
 		Edge<E> e = null;
 		Vertex<V> vOpposite = null;
-		int i = 10;
 		while (itE.hasNext()) {
 			e = itE.next();
 			vOpposite = g.opposite(e, vStart);
 			e.set(ACTIVE, null);
-			vStart.set(VISITED, null);
-			vStart.set(DISTANCE, i);
 			recorder.recordStep(g);
 			e.set(VISITED, null);
 			vOpposite.set(ACTIVE, null);
 			recorder.recordStep(g);
 			vOpposite.set(VISITED, null);
-			i += 10;
+			if(e.has(WEIGHT))
+			{
+				vOpposite.set(DISTANCE, e.get(WEIGHT));
+			}
+			recorder.recordStep(g);
 		}
 	}
 }

@@ -221,6 +221,9 @@ public class GraphPanelModel<V, E> extends Observable {
 			if (vertex.has(DecorableConstants.VISITED)) {
 				vertex.destroy(DecorableConstants.VISITED);
 			}
+			if (vertex.has(DecorableConstants.ACTIVE)) {
+				vertex.destroy(DecorableConstants.ACTIVE);
+			}
 			if (vertex.has(DecorableConstants.MSF)) {
 				vertex.destroy(DecorableConstants.MSF);
 			}

@@ -25,67 +25,70 @@ public class GraphExamples<V, E> {
 		this.recorder = new Recorder(processor);
 	}
 
-	public final int kruskal(Graph<V, E> g) {
-		if (g.isDirected())
-			throw new RuntimeException("We need an undirected graph!");
-		// Returns the number of connected components
-		// Finds the minimum spanning forrest:
-		// each edge belonging to the minimum spanning forrest gets
-		// an attribute MSF. The value of MSF is an integer
-		// indicating the number of the connected component
-		// it belongs to. The attribute
-		// MSF is also assigned to the vertices.
-		recorder.recordStep(g);
-		int n = g.numberOfVertices();
-		final Object CLUSTER = new Object();
-		ArrayList<Vertex<V>>[] clusters = new ArrayList[n];
-		Iterator<Vertex<V>> it = g.vertices();
-		int num = 0;// g.numberOfVertices();
-		while (it.hasNext()) {
-			// all vertices are in their own cluster
-			Vertex<V> v = it.next();
-			clusters[num].add(v);
-			v.set(CLUSTER, clusters[num++]);
-			v.set(MSF, null); // show to which component v belongs
-			recorder.recordStep(g);
-		}
-		HeapPriorityQueue<Double, Edge<E>> pq = new HeapPriorityQueue<>();
-		Iterator<Edge<E>> eit = g.edges();
-		while (eit.hasNext()) {
-			double w = 1.0;
-			Edge<E> e = eit.next();
-			if (e.has(WEIGHT))
-				w = (Double) e.get(WEIGHT);
-			pq.insert(w, e);
-		}
-		while (!pq.isEmpty()) {
-			// take the shortest edge from hq:
-			Edge<E> e = pq.removeMin().element();
-			// get the endPoints:
-			Vertex<V>[] endV = g.endVertices(e);
-			ArrayList<Vertex<V>> c0 = (ArrayList<Vertex<V>>) endV[0]
-					.get(CLUSTER);
-			ArrayList<Vertex<V>> c1 = (ArrayList<Vertex<V>>) endV[1]
-					.get(CLUSTER);
-			if (c0 != c1) {
-				if (c1.size() < c0.size()) {
-					ArrayList<Vertex<V>> tmp = c0;
-					c0 = c1;
-					c1 = tmp;
-				}
-				e.set(MSF, c0);
-				recorder.recordStep(g);
-				num--;
-				// now copy all elements from c1 to c0 and change the attribute
-				for (Vertex<V> v : c1) {
-					c0.add(v);
-					v.set(CLUSTER, c0);
-				}
-				c1.clear();
-			}
-		}
-		return num;
-	}
+	    public final int kruskal(Graph<V, E> g) {
+        if (g.isDirected())
+            throw new RuntimeException("We need an undirected graph!");
+        // Returns the number of connected components
+        // Finds the minimum spanning forrest:
+        // each edge belonging to the minimum spanning forrest gets
+        // an attribute MSF. The value of MSF is an integer
+        // indicating the number of the connected component
+        // it belongs to. The attribute
+        // MSF is also assigned to the vertices.
+        //recorder.recordStep(g);
+        int n = g.numberOfVertices();
+        System.out.println("number of vertices: "+n);
+        final Object CLUSTER = new Object();
+        ArrayList<Vertex<V>>[] clusters = new ArrayList[n];
+        Iterator<Vertex<V>> it = g.vertices();
+        int num = 0;// g.numberOfVertices();
+        while (it.hasNext()) {
+            // all vertices are in their own cluster
+            Vertex<V> v = it.next();
+            clusters[num]= new ArrayList<>();
+            clusters[num].add(v);
+            v.set(CLUSTER, clusters[num++]);
+            v.set(MSF, null); // show to which component v belongs
+            recorder.recordStep(g);
+        }
+        HeapPriorityQueue<Double, Edge<E>> pq = new HeapPriorityQueue<>();
+        Iterator<Edge<E>> eit = g.edges();
+        while (eit.hasNext()) {
+            double w = 1.0;
+            Edge<E> e = eit.next();
+            if (e.has(WEIGHT))
+                w = (Double) e.get(WEIGHT);
+            pq.insert(w, e);
+        }
+        while (!pq.isEmpty()) {
+            // take the shortest edge from hq:
+            Edge<E> e = pq.removeMin().element();
+            // get the endPoints:
+            Vertex<V>[] endV = g.endVertices(e);
+            ArrayList<Vertex<V>> c0 = (ArrayList<Vertex<V>>) endV[0]
+                    .get(CLUSTER);
+            ArrayList<Vertex<V>> c1 = (ArrayList<Vertex<V>>) endV[1]
+                    .get(CLUSTER);
+            if (c0 != c1) {
+                if (c1.size() < c0.size()) {
+                    ArrayList<Vertex<V>> tmp = c0;
+                    c0 = c1;
+                    c1 = tmp;
+                }
+                e.set(MSF, c0);
+                recorder.recordStep(g);
+                num--;
+                // now copy all elements from c1 to c0 and change the attribute
+                for (Vertex<V> v : c1) {
+                    c0.add(v);
+                    v.set(CLUSTER, c0);
+                }
+                c1.clear();
+            }
+        }
+        return num;
+    }
+
 
 	public void findGateways(Graph<V, E> g, boolean dijkstra) {
 		// if 'v' and 'w' are vertices of 'g' then

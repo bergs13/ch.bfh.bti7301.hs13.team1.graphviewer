@@ -704,9 +704,9 @@ public class GraphDataProcessor<V, E> {
 					Element activeElement = (Element) activeList.item(0);
 					if (activeElement != null) {
 						if (activeElement.getTextContent().equals("true")) {
-							eF.setActive(true);
+							eF.setActive();
 						} else {
-							eF.setActive(false);
+							eF.setInactive();
 						}
 					}
 

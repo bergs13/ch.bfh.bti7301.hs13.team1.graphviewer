@@ -34,7 +34,7 @@ public class FormatHelper {
 					}
 					if (EdgeFormat.class.isInstance(format)) {
 						EdgeFormat eformat = (EdgeFormat) format;
-						eformat.setActive(true);
+						eformat.setActive();
 					}
 				} else {
 					if (VertexFormat.class.isInstance(format)) {
@@ -43,7 +43,7 @@ public class FormatHelper {
 					}
 					if (EdgeFormat.class.isInstance(format)) {
 						EdgeFormat eformat = (EdgeFormat) format;
-						eformat.setActive(false);
+						eformat.setInactive();
 					}
 				}
 				// Distance

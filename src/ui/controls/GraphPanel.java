@@ -51,6 +51,7 @@ public class GraphPanel<V, E> extends JComponent implements Observer {
 			"Connect vertices");
 	private JMenuItem menuItemUpdGraphFormat = new JMenuItem(
 			"Change graph format");
+	private JMenuItem menuItemEditEdge = new JMenuItem("Edit edge");
 	private JPopupMenu popupMenu = new JPopupMenu();
 
 	// End of Members
@@ -168,6 +169,21 @@ public class GraphPanel<V, E> extends JComponent implements Observer {
 				gFormatDialog.setVisible(true);
 				if (gFormatDialog.getSaved()) {
 					model.updateFormat(gFormatDialog.getFormat());
+				}
+			}
+		});
+		this.popupMenu.add(this.menuItemEditEdge);
+		this.menuItemEditEdge.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				EdgeEditDialog<V, E> edgeEditDialog = new EdgeEditDialog<V, E>(
+						model.getGraph(), model.getGraphFormat().isWeighted());
+				edgeEditDialog.setVisible(true);
+				if (edgeEditDialog.getSaved()) {
+					model.changeEdge(edgeEditDialog.getSourceVertex(),
+							edgeEditDialog.getTargetVertex(),
+							edgeEditDialog.getWeight(),
+							edgeEditDialog.getClearEdge());
 				}
 			}
 		});

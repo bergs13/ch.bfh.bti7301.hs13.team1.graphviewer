@@ -147,7 +147,32 @@ public class GraphPanelModel<V, E> extends Observable {
 		setChanged();
 		notifyObservers(ModelEventConstants.VERTEXADDED);
 	}
+	public void changeEdge(Vertex<V> sourceVertex,Vertex<V> targetVertex,
+			double weight, boolean clearEdge) {
+		
+		if(null != sourceVertex 
+				&& null != targetVertex)
+		{
+			
+		}
+		// Update data
+	
 
+//		if (null != sourceVertex) {
+//			// connect via edge if has source (if there is no source, it will be
+//			// null)
+//			E eElement = null;
+//			Edge edge = this.graph.insertEdge(sourceVertex, vNew, eElement);
+//			if (weight > Double.NEGATIVE_INFINITY) {
+//				edge.set(DecorableConstants.WEIGHT, weight);
+//			}
+//		}
+
+		// Update UI
+		changedVertex = null;//vNew;
+		setChanged();
+		notifyObservers(ModelEventConstants.VERTEXADDED);
+	}
 	public void connectVertices(Vertex<V> sourceVertex, Vertex<V> targetVertex,
 			double weight) {
 		// Check variables

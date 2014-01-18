@@ -25,8 +25,12 @@ public class EdgeFormat {
 		return active;
 	}
 
-	public void setActive(boolean active) {
-		this.active = active;
+	public void setInactive()
+	{
+		this.active = false;
+	}
+	public void setActive() {
+		this.active = true;
 		this.visited = false;
 	}
 
@@ -41,7 +45,6 @@ public class EdgeFormat {
 
 	public void setUnvisited() {
 		this.visited = false;
-		this.active = false;
 	}
 
 	public Point getFromPoint() {

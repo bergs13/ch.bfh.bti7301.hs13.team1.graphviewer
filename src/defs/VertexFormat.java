@@ -59,13 +59,11 @@ public class VertexFormat {
 	}
 
 	public void setUnvisited() {
-		active = false;
 		visited = false;
 	}
 
 	public void setInactive() {
 		this.active = false;
-		this.visited = false;
 	}
 
 	public boolean isActive() {

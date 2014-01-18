@@ -9,8 +9,8 @@ import java.awt.Color;
 public class StandardLayout implements GraphLayout {
 
 	private static final Color ACTIVECOLOR = new Color(255, 0, 0);
-	private static final Color VISITEDCOLOR = new Color(0, 0, 255);
-	private static final Color UNVISITEDCOLOR = new Color(0, 0, 0);
+	private static final Color VISITEDCOLOR = new Color(0, 0, 0);
+	private static final Color UNVISITEDCOLOR = new Color(255, 255, 200);
 	private static final boolean lableVisible = true;
 
 	public StandardLayout() {

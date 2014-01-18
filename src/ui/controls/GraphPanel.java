@@ -134,7 +134,6 @@ public class GraphPanel<V, E> extends JComponent implements Observer {
 					f.setLabel(vAddDialog.getLabel());
 					model.addVertex(vAddDialog.getSourceVertex(), f,
 							vAddDialog.getWeight());
-					// System.out.println(vAddDialog.getWeight());
 				}
 			}
 		});

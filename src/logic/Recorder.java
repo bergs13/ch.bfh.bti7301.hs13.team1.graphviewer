@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package logic;
 
 import logic.extlib.Graph;
@@ -19,22 +14,19 @@ public class Recorder<V, E> {
 
     //Members
    private  AlgorithmDataProcessor processor;
-    //End of Members
+
     
     //Constructors
     public Recorder(AlgorithmDataProcessor modelProcessor) {
-        this.processor = modelProcessor;
+            this.processor = modelProcessor;
     }
-    //End of constructors
-    
+      
     //methods
     public void recordStep(Graph graph){
-        if (null == processor){
-            throw new RuntimeException("processor not instantiated");
-        }
-        this.processor.set((IncidenceListGraph)graph);
-        
+            if (null == processor){
+                throw new RuntimeException("processor not instantiated");
+            }
+            this.processor.set((IncidenceListGraph)graph);    
     }
-    
     
 }

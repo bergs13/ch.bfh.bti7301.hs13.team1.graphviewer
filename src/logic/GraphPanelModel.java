@@ -378,19 +378,21 @@ public class GraphPanelModel<V, E> extends Observable {
 				setChanged();
 				notifyObservers(ModelEventConstants.GRAPHREPLACED);
 			}
-		} else if (gUICommandConstant.equals(GUICommandConstants.RUN)) {
+		}
+                else if (gUICommandConstant.equals(GUICommandConstants.RUN)) {
 			this.setExternalGraph(this.algorithmDataProcessor.first());
 			setChanged();
 			notifyObservers(ModelEventConstants.GRAPHREPLACED);
 			int listSize = this.algorithmDataProcessor.getGraphList().size();
 			for (int i = 0; i < listSize; i++) {
 
-				this.setExternalGraph(this.algorithmDataProcessor.forward());
-				setChanged();
-				notifyObservers(ModelEventConstants.GRAPHREPLACED);
-			}
+                                    this.setExternalGraph(this.algorithmDataProcessor.forward());
+                                    setChanged();
+                                    notifyObservers(ModelEventConstants.GRAPHREPLACED);
+                                }
+                        }
 
-		} else if (gUICommandConstant.equals(GUICommandConstants.FIRST)) {
+		 else if (gUICommandConstant.equals(GUICommandConstants.FIRST)) {
 			if (this.algorithmDataProcessor.isNotEmpty()) {
 				this.setExternalGraph(this.algorithmDataProcessor.first());
 				setChanged();

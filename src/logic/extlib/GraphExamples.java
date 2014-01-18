@@ -1,9 +1,6 @@
 package logic.extlib;
 
 import defs.DecorableConstants;
-import defs.FormatHelper;
-import defs.VertexFormat;
-
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -202,88 +199,73 @@ public class GraphExamples<V, E> {
 		// the value of this attribute is the first
 		// vertex on a shortest path from w to v
 		LinkedList<Vertex<V>> li = new LinkedList<Vertex<V>>();
-
-		v.set(v, v);
-		v.set(VISITED, null);
-		recorder.recordStep(g);
+		v.set(v,v);
 		li.addFirst(v);
-		while (li.size() > 0) {
+		while (li.size() > 0){
 			Vertex<V> w = li.removeLast();
-			// FormatHelper.getFormat(VertexFormat.class, w).setActive();
-			// recorder.recordStep(g);
 			Iterator<Edge<E>> eit;
-			if (g.isDirected())
-				eit = g.incidentOutEdges(w);
-			else
-				eit = g.incidentEdges(w);
-			while (eit.hasNext()) {
+			if (g.isDirected()) eit = g.incidentOutEdges(w);  
+			else eit  = g.incidentEdges(w);
+			while(eit.hasNext()){
 				Edge<E> e = eit.next();
 				Vertex<V> u = g.opposite(e, w);
-				if (v.get(u) == null) {// u not yet visited
-					if (w == v) {
-						v.set(u, u);
-					} else {
-						v.set(u, v.get(w));
-					}
-					li.addFirst(u);
-					e.set(VISITED, null);
+				if (  v.get(u) == null) {// u not yet visited
+					if(w==v)v.set(u,u);
+					else v.set(u,v.get(w));
+					li.addFirst(u);			
 				}
 			}
-			w.set(VISITED, null);
-			recorder.recordStep(g);
-
+			
 		}
 	}
-        public void dephtFirstSearch(Graph<V, E> g, Vertex<V> v){
-            v.set(VISITED, null);
-            recorder.recordStep(g);
-            Iterator<Edge<E>> eit;
-            if (g.isDirected()){
-                    eit = g.incidentOutEdges(v);
-            }
-
-            else{
-                    eit = g.incidentEdges(v);
-            }
-            while (eit.hasNext()) {
-                    Edge<E> e = eit.next();
-                    if (!e.has(VISITED)){
-                    Vertex<V> u = g.opposite(e, v);    
-                    if (!u.has(VISITED)) {
-                            e.set(VISITED, null);
-                            recorder.recordStep(g);
-                            dephtFirstSearch(g, u);
-                            
+        public void dephtFirstSearch(Graph<V, E> g, Vertex<V> v) {
+         v.set(VISITED, null);
+         recorder.recordStep(g);
+         Iterator<Edge<E>> eit;
+         if (g.isDirected()) {
+             eit = g.incidentOutEdges(v);
+         } else {
+             eit = g.incidentEdges(v);
+         }
+         while (eit.hasNext()) {
+             Edge<E> e = eit.next();
+             if (!e.has(VISITED)) {
+                 Vertex<V> u = g.opposite(e, v);
+                 if (!u.has(VISITED)) {
+                     e.set(VISITED, null);
+                     recorder.recordStep(g);
+                     dephtFirstSearch(g, u);
                     }
 
+                }
             }
-          }
         }
-        public void breadthFirstSearch(Graph<V, E> g, Vertex<V> v){
-                LinkedList<Vertex<V>> li = new LinkedList<Vertex<V>>();
-                li.addFirst(v);
-                v.set(VISITED, null);
-		recorder.recordStep(g);
-                while (li.size() > 0) {
-			Vertex<V> w = li.removeLast();
-			Iterator<Edge<E>> eit;
-			if (g.isDirected())
-				eit = g.incidentOutEdges(w);
-			else
-				eit = g.incidentEdges(w);
-			while (eit.hasNext()) {
-				Edge<E> e = eit.next();
-                                Vertex<V> u = g.opposite(e, w);
-                                    if (!u.has(VISITED)) {
-                                            li.addFirst(u);
-                                            u.set(VISITED, null);
-                                            e.set(VISITED, null);
-                                            recorder.recordStep(g);
-                                        }
-                                }	
-			}
-		
+        public void breadthFirstSearch(Graph<V, E> g, Vertex<V> v) {
+            LinkedList<Vertex<V>> li = new LinkedList<Vertex<V>>();
+            li.addFirst(v);
+            v.set(VISITED, null);
+            recorder.recordStep(g);
+            while (li.size() > 0) {
+                Vertex<V> w = li.removeLast();
+                Iterator<Edge<E>> eit;
+                if (g.isDirected()) {
+                    eit = g.incidentOutEdges(w);
+                } else {
+                    eit = g.incidentEdges(w);
+                }
+                while (eit.hasNext()) {
+                    Edge<E> e = eit.next();
+                    Vertex<V> u = g.opposite(e, w);
+                    if (!u.has(VISITED)) {
+                        li.addFirst(u);
+                        u.set(VISITED, null);
+                        e.set(VISITED, null);
+                        recorder.recordStep(g);
+                    }
+                }
+            }
         }
+
 	public LinkedList<Vertex<V>> findPath(Graph<V, E> g, Vertex<V> v,
 			Vertex<V> w) {
 		LinkedList<Vertex<V>> li = new LinkedList<>();

@@ -7,7 +7,7 @@ public class GUICommandConstants {
         public static final String BFS = "BFS";
         public static final String DFS = "DFS";
 	public static final String CUSTOMGRAPH = "CUSTOMGRAPH";
-	// algorithmiteration
+	// algorithm iteration
 	public static final String FORWARD = "FORWARD";
 	public static final String BACKWARD = "BACKWARD";
 	public static final String RUN = "RUN";

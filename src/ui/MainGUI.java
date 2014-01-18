@@ -109,7 +109,6 @@ public class MainGUI<V, E> extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        runButton = new javax.swing.JButton();
         backwardButton = new javax.swing.JButton();
         forwardButton = new javax.swing.JButton();
         FirstButton = new javax.swing.JButton();
@@ -130,13 +129,6 @@ public class MainGUI<V, E> extends javax.swing.JFrame {
         CustomAlgorithmMenuItem = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-
-        runButton.setText("Run");
-        runButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                runButtonActionPerformed(evt);
-            }
-        });
 
         backwardButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ui/icons/arrow-left-2.png"))); // NOI18N
         backwardButton.setText("Previous");
@@ -182,9 +174,7 @@ public class MainGUI<V, E> extends javax.swing.JFrame {
                 .addComponent(forwardButton)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(LastButton)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(runButton)
-                .addContainerGap(370, Short.MAX_VALUE))
+                .addContainerGap(431, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -193,8 +183,7 @@ public class MainGUI<V, E> extends javax.swing.JFrame {
                     .addComponent(backwardButton)
                     .addComponent(FirstButton)
                     .addComponent(LastButton)
-                    .addComponent(forwardButton)
-                    .addComponent(runButton))
+                    .addComponent(forwardButton))
                 .addContainerGap(29, Short.MAX_VALUE))
         );
 
@@ -443,7 +432,6 @@ public class MainGUI<V, E> extends javax.swing.JFrame {
     private javax.swing.JMenuItem loadGraphjMenuItem;
     private javax.swing.JMenuBar mainMenuBar;
     private javax.swing.JMenuItem newGraphMenuItem;
-    private javax.swing.JButton runButton;
     private javax.swing.JMenuItem saveGraphMenuItem;
     // End of variables declaration//GEN-END:variables
 

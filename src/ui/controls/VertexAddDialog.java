@@ -121,19 +121,31 @@ public class VertexAddDialog<V> extends JDialog {
 						@Override
 						public void changedUpdate(DocumentEvent e) {
 							// text was changed
-							weight = Double.parseDouble(weightField.getText());
+							try {
+								weight = Double.parseDouble(weightField
+										.getText());
+							} catch (NumberFormatException nfe) {
+							}
 						}
 
 						@Override
 						public void removeUpdate(DocumentEvent e) {
 							// text was deleted
-							weight = Double.parseDouble(weightField.getText());
+							try {
+								weight = Double.parseDouble(weightField
+										.getText());
+							} catch (NumberFormatException nfe) {
+							}
 						}
 
 						@Override
 						public void insertUpdate(DocumentEvent e) {
 							// text was inserted
-							weight = Double.parseDouble(weightField.getText());
+							try {
+								weight = Double.parseDouble(weightField
+										.getText());
+							} catch (NumberFormatException nfe) {
+							}
 						}
 					});
 			this.add(weightField);
@@ -149,15 +161,15 @@ public class VertexAddDialog<V> extends JDialog {
 				dispose();
 			};
 		});
-                okButton.addKeyListener(new KeyAdapter(){
-                
-                        @Override
-                        public void keyTyped(KeyEvent e) {
-                            if (KeyEvent.VK_ENTER == e.getKeyCode()) {
-                                okButton.doClick();
-                            }
-                        }        
-                });
+		okButton.addKeyListener(new KeyAdapter() {
+
+			@Override
+			public void keyTyped(KeyEvent e) {
+				if (KeyEvent.VK_ENTER == e.getKeyCode()) {
+					okButton.doClick();
+				}
+			}
+		});
 		JButton cancelButton = new JButton("Cancel");
 		cancelButton.addActionListener(new ActionListener() {
 			@Override
@@ -168,7 +180,7 @@ public class VertexAddDialog<V> extends JDialog {
 		});
 		this.add(okButton);
 		this.add(cancelButton);
-                getRootPane().setDefaultButton(okButton);
+		getRootPane().setDefaultButton(okButton);
 	}
 
 	public boolean getSaved() {

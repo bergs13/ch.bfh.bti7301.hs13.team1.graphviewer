@@ -417,6 +417,19 @@ public class GraphPanel<V, E> extends JComponent implements Observer {
 						repaintContent();
 					}
 				}
+			} else if (eventConstant.equals(ModelEventConstants.EDGECHANGED)) {
+				// changed V is the source vertex of the edge, for a bit more
+				// performance (incident and not all edges)
+				Vertex<V> changedV = this.model.getChangedVertex();
+				if (null != changedV) {
+					// calculate the edges of the source verte
+					Iterator<Edge<E>> itE = model.getGraph().incidentEdges(
+							changedV);
+					while (itE.hasNext()) {
+						reCalculateAndSetEdgeFormatPoints(changedV, itE.next());
+					}
+					repaintContent();
+				}
 			} else if (eventConstant
 					.equals(ModelEventConstants.VERTEXCONNECTED)) {
 				if (null != model.getChangedVertex()) {

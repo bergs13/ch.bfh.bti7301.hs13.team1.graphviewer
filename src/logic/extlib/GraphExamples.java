@@ -123,70 +123,48 @@ public class GraphExamples<V, E> {
 		}
 	}
 
-	public void dijkstra(Graph<V, E> g, Vertex<V> s) {
-		
-		HeapPriorityQueue<Double, Vertex<V>> hq = new HeapPriorityQueue<>();
+	public void dijkstra(Graph<V,E> g, Vertex<V> s){
+                
+		HeapPriorityQueue<Double,Vertex<V>> hq = new HeapPriorityQueue<>();
 		Iterator<Vertex<V>> it = g.vertices();
-		while (it.hasNext()) {
+		while (it.hasNext()){
 			Vertex<V> v = it.next();
-			v.set(DISTANCE, Double.POSITIVE_INFINITY);
-			Locator<Double, Vertex<V>> loc = hq.insert(
-					(Double) v.get(DISTANCE), v);
+			v.set(DISTANCE,Double.POSITIVE_INFINITY);
+                        Locator<Double,Vertex<V>> loc = hq.insert((Double)v.get(DISTANCE),v);
 			v.set(PQLOCATOR, loc);
-			s.set(v, null);
-			s.set(DISTANCE, 0.0);
+                        s.set(v,null);
 		}
-		hq.replaceKey((Locator<Double, Vertex<V>>) s.get(PQLOCATOR), 0.0);
-
-		System.out.println("Distance StartVertex" + s.get(DISTANCE));
-		s.set(s, s);
-		while (!hq.isEmpty()) {
-			Locator<Double, Vertex<V>> loc = hq.removeMin();
+		hq.replaceKey((Locator<Double,Vertex<V>>)s.get(PQLOCATOR),0.0);
+		s.set(s,s);
+		while ( ! hq.isEmpty()){
+			Locator<Double,Vertex<V>> loc = hq.removeMin();
 			Vertex<V> v = loc.element();
 			// no modify the distance of all neighbours
 			Iterator<Edge<E>> eit;
-			if (g.isDirected())
-				eit = g.incidentOutEdges(v);
-			else
-				eit = g.incidentEdges(v);
-			while (eit.hasNext()) {
-				Edge<E> e = eit.next();
-				double weight = 1.0; // if no weight is entered
-				if (e.has(WEIGHT))
-					weight = (Double) e.get(WEIGHT);
-
+			if (g.isDirected()) eit = g.incidentOutEdges(v);  
+			else eit  = g.incidentEdges(v);
+			while(eit.hasNext()){
+				Edge<E> e  = eit.next();
+				double weight =1.0; // if no weight is entered
+				if (e.has(WEIGHT)) weight = (Double)e.get(WEIGHT);
 				Vertex<V> u = g.opposite(e, v);
-				// System.out.println("Vertex " +
-				// FormatHelper.getFormat(VertexFormat.class, u).getLabel() +
-				// " Distance " + u.get(DISTANCE));
-				double newDist = (Double) u.get(DISTANCE) + weight;
-				;
-				if ((Double) u.get(DISTANCE) < Double.POSITIVE_INFINITY) {
-					newDist = (Double) u.get(DISTANCE) + weight;
-				} else {
-					newDist = weight;
-				}
-
-				if (newDist < (Double) u.get(DISTANCE)) {
-					u.set(DISTANCE, newDist);
-					hq.replaceKey(
-							(Locator<Double, Vertex<V>>) u.get(PQLOCATOR),
-							newDist);
+				double newDist = (Double)u.get(DISTANCE)+weight;
+				if (newDist < (Double)u.get(DISTANCE)){
+					u.set(DISTANCE,newDist);
+					hq.replaceKey((Locator<Double,Vertex<V>>)u.get(PQLOCATOR), newDist);
 					// now set as best gateway (until now) v
 					// i.e v is the gateway from u to s.
-					if (v == s) {
-						s.set(u, u);
-
-					} else {
-						s.set(u, s.get(v));
-
-					}
-					
+					if(v==s){
+                                            s.set(u,u);
+                                        }
+					else {
+                                            s.set(u,s.get(v));
+                                        }				
 				}
 			}
-
+			
 		}
-
+		
 	}
 
 	public void setTopologicalNumbers(Graph<V, E> g) {
@@ -260,25 +238,51 @@ public class GraphExamples<V, E> {
             v.set(VISITED, null);
             recorder.recordStep(g);
             Iterator<Edge<E>> eit;
-            		if (g.isDirected()){
-                                eit = g.incidentOutEdges(v);
-                        }
-				
-                        else{
-				eit = g.incidentEdges(v);
-                        }
+            if (g.isDirected()){
+                    eit = g.incidentOutEdges(v);
+            }
+
+            else{
+                    eit = g.incidentEdges(v);
+            }
+            while (eit.hasNext()) {
+                    Edge<E> e = eit.next();
+                    if (!e.has(VISITED)){
+                    Vertex<V> u = g.opposite(e, v);    
+                    if (!u.has(VISITED)) {
+                            e.set(VISITED, null);
+                            recorder.recordStep(g);
+                            dephtFirstSearch(g, u);
+                            
+                    }
+
+            }
+          }
+        }
+        public void breadthFirstSearch(Graph<V, E> g, Vertex<V> v){
+                LinkedList<Vertex<V>> li = new LinkedList<Vertex<V>>();
+                li.addFirst(v);
+                v.set(VISITED, null);
+		recorder.recordStep(g);
+                while (li.size() > 0) {
+			Vertex<V> w = li.removeLast();
+			Iterator<Edge<E>> eit;
+			if (g.isDirected())
+				eit = g.incidentOutEdges(w);
+			else
+				eit = g.incidentEdges(w);
 			while (eit.hasNext()) {
-                                Edge<E> e = eit.next();
-                                if (!e.has(VISITED)){
-                                Vertex<V> u = g.opposite(e, v);    
-                                if (u.has(VISITED)) {
-					dephtFirstSearch(g, u);
-					e.set(VISITED, null);
-                                        recorder.recordStep(g);
-				}
-                                
+				Edge<E> e = eit.next();
+                                Vertex<V> u = g.opposite(e, w);
+                                    if (!u.has(VISITED)) {
+                                            li.addFirst(u);
+                                            u.set(VISITED, null);
+                                            e.set(VISITED, null);
+                                            recorder.recordStep(g);
+                                        }
+                                }	
 			}
-                }
+		
         }
 	public LinkedList<Vertex<V>> findPath(Graph<V, E> g, Vertex<V> v,
 			Vertex<V> w) {

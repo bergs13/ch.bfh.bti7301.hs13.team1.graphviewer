@@ -89,4 +89,8 @@ public class AlgorithmDataProcessor {
         this.resetGraphList();
         graphList.addAll(graphlistToImport);
     }
+    public boolean isNotEmpty(){
+        return !this.graphList.isEmpty();
+    }
+            
 }

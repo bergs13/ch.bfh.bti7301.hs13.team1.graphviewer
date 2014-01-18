@@ -31,7 +31,6 @@ public class EdgeFormat {
 	}
 	public void setActive() {
 		this.active = true;
-		this.visited = false;
 	}
 
 	public boolean isVisited() {
@@ -40,7 +39,6 @@ public class EdgeFormat {
 
 	public void setVisited() {
 		this.visited = true;
-		this.active = false;
 	}
 
 	public void setUnvisited() {

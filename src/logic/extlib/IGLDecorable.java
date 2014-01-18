@@ -14,12 +14,11 @@ public class IGLDecorable extends Observable implements Decorable {
 	public Object get(Object attr) {
 		Object ret = attrs.get(attr);
 		if (ret == null)
-                    if (Vertex.class.isInstance(attr) || attr == DecorableConstants.VISITED ){
-                        return null;
-                    }
-                    else{
-			throw new RuntimeException("no attribute " + attr);
-                    }
+			if (Vertex.class.isInstance(attr)) {
+				return null;
+			} else {
+				throw new RuntimeException("no attribute " + attr);
+			}
 		if (ret == DUMMY)
 			ret = null;
 		return ret;
@@ -34,16 +33,27 @@ public class IGLDecorable extends Observable implements Decorable {
 	@Override
 	public void set(Object attr, Object val) {
 		Object value = DUMMY;
-		if (val != null){
+		if (val != null) {
 			value = val;
-                }
-		attrs.put(attr, value);
-		// Dijkstra (Umsetzung Vertex Target in VISITED
-		if (null != attr && Vertex.class.isInstance(attr)
-				&& Vertex.class.isInstance(value)) {
-			((IGLDecorable) value).set(DecorableConstants.VISITED, null);
 		}
+		attrs.put(attr, value);
+		
+		// active clears visited and vice versa
+		// the last application of visited or activ clears the other
+		if (null != attr) {
+			if (attr.equals(DecorableConstants.VISITED)
+					&& this.has(DecorableConstants.ACTIVE)) {
+				this.destroy(DecorableConstants.ACTIVE);
+			}
+
+			if (attr.equals(DecorableConstants.ACTIVE)
+					&& this.has(DecorableConstants.VISITED)) {
+				this.destroy(DecorableConstants.VISITED);
+			}
+		}
+		//format updates depending on decorable
 		FormatHelper.updateDecorableFormat(this);
+		//inform the gui
 		this.setChanged();
 		this.notifyObservers(this);
 	}

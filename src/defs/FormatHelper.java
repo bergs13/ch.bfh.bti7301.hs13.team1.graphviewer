@@ -60,8 +60,7 @@ public class FormatHelper {
 					}
 				}
 				// Visited
-				if (decorable.has(DecorableConstants.VISITED)
-						|| decorable.has(DecorableConstants.MSF)) {
+				if (decorable.has(DecorableConstants.VISITED)) {
 					if (VertexFormat.class.isInstance(format)) {
 						VertexFormat vformat = (VertexFormat) format;
 						vformat.setVisited();

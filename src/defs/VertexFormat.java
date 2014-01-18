@@ -72,7 +72,6 @@ public class VertexFormat {
 
 	public void setActive() {
 		this.active = true;
-		this.visited = false;
 	}
 
 	public boolean isVisited() {
@@ -81,7 +80,6 @@ public class VertexFormat {
 
 	public void setVisited() {
 		this.visited = true;
-		this.active = false;
 	}
 
 	public boolean hasDistance() {

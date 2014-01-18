@@ -37,7 +37,9 @@ public class EdgeEditDialog<V, E> extends JDialog {
 		super();
 		this.setModalityType(ModalityType.APPLICATION_MODAL);
 
+		// Dynamic contents set in events
 		final JTextField weightField = new JTextField();
+		final JComboBox<CustomComboBoxItem> cBTV = new JComboBox<CustomComboBoxItem>();
 
 		// Layout
 		// adjust rows and height
@@ -62,58 +64,49 @@ public class EdgeEditDialog<V, E> extends JDialog {
 		Iterator<Vertex<V>> itV = graph.vertices();
 		while (itV.hasNext()) {
 			key = itV.next();
-			formatForValue = FormatHelper.getFormat(VertexFormat.class, key);
-			value = "";
-			if (null != formatForValue && null != formatForValue.getLabel()) {
-				value = formatForValue.getLabel();
+			// only vertices with incident edges
+			if (graph.incidentEdges(key).hasNext()) {
+				formatForValue = FormatHelper
+						.getFormat(VertexFormat.class, key);
+				value = "";
+				if (null != formatForValue && null != formatForValue.getLabel()) {
+					value = formatForValue.getLabel();
+				}
+				cBV.addItem(new CustomComboBoxItem(key, value));
 			}
-			cBV.addItem(new CustomComboBoxItem(key, value));
-		}
-		// Default selection
-		if (cBV.getItemCount() > 0) {
-			cBV.setSelectedIndex(0);
-			sourceVertex = (Vertex<V>) cBV.getItemAt(0).getKey();
 		}
 		cBV.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				sourceVertex = (Vertex<V>) ((CustomComboBoxItem) cBV
 						.getSelectedItem()).getKey();
+				adjustTargetVertices(sourceVertex, graph, cBTV);
 				if (showWeight) {
 					initEdgeWeightInTextField(graph, sourceVertex,
 							targetVertex, weightField);
 				}
-			};
+			}
 		});
+		// Default selection (After event because of the target list when
+		// starting the editor)
+		if (cBV.getItemCount() > 0) {
+			cBV.setSelectedIndex(0);
+			sourceVertex = (Vertex<V>) cBV.getItemAt(0).getKey();
+		}
 		this.add(cBV);
 
 		// Target vertex
 		this.add(new JLabel("Target vertex:"));
-		final JComboBox<CustomComboBoxItem> cBTV = new JComboBox<CustomComboBoxItem>();
-		key = null;
-		itV = graph.vertices();
-		while (itV.hasNext()) {
-			key = itV.next();
-			formatForValue = FormatHelper.getFormat(VertexFormat.class, key);
-			value = "";
-			if (null != formatForValue && null != formatForValue.getLabel()) {
-				value = formatForValue.getLabel();
-			}
-			cBTV.addItem(new CustomComboBoxItem(key, value));
-		}
-		// Default selection
-		if (cBTV.getItemCount() > 0) {
-			cBTV.setSelectedIndex(0);
-			targetVertex = (Vertex<V>) cBTV.getItemAt(0).getKey();
-		}
 		cBTV.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				targetVertex = (Vertex<V>) ((CustomComboBoxItem) cBTV
-						.getSelectedItem()).getKey();
-				if (showWeight) {
-					initEdgeWeightInTextField(graph, sourceVertex,
-							targetVertex, weightField);
+				if (null != (CustomComboBoxItem) cBTV.getSelectedItem()) {
+					targetVertex = (Vertex<V>) ((CustomComboBoxItem) cBTV
+							.getSelectedItem()).getKey();
+					if (showWeight) {
+						initEdgeWeightInTextField(graph, sourceVertex,
+								targetVertex, weightField);
+					}
 				}
 			}
 		});
@@ -129,19 +122,30 @@ public class EdgeEditDialog<V, E> extends JDialog {
 						@Override
 						public void changedUpdate(DocumentEvent e) {
 							// text was changed
-							weight = Double.parseDouble(weightField.getText());
+							try {
+								weight = Double.parseDouble(weightField
+										.getText());
+							} catch (NumberFormatException nfe) {
+							}
 						}
 
 						@Override
 						public void removeUpdate(DocumentEvent e) {
 							// text was deleted
-							weight = Double.parseDouble(weightField.getText());
+							try {
+								weight = Double.parseDouble(weightField
+										.getText());
+							} catch (NumberFormatException nfe) {
+							}
 						}
 
 						@Override
 						public void insertUpdate(DocumentEvent e) {
-							// text was inserted
-							weight = Double.parseDouble(weightField.getText());
+							try {
+								weight = Double.parseDouble(weightField
+										.getText());
+							} catch (NumberFormatException nfe) {
+							}
 						}
 					});
 			this.add(weightField);
@@ -211,6 +215,39 @@ public class EdgeEditDialog<V, E> extends JDialog {
 		return this.weight;
 	}
 
+	// Helper methods
+	private void adjustTargetVertices(Vertex<V> sourceV,
+			IncidenceListGraph<V, E> graph,
+			JComboBox<CustomComboBoxItem> targetVCombo) {
+		if (null != sourceV && null != graph && null != targetVCombo) {
+			targetVCombo.removeAllItems();
+			Iterator<Edge<E>> itE = graph.incidentEdges(sourceV);
+			Vertex<V> key = null;
+			Edge<E> edge = null;
+			VertexFormat formatForValue = null;
+			String value = "";
+			while (itE.hasNext()) {
+				edge = itE.next();
+				key = graph.opposite(edge, sourceV);
+				if (null != key) {
+					formatForValue = FormatHelper.getFormat(VertexFormat.class,
+							key);
+					value = "";
+					if (null != formatForValue
+							&& null != formatForValue.getLabel()) {
+						value = formatForValue.getLabel();
+					}
+					targetVCombo.addItem(new CustomComboBoxItem(key, value));
+				}
+			}
+			// Default selection
+			if (targetVCombo.getItemCount() > 0) {
+				targetVCombo.setSelectedIndex(0);
+				targetVertex = (Vertex<V>) targetVCombo.getItemAt(0).getKey();
+			}
+		}
+	}
+
 	private void initEdgeWeightInTextField(IncidenceListGraph<V, E> graph,
 			Vertex<V> sourceV, Vertex<V> targetV, JTextField weightField) {
 		if (null != graph && null != sourceV && null != targetV
@@ -230,5 +267,6 @@ public class EdgeEditDialog<V, E> extends JDialog {
 				}
 			}
 		}
-	};
+	}
+	// End of Helper methods
 }

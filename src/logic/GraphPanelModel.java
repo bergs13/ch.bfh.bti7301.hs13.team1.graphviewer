@@ -294,7 +294,6 @@ public class GraphPanelModel<V, E> extends Observable {
 		if (gUICommandConstant.equals(GUICommandConstants.DIJKSTRA)) {
 			this.algorithmDataProcessor.resetGraphList();
 			resetFormatAndDecorable(this.graph);
-			this.algorithmDataProcessor.set(graph);
 			ChooseStartVertexDialog csvDialog = new ChooseStartVertexDialog(
 					this.graph.vertices());
 			if (csvDialog.getSaved()) {
@@ -302,25 +301,27 @@ public class GraphPanelModel<V, E> extends Observable {
 				this.graphExamples.dijkstra(this.graph,
 						csvDialog.getStartVertex());
 				this.isGUIRefreshDisabled = false;
-				this.setExternalGraph(this.algorithmDataProcessor.first());
+				if (this.algorithmDataProcessor.isNotEmpty()){
+                                    this.setExternalGraph(this.algorithmDataProcessor.first());
+                                }
 				setChanged();
 				notifyObservers(ModelEventConstants.GRAPHREPLACED);
 			}
 		} else if (gUICommandConstant.equals(GUICommandConstants.KRUSKAL)) {
 			this.algorithmDataProcessor.resetGraphList();
 			resetFormatAndDecorable(this.graph);
-			this.algorithmDataProcessor.set(graph);
 			this.isGUIRefreshDisabled = true;
 			this.graphExamples.kruskal(this.graph);
 			this.isGUIRefreshDisabled = false;
-			this.setExternalGraph(this.algorithmDataProcessor.first());
+			if (this.algorithmDataProcessor.isNotEmpty()){
+                                    this.setExternalGraph(this.algorithmDataProcessor.first());
+                                }
 			setChanged();
 			notifyObservers(ModelEventConstants.GRAPHREPLACED);
 
 		} else if (gUICommandConstant.equals(GUICommandConstants.BFS)) {
 			this.algorithmDataProcessor.resetGraphList();
 			resetFormatAndDecorable(this.graph);
-			this.algorithmDataProcessor.set(graph);
 			ChooseStartVertexDialog csvDialog = new ChooseStartVertexDialog(
 					this.graph.vertices());
 			if (csvDialog.getSaved()) {
@@ -328,14 +329,15 @@ public class GraphPanelModel<V, E> extends Observable {
 				this.graphExamples.breadthFirstSearch(this.graph,
 						csvDialog.getStartVertex());
 				this.isGUIRefreshDisabled = false;
-				this.setExternalGraph(this.algorithmDataProcessor.first());
+				if (this.algorithmDataProcessor.isNotEmpty()){
+                                    this.setExternalGraph(this.algorithmDataProcessor.first());
+                                }
 				setChanged();
 				notifyObservers(ModelEventConstants.GRAPHREPLACED);
 			}
 		} else if (gUICommandConstant.equals(GUICommandConstants.DFS)) {
 			this.algorithmDataProcessor.resetGraphList();
 			resetFormatAndDecorable(this.graph);
-			this.algorithmDataProcessor.set(graph);
 			ChooseStartVertexDialog csvDialog = new ChooseStartVertexDialog(
 					this.graph.vertices());
 			if (csvDialog.getSaved()) {
@@ -343,14 +345,15 @@ public class GraphPanelModel<V, E> extends Observable {
 				this.graphExamples.dephtFirstSearch(this.graph,
 						csvDialog.getStartVertex());
 				this.isGUIRefreshDisabled = false;
-				this.setExternalGraph(this.algorithmDataProcessor.first());
+				if (this.algorithmDataProcessor.isNotEmpty()){
+                                    this.setExternalGraph(this.algorithmDataProcessor.first());
+                                }
 				setChanged();
 				notifyObservers(ModelEventConstants.GRAPHREPLACED);
 			}
 		} else if (gUICommandConstant.equals(GUICommandConstants.CUSTOMGRAPH)) {
 			this.algorithmDataProcessor.resetGraphList();
 			resetFormatAndDecorable(this.graph);
-			this.algorithmDataProcessor.set(graph);
 			ChooseStartVertexDialog csvDialog = new ChooseStartVertexDialog(
 					this.graph.vertices());
 			if (csvDialog.getSaved()) {
@@ -358,8 +361,10 @@ public class GraphPanelModel<V, E> extends Observable {
 				this.graphExamples.customAlgorithm(this.graph,
 						csvDialog.getStartVertex());
 				this.isGUIRefreshDisabled = false;
-				this.setExternalGraph(this.algorithmDataProcessor.first());
-				setChanged();
+				if (this.algorithmDataProcessor.isNotEmpty()){
+                                    this.setExternalGraph(this.algorithmDataProcessor.first());
+                                }
+                                setChanged();
 				notifyObservers(ModelEventConstants.GRAPHREPLACED);
 			}
 		}

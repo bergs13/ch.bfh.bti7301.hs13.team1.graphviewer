@@ -125,6 +125,7 @@ public class MainGUI<V, E> extends javax.swing.JFrame {
         algorithmMenu = new javax.swing.JMenu();
         dijkstraMenuItem = new javax.swing.JMenuItem();
         kruskalMenuItem = new javax.swing.JMenuItem();
+        dfsMenuItem = new javax.swing.JMenuItem();
         bfsMenuItem = new javax.swing.JMenuItem();
         CustomAlgorithmMenuItem = new javax.swing.JMenuItem();
 
@@ -255,6 +256,14 @@ public class MainGUI<V, E> extends javax.swing.JFrame {
         });
         algorithmMenu.add(kruskalMenuItem);
 
+        dfsMenuItem.setText("DFS");
+        dfsMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                dfsMenuItemActionPerformed(evt);
+            }
+        });
+        algorithmMenu.add(dfsMenuItem);
+
         bfsMenuItem.setText("BFS");
         bfsMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -317,6 +326,11 @@ public class MainGUI<V, E> extends javax.swing.JFrame {
         this.model.getGraphPanelModel().handleMainGUICommand(
 				GUICommandConstants.LAST, null);
     }//GEN-LAST:event_LastButtonActionPerformed
+
+    private void dfsMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dfsMenuItemActionPerformed
+        this.model.getGraphPanelModel().handleMainGUICommand(
+				GUICommandConstants.DFS, null);
+    }//GEN-LAST:event_dfsMenuItemActionPerformed
 
 	private void exitMenuItemActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_exitMenuItemActionPerformed
 		dispose();
@@ -419,6 +433,7 @@ public class MainGUI<V, E> extends javax.swing.JFrame {
     private javax.swing.JMenu algorithmMenu;
     private javax.swing.JButton backwardButton;
     private javax.swing.JMenuItem bfsMenuItem;
+    private javax.swing.JMenuItem dfsMenuItem;
     private javax.swing.JMenuItem dijkstraMenuItem;
     private javax.swing.JMenuItem exitMenuItem;
     private javax.swing.JButton forwardButton;

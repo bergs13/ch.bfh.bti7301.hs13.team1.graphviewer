@@ -292,6 +292,20 @@ public class GraphPanelModel<V, E> extends Observable {
 				setChanged();
 				notifyObservers(ModelEventConstants.GRAPHREPLACED);
 			}
+                }
+                else if (gUICommandConstant.equals(GUICommandConstants.DFS)) {
+			this.algorithmDataProcessor.resetGraphList();
+			resetFormatAndDecorable(this.graph);
+			ChooseStartVertexDialog csvDialog = new ChooseStartVertexDialog(
+					this.graph.vertices());
+			if (csvDialog.getSaved()) {
+				this.isGUIRefreshDisabled = true;
+				this.graphExamples.dephtFirstSearch(this.graph, csvDialog.getStartVertex());
+				this.isGUIRefreshDisabled = false;
+				this.setExternalGraph(this.algorithmDataProcessor.first());
+				setChanged();
+				notifyObservers(ModelEventConstants.GRAPHREPLACED);
+			}        
 		} else if (gUICommandConstant.equals(GUICommandConstants.CUSTOMGRAPH)) {
 			this.algorithmDataProcessor.resetGraphList();
 			resetFormatAndDecorable(this.graph);

@@ -5,6 +5,7 @@ public class GUICommandConstants {
 	public static final String DIJKSTRA = "DIJKSTRA";
 	public static final String KRUSKAL = "KRUSKAL";
         public static final String BFS = "BFS";
+        public static final String DFS = "DFS";
 	public static final String CUSTOMGRAPH = "CUSTOMGRAPH";
 	// algorithmiteration
 	public static final String FORWARD = "FORWARD";

@@ -124,7 +124,7 @@ public class GraphExamples<V, E> {
 	}
 
 	public void dijkstra(Graph<V, E> g, Vertex<V> s) {
-		recorder.recordStep(g);
+		
 		HeapPriorityQueue<Double, Vertex<V>> hq = new HeapPriorityQueue<>();
 		Iterator<Vertex<V>> it = g.vertices();
 		while (it.hasNext()) {
@@ -181,7 +181,7 @@ public class GraphExamples<V, E> {
 						s.set(u, s.get(v));
 
 					}
-					recorder.recordStep(g);
+					
 				}
 			}
 
@@ -256,7 +256,30 @@ public class GraphExamples<V, E> {
 
 		}
 	}
-
+        public void dephtFirstSearch(Graph<V, E> g, Vertex<V> v){
+            v.set(VISITED, null);
+            recorder.recordStep(g);
+            Iterator<Edge<E>> eit;
+            		if (g.isDirected()){
+                                eit = g.incidentOutEdges(v);
+                        }
+				
+                        else{
+				eit = g.incidentEdges(v);
+                        }
+			while (eit.hasNext()) {
+                                Edge<E> e = eit.next();
+                                if (!e.has(VISITED)){
+                                Vertex<V> u = g.opposite(e, v);    
+                                if (u.has(VISITED)) {
+					dephtFirstSearch(g, u);
+					e.set(VISITED, null);
+                                        recorder.recordStep(g);
+				}
+                                
+			}
+                }
+        }
 	public LinkedList<Vertex<V>> findPath(Graph<V, E> g, Vertex<V> v,
 			Vertex<V> w) {
 		LinkedList<Vertex<V>> li = new LinkedList<>();

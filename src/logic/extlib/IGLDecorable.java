@@ -14,7 +14,7 @@ public class IGLDecorable extends Observable implements Decorable {
 	public Object get(Object attr) {
 		Object ret = attrs.get(attr);
 		if (ret == null)
-                    if (Vertex.class.isInstance(attr) ){
+                    if (Vertex.class.isInstance(attr) || attr == DecorableConstants.VISITED ){
                         return null;
                     }
                     else{

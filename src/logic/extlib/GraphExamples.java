@@ -22,7 +22,7 @@ public class GraphExamples<V, E> {
 		this.recorder = new Recorder(processor);
 	}
 
-	    public final int kruskal(Graph<V, E> g) {
+	public final int kruskal(Graph<V, E> g) {
         if (g.isDirected())
             throw new RuntimeException("We need an undirected graph!");
         // Returns the number of connected components
@@ -46,7 +46,7 @@ public class GraphExamples<V, E> {
             clusters[num].add(v);
             v.set(CLUSTER, clusters[num++]);
             v.set(MSF, null); // show to which component v belongs
-            recorder.recordStep(g);
+            
         }
         HeapPriorityQueue<Double, Edge<E>> pq = new HeapPriorityQueue<>();
         Iterator<Edge<E>> eit = g.edges();
@@ -73,7 +73,14 @@ public class GraphExamples<V, E> {
                     c1 = tmp;
                 }
                 e.set(MSF, c0);
+                e.set(VISITED,null);
                 recorder.recordStep(g);
+                for (Vertex vertex : endV){
+                    if (!vertex.has(VISITED)){
+                        vertex.set(VISITED, null);
+                        recorder.recordStep(g);
+                    }
+                }
                 num--;
                 // now copy all elements from c1 to c0 and change the attribute
                 for (Vertex<V> v : c1) {

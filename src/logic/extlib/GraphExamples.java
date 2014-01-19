@@ -139,23 +139,52 @@ public class GraphExamples<V, E> {
                         s.set(v,null);
 		}
 		hq.replaceKey((Locator<Double,Vertex<V>>)s.get(PQLOCATOR),0.0);
-		s.set(s,s);
+                System.out.println(s.get(DISTANCE));
+                s.set(s,s);
+                s.set(DISTANCE, (double)0.0);
 		while ( ! hq.isEmpty()){
 			Locator<Double,Vertex<V>> loc = hq.removeMin();
 			Vertex<V> v = loc.element();
+                        v.set(VISITED, null);
+                        recorder.recordStep(g);
 			// no modify the distance of all neighbours
 			Iterator<Edge<E>> eit;
-			if (g.isDirected()) eit = g.incidentOutEdges(v);  
-			else eit  = g.incidentEdges(v);
+			if (g.isDirected()) {
+                            eit = g.incidentOutEdges(v);
+                        }  
+			else {
+                            eit  = g.incidentEdges(v);
+                        }
 			while(eit.hasNext()){
 				Edge<E> e  = eit.next();
 				double weight =1.0; // if no weight is entered
-				if (e.has(WEIGHT)) weight = (Double)e.get(WEIGHT);
+				if (e.has(WEIGHT)) {
+                                    weight = (Double)e.get(WEIGHT);
+                                }
 				Vertex<V> u = g.opposite(e, v);
-				double newDist = (Double)u.get(DISTANCE)+weight;
-				if (newDist < (Double)u.get(DISTANCE)){
+                                double dist = (Double)v.get(DISTANCE);
+                                double newDist = dist +weight;
+                                if (newDist < (Double)u.get(DISTANCE)){
 					u.set(DISTANCE,newDist);
 					hq.replaceKey((Locator<Double,Vertex<V>>)u.get(PQLOCATOR), newDist);
+                                        Iterator<Edge<E>> innereit;
+                                        if (g.isDirected()) {
+                                            innereit = g.incidentOutEdges(u);
+                                        }  
+                                        else {
+                                            innereit  = g.incidentEdges(u);
+                                        }
+                                        while (innereit.hasNext()){
+                                            Edge edge = innereit.next();
+                                            if (edge == e){
+                                                e.set(VISITED, null);
+                                            }
+                                            else{
+                                                if(edge.has(VISITED)){
+                                                    edge.destroy(VISITED);
+                                                }
+                                            }
+                                        }
 					// now set as best gateway (until now) v
 					// i.e v is the gateway from u to s.
 					if(v==s){

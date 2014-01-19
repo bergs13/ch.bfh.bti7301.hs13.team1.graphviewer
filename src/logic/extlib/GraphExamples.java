@@ -34,7 +34,6 @@ public class GraphExamples<V, E> {
         // MSF is also assigned to the vertices.
         //recorder.recordStep(g);
         int n = g.numberOfVertices();
-        System.out.println("number of vertices: "+n);
         final Object CLUSTER = new Object();
         ArrayList<Vertex<V>>[] clusters = new ArrayList[n];
         Iterator<Vertex<V>> it = g.vertices();
@@ -139,7 +138,6 @@ public class GraphExamples<V, E> {
                         s.set(v,null);
 		}
 		hq.replaceKey((Locator<Double,Vertex<V>>)s.get(PQLOCATOR),0.0);
-                System.out.println(s.get(DISTANCE));
                 s.set(s,s);
                 s.set(DISTANCE, (double)0.0);
 		while ( ! hq.isEmpty()){
